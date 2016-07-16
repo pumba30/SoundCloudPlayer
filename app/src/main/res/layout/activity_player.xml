@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout_root_player"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/background_player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/blur"
+        android:layout_above="@+id/recyclerViewBottom"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/text_view_title_track_2"
+        android:layout_width="wrap_content"
+        android:textColor="@color/white"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:ellipsize="end"
+        android:ems="12"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="In Your Eyes"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/text_view_user_name_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_view_title_track_2"
+        android:layout_centerHorizontal="true"
+        android:ellipsize="end"
+        android:ems="12"
+        android:gravity="center"
+        android:maxLines="2"
+        android:text="Inna - In Your Eyes"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        tools:textColor="#544848"/>
+
+    <RelativeLayout
+        android:id="@+id/layoutSet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_view_user_name_2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp">
+
+
+        <com.pumba30.soundcloudplayer.player.blurPlayerView.BlurPlayerView
+            android:id="@+id/blur_player"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_centerInParent="true"
+            app:emptyColor="#ffffff"
+            app:imageCover="@drawable/qwe"
+            app:loadedColor="@color/orange_light"/>
+
+        <ImageView
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/blur_player"
+            android:background="@drawable/icon_forward"/>
+
+        <ImageView
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/blur_player"
+            android:background="@drawable/icon_back"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/arrow_to_back"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/text_view_title_track_2"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/icon_image_to_back"/>
+
+    <ImageView
+        android:id="@+id/popup_context_menu"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignEnd="@+id/relativeLayout"
+        android:layout_alignTop="@+id/text_view_title_track_2"
+        android:background="@drawable/icon_arrow_down"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewBottom"
+        android:layout_width="match_parent"
+        android:layout_height="380dp"
+        android:layout_below="@+id/layoutSet"
+        android:background="#ffffff"
+        app:layout_scrollFlags="scroll|enterAlways|snap"/>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginRight="25dp"
+        android:background="@drawable/circle"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/text_view_user_name_2"
+        android:layout_marginBottom="24dp">
+
+        <ImageView
+            android:id="@+id/control"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/play"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
+
