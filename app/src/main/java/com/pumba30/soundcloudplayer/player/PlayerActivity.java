@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -86,16 +85,9 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         mBlurPlayerView.setProgress(0);
         mBlurPlayerView.setMax(mTrack.getDuration() / 1000);
 
-        // TODO: 12.07.2016 to metod
         mBlurPlayerView.start();
         mPlayer.playPlayer(mTrack);
         mImageViewPlay.setBackgroundResource(R.drawable.pause);
-
-        // TODO: 15.07.2016   User make Parcelable
-        Log.d(LOG_TAG, "User " + mTrack.getUser());
-
-        mBlurPlayerView.setCoverDrawable(R.drawable.amult);
-
     }
 
     private void setTitlePlyer() {

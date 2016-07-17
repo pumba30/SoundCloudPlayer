@@ -45,5 +45,8 @@ public interface ApiService {
     @POST("oauth2/token")
     Call<Token> authorize(@FieldMap Map<String, String> authMap);
 
+    /*requests for charts track*/
+
+//    @GET()
 
 }

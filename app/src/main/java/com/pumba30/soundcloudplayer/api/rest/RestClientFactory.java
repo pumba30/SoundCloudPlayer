@@ -14,15 +14,28 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestClientFactory {
-    private static final String API_END_POINTS = "https://api.soundcloud.com/";
+    public static final String API_END_POINT = "https://api.soundcloud.com/";
+    public static final String CHARTS_TRACK_END_POINT = "https://soundcloud.com/charts/";
+
+    //  https://soundcloud.com/charts/  top  ? genre=classical
+
 
     public static ApiService getRestApiService(List<Interceptor> interceptors) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_END_POINTS)
+                .baseUrl(API_END_POINT)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getClient(interceptors))
                 .build();
 
+        return retrofit.create(ApiService.class);
+    }
+
+    public static ApiService getRestApiServiseChartsTrack(List<Interceptor> interceptors) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(CHARTS_TRACK_END_POINT)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(getClient(interceptors))
+                .build();
         return retrofit.create(ApiService.class);
     }
 

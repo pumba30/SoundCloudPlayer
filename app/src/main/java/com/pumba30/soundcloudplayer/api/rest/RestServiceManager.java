@@ -13,44 +13,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RestServiceManager {
+public abstract class RestServiceManager {
 
-    private ApiService mApiService;
+    protected ApiService mApiService;
 
     public RestServiceManager() {
-        List<Interceptor> interceptors = new ArrayList<>();
-        interceptors.add(new ClientInterceptor());
-        mApiService = RestClientFactory.getRestApiService(interceptors);
     }
 
-
-    public void loadPublicTracks(RestCallback<List<Track>> restCallback) {
-        mApiService.loadPublicTracks().enqueue(new RestCallbackWrapper<>(restCallback));
-    }
-
-
-    public void getToken(Map authMap, RestCallback<Token> restCallback) {
-        mApiService.authorize(authMap).enqueue(new RestCallbackWrapper<>(restCallback));
-    }
-
-    public void getPlayLists(RestCallback<List<Playlists>> restCallback) {
-        mApiService.getMyPlaylists().enqueue(new RestCallbackWrapper<>(restCallback));
-    }
-
-    public void toMyCollection(int idTrack, RestCallback<Track> trackRestCallback) {
-        mApiService.toMyCollection(idTrack).enqueue(new RestCallbackWrapper<>(trackRestCallback));
-    }
-
-    public void deleteFromMyCollection(int idTrack, RestCallback<Track> trackRestCallback) {
-        mApiService.deleteFromMyCollection(idTrack).enqueue(new RestCallbackWrapper<>(trackRestCallback));
-    }
-
-    public void getMyCollection(RestCallback<List<Track>> trackRestCallback) {
-        mApiService.getMyColection().enqueue(new RestCallbackWrapper<>(trackRestCallback));
-    }
-
-
-    private class RestCallbackWrapper<T> implements Callback<T> {
+    protected class RestCallbackWrapper<T> implements Callback<T> {
 
         private RestCallback<T> mRestCallback;
 
