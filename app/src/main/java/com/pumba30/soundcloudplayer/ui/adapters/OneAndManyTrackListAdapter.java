@@ -35,6 +35,7 @@ public class OneAndManyTrackListAdapter extends RecyclerView.Adapter<OneAndManyT
     private Context mContext;
     private TypeListTrack mTypeListTrack;
 
+
     public OneAndManyTrackListAdapter(Context context, TypeListTrack typeListTrack) {
         mInflater = LayoutInflater.from(context);
         mContext = context;
@@ -49,6 +50,7 @@ public class OneAndManyTrackListAdapter extends RecyclerView.Adapter<OneAndManyT
         } else if (mTypeListTrack == TypeListTrack.MANY_TRACK) {
             view = mInflater.inflate(R.layout.activity_player_content_many_track, parent, false);
         }
+
 
         return new ViewHolder(view, mTypeListTrack);
     }
@@ -87,6 +89,7 @@ public class OneAndManyTrackListAdapter extends RecyclerView.Adapter<OneAndManyT
         mTrackList = trackList;
     }
 
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView mImageViewArtWork;
@@ -100,6 +103,7 @@ public class OneAndManyTrackListAdapter extends RecyclerView.Adapter<OneAndManyT
         private TextView mDownloadTrack;
         private TextView mUserNameTrack;
         private TextView mDescriptionTrack;
+
 
         public ViewHolder(View itemView, TypeListTrack typeListTrack) {
             super(itemView);
@@ -160,4 +164,8 @@ public class OneAndManyTrackListAdapter extends RecyclerView.Adapter<OneAndManyT
                     .into(mImageViewArtWork);
         }
     }
+
+
+
 }
+

@@ -2,9 +2,11 @@ package com.pumba30.soundcloudplayer.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +19,12 @@ import com.pumba30.soundcloudplayer.player.PlayerActivity;
 import com.pumba30.soundcloudplayer.player.playerEvents.AddTrackToCollectionEvent;
 import com.pumba30.soundcloudplayer.ui.adapters.OneAndManyTrackListAdapter;
 import com.pumba30.soundcloudplayer.utils.DividerItemDecoration;
+import com.pumba30.soundcloudplayer.utils.RecyclerItemClickListener;
+import com.pumba30.soundcloudplayer.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CollectionTracksFragment extends Fragment {
@@ -49,15 +52,23 @@ public class CollectionTracksFragment extends Fragment {
         RecyclerView.ItemDecoration itemDecoration = new
                 DividerItemDecoration(getActivity());
         recyclerView.addItemDecoration(itemDecoration);
-
         mAdapter = new OneAndManyTrackListAdapter(getActivity(), PlayerActivity.TypeListTrack.MANY_TRACK);
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Utils.toast(getActivity(), "Toast");
+                    }
 
+                    @Override
+                    public void onLongItemClick(View view, int position) {/*empty*/}
+                })
+        );
+
+        recyclerView.setAdapter(mAdapter);
         getMyCollectionList();
 
         return view;
-
-
     }
 
     @Subscribe
@@ -65,6 +76,11 @@ public class CollectionTracksFragment extends Fragment {
         if (event.isAdded()) {
             getMyCollectionList();
         }
+    }
+
+    private void snackBarDelete(View view) {
+        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
     private void getMyCollectionList() {
@@ -78,8 +94,10 @@ public class CollectionTracksFragment extends Fragment {
 
                     @Override
                     public void onError(int errorCode) {
-
+                        Log.d(LOG_TAG, "Error: " + errorCode);
                     }
                 });
     }
+
+
 }
