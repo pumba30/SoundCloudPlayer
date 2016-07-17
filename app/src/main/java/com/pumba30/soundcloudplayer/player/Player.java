@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
+import com.pumba30.soundcloudplayer.player.playerEvents.PlayerEvent;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -70,7 +71,7 @@ public class Player {
             mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
-                    Utils.toast(mContext, "On complit");
+                    Log.d(LOG_TAG, "Player onComplete");
                     mediaPlayer.stop();
                     mediaPlayer.reset();
                 }

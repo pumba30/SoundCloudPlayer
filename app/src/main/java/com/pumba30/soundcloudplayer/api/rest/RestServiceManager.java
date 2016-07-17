@@ -1,5 +1,6 @@
 package com.pumba30.soundcloudplayer.api.rest;
 
+import com.pumba30.soundcloudplayer.api.models.Playlists;
 import com.pumba30.soundcloudplayer.api.models.Token;
 import com.pumba30.soundcloudplayer.api.models.Track;
 
@@ -30,6 +31,18 @@ public class RestServiceManager {
 
     public void getToken(Map authMap, RestCallback<Token> restCallback) {
         mApiService.authorize(authMap).enqueue(new RestCallbackWrapper<>(restCallback));
+    }
+
+    public void getPlayLists(RestCallback<List<Playlists>> restCallback) {
+        mApiService.getMyPlaylists().enqueue(new RestCallbackWrapper<>(restCallback));
+    }
+
+    public void toMyCollection(int idTrack, RestCallback<Track> trackRestCallback) {
+        mApiService.toMyCollection(idTrack).enqueue(new RestCallbackWrapper<>(trackRestCallback));
+    }
+
+    public void getMyCollection(RestCallback<List<Track>> trackRestCallback) {
+        mApiService.getMyColection().enqueue(new RestCallbackWrapper<>(trackRestCallback));
     }
 
 

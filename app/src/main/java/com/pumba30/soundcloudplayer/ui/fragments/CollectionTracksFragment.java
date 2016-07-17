@@ -14,19 +14,29 @@ import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.api.rest.RestServiceManager;
 import com.pumba30.soundcloudplayer.player.PlayerActivity;
+import com.pumba30.soundcloudplayer.player.playerEvents.AddTrackToCollectionEvent;
 import com.pumba30.soundcloudplayer.ui.adapters.OneAndManyTrackListAdapter;
 import com.pumba30.soundcloudplayer.utils.DividerItemDecoration;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by pumba30 on 15.07.2016.
- */
-public class LikeTracksFragment extends Fragment {
+public class CollectionTracksFragment extends Fragment {
+    private static final String LOG_TAG = CollectionTracksFragment.class.getSimpleName();
     private OneAndManyTrackListAdapter mAdapter;
 
-    public static LikeTracksFragment newInstance() {
-        return new LikeTracksFragment();
+
+    public static CollectionTracksFragment newInstance() {
+        return new CollectionTracksFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -43,8 +53,23 @@ public class LikeTracksFragment extends Fragment {
         mAdapter = new OneAndManyTrackListAdapter(getActivity(), PlayerActivity.TypeListTrack.MANY_TRACK);
         recyclerView.setAdapter(mAdapter);
 
+        getMyCollectionList();
+
+        return view;
+
+
+    }
+
+    @Subscribe
+    public void updateAdapter(AddTrackToCollectionEvent event) {
+        if (event.isAdded()) {
+            getMyCollectionList();
+        }
+    }
+
+    private void getMyCollectionList() {
         App.getAppInstance().getRestServiceManager()
-                .loadPublicTracks(new RestServiceManager.RestCallback<List<Track>>() {
+                .getMyCollection(new RestServiceManager.RestCallback<List<Track>>() {
                     @Override
                     public void onSuccess(List<Track> response) {
                         mAdapter.setTrackList(response);
@@ -56,9 +81,5 @@ public class LikeTracksFragment extends Fragment {
 
                     }
                 });
-
-
-        return view;
-
     }
 }

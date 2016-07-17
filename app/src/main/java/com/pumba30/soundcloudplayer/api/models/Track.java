@@ -142,6 +142,65 @@ public class Track implements Parcelable {
     @SerializedName("attachments_uri")
     private String mAttachmentsUri;
 
+    protected Track(Parcel in) {
+        mKind = in.readString();
+        mId = in.readInt();
+        mCreatedAd = in.readString();
+        mUserId = in.readInt();
+        mDuration = in.readInt();
+        mCommentable = in.readByte() != 0;
+        mState = in.readString();
+        mOriginalContentSize = in.readInt();
+        mLastModified = in.readString();
+        mSharing = in.readString();
+        mTagList = in.readString();
+        mPermalink = in.readString();
+        mStreamable = in.readByte() != 0;
+        mEmbeddableBy = in.readString();
+        mDownloadable = in.readByte() != 0;
+        mPurchaseUrl = in.readString();
+        mLabelId = in.readString();
+        mPurchaseTitle = in.readString();
+        mGenre = in.readString();
+        mTitle = in.readString();
+        mDescription = in.readString();
+        mLabelName = in.readString();
+        mRelease = in.readString();
+        mTrackType = in.readString();
+        mKeySignature = in.readString();
+        mIsrc = in.readString();
+        mVideoUrl = in.readString();
+        mBpm = in.readString();
+        mReleaseYear = in.readString();
+        mReleaseMonth = in.readString();
+        mReleaseDay = in.readString();
+        mOriginalFormat = in.readString();
+        mLicence = in.readString();
+        mUri = in.readString();
+        mUser = in.readParcelable(User.class.getClassLoader());
+        mPermalinkUrl = in.readString();
+        mArtworkUrl = in.readString();
+        mWaveFormUrl = in.readString();
+        mStreamUrl = in.readString();
+        mPlaybackCount = in.readInt();
+        mDownloadCount = in.readInt();
+        mFavoritingsCount = in.readInt();
+        mCommentCount = in.readInt();
+        mAttachmentsUri = in.readString();
+    }
+
+    public static final Creator<Track> CREATOR = new Creator<Track>() {
+        @Override
+        public Track createFromParcel(Parcel in) {
+            return new Track(in);
+        }
+
+        @Override
+        public Track[] newArray(int size) {
+            return new Track[size];
+        }
+    };
+
     public void setKind(String kind) {
         mKind = kind;
     }
@@ -494,55 +553,10 @@ public class Track implements Parcelable {
         return mAttachmentsUri;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    protected Track(Parcel in) {
-        mKind = in.readString();
-        mId = in.readInt();
-        mCreatedAd = in.readString();
-        mUserId = in.readInt();
-        mDuration = in.readInt();
-        mCommentable = in.readByte() != 0;
-        mState = in.readString();
-        mOriginalContentSize = in.readInt();
-        mLastModified = in.readString();
-        mSharing = in.readString();
-        mTagList = in.readString();
-        mPermalink = in.readString();
-        mStreamable = in.readByte() != 0;
-        mEmbeddableBy = in.readString();
-        mDownloadable = in.readByte() != 0;
-        mPurchaseUrl = in.readString();
-        mLabelId = in.readString();
-        mPurchaseTitle = in.readString();
-        mGenre = in.readString();
-        mTitle = in.readString();
-        mDescription = in.readString();
-        mLabelName = in.readString();
-        mRelease = in.readString();
-        mTrackType = in.readString();
-        mKeySignature = in.readString();
-        mIsrc = in.readString();
-        mVideoUrl = in.readString();
-        mBpm = in.readString();
-        mReleaseYear = in.readString();
-        mReleaseMonth = in.readString();
-        mReleaseDay = in.readString();
-        mOriginalFormat = in.readString();
-        mLicence = in.readString();
-        mUri = in.readString();
-        mPermalinkUrl = in.readString();
-        mArtworkUrl = in.readString();
-        mWaveFormUrl = in.readString();
-        mStreamUrl = in.readString();
-        mPlaybackCount = in.readInt();
-        mDownloadCount = in.readInt();
-        mFavoritingsCount = in.readInt();
-        mCommentCount = in.readInt();
-        mAttachmentsUri = in.readString();
     }
 
     @Override
@@ -581,6 +595,7 @@ public class Track implements Parcelable {
         parcel.writeString(mOriginalFormat);
         parcel.writeString(mLicence);
         parcel.writeString(mUri);
+        parcel.writeParcelable(mUser, i);
         parcel.writeString(mPermalinkUrl);
         parcel.writeString(mArtworkUrl);
         parcel.writeString(mWaveFormUrl);
@@ -591,16 +606,4 @@ public class Track implements Parcelable {
         parcel.writeInt(mCommentCount);
         parcel.writeString(mAttachmentsUri);
     }
-
-    public static final Creator<Track> CREATOR = new Creator<Track>() {
-        @Override
-        public Track createFromParcel(Parcel in) {
-            return new Track(in);
-        }
-
-        @Override
-        public Track[] newArray(int size) {
-            return new Track[size];
-        }
-    };
 }

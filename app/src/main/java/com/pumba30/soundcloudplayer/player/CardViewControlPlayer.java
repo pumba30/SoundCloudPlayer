@@ -5,14 +5,19 @@ import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
+import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
+import com.pumba30.soundcloudplayer.api.rest.RestServiceManager;
+import com.pumba30.soundcloudplayer.player.playerEvents.AddTrackToCollectionEvent;
+import com.pumba30.soundcloudplayer.player.playerEvents.PlayerEvent;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -22,16 +27,19 @@ import org.greenrobot.eventbus.Subscribe;
  * This class is responsible for handling  buttons in CardView item
  */
 public class CardViewControlPlayer extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private static final String LOG_TAG = CardViewControlPlayer.class.getSimpleName();
 
     private ImageButton mPopupMenu;
     private ProgressBar mProgressBar;
     private Player mPlayer;
     private Track mTrack;
+    private Context mContext;
 
     public CardViewControlPlayer(View itemView) {
         super(itemView);
-        initView(itemView.getContext());
+        mContext = itemView.getContext();
         mPlayer = Player.getInstance(itemView.getContext());
+        initView();
         EventBus.getDefault().register(this);
     }
 
@@ -45,8 +53,9 @@ public class CardViewControlPlayer extends RecyclerView.ViewHolder implements Vi
         }
     }
 
+
     private void
-    initView(Context context) {
+    initView() {
         ImageButton buttonPlay = (ImageButton) itemView.findViewById(R.id.image_button_play_public_track);
         ImageButton buttonStop = (ImageButton) itemView.findViewById(R.id.image_button_stop);
         ImageButton buttonLike = (ImageButton) itemView.findViewById(R.id.image_button_like);
@@ -104,7 +113,7 @@ public class CardViewControlPlayer extends RecyclerView.ViewHolder implements Vi
         int viewId = view.getId();
         switch (viewId) {
             case R.id.image_button_like:
-                Utils.toast(view.getContext(), R.string.like);
+                addToMyCollection();
                 break;
             case R.id.image_button_add_to_playlist:
                 Utils.toast(view.getContext(), R.string.add_to_play_list);
@@ -128,6 +137,30 @@ public class CardViewControlPlayer extends RecyclerView.ViewHolder implements Vi
     public void setTrack(Track track) {
         if (track != null) {
             mTrack = track;
+        } else {
+            Log.d(LOG_TAG, "Track is null");
         }
     }
+
+
+    private void addToMyCollection() {
+        int idTrack = mTrack.getId();
+        App.getAppInstance().getRestServiceManager().toMyCollection(idTrack, new RestServiceManager.RestCallback<Track>() {
+            @Override
+            public void onSuccess(Track response) {
+                Utils.toast(mContext, R.string.added_to_collection);
+                EventBus.getDefault().post(new AddTrackToCollectionEvent(true));
+
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                Utils.toast(mContext, R.string.failed_added);
+            }
+        });
+
+
+    }
+
+
 }

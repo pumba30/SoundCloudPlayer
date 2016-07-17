@@ -1,11 +1,14 @@
 package com.pumba30.soundcloudplayer.api.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by pumba30 on 28.06.2016.
  */
-public class User {
+public class User implements Parcelable {
     @SerializedName("id")
     private int mId;
 
@@ -29,6 +32,29 @@ public class User {
 
     @SerializedName("avatar_url")
     private String mAvatarUrl;
+
+    protected User(Parcel in) {
+        mId = in.readInt();
+        mKind = in.readString();
+        mPermalink = in.readString();
+        mUserName = in.readString();
+        mLastModified = in.readString();
+        mUri = in.readString();
+        mPermalinkUrl = in.readString();
+        mAvatarUrl = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public void setId(int id) {
         mId = id;
@@ -92,5 +118,22 @@ public class User {
 
     public String getAvatarUrl() {
         return mAvatarUrl;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mId);
+        parcel.writeString(mKind);
+        parcel.writeString(mPermalink);
+        parcel.writeString(mUserName);
+        parcel.writeString(mLastModified);
+        parcel.writeString(mUri);
+        parcel.writeString(mPermalinkUrl);
+        parcel.writeString(mAvatarUrl);
     }
 }

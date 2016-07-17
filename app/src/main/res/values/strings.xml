@@ -7,10 +7,10 @@
     <string name="prefix_query_client_id">\?client_id=</string>
     <string name="play">"Play "</string>
     <string name="player_stop">Stop</string>
-    <string name="like">Like</string>
+    <string name="like">Add to my collection</string>
     <string name="add_to_play_list">Add to play list</string>
     <string name="share">Share</string>
-    <string name="refresh_tracks">Refresh tracks</string>
+    <string name="refresh_tracks">Refresh trackList</string>
     <string name="menu_test_item_1">menu_test_item_1</string>
     <string name="menu_test_item_2">menu_test_item_2</string>
     <string name="login">Sign up</string>
@@ -28,12 +28,16 @@
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="like_tracks">Like tracks</string>
+    <string name="like_tracks">My Collection</string>
     <string name="playlists">Playlists</string>
     <string name="search">Search</string>
     <string name="loading_connect_page">Loading connect page</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="public_tracks">Public tracks</string>
+    <string name="public_tracks">Overview</string>
+    <string name="description_is_empty">Description is empty</string>
+    <string name="user_name_track">"User name: "</string>
+    <string name="added_to_collection">Added to Collection</string>
+    <string name="failed_added">Failed added</string>
 </resources>

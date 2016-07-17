@@ -4,21 +4,17 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
-import android.view.ViewGroup;
 
 import com.pumba30.soundcloudplayer.R;
-import com.pumba30.soundcloudplayer.ui.fragments.LikeTracksFragment;
+import com.pumba30.soundcloudplayer.ui.fragments.CollectionTracksFragment;
 import com.pumba30.soundcloudplayer.ui.fragments.PlayListsFragment;
 import com.pumba30.soundcloudplayer.ui.fragments.PublicTrackFragment;
 import com.pumba30.soundcloudplayer.ui.fragments.SearchFragment;
-
-import java.util.HashMap;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public static final int PAGE_COUNT = 4;
@@ -42,7 +38,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return PublicTrackFragment.newInstance();
             case 1:
-                return LikeTracksFragment.newInstance();
+                return CollectionTracksFragment.newInstance();
             case 2:
                 return PlayListsFragment.newInstance();
             case 3:

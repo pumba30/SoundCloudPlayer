@@ -36,7 +36,7 @@ public class PreferencesManager {
         editor.apply();
     }
 
-    public String getKeyToken() {
+    public String getToken() {
         return mPreferences.getString(KEY_TOKEN, "");
     }
 

@@ -39,7 +39,7 @@ public class RestClientFactory {
         }
 
         if (BuildConfig.DEBUG) {
-            builder.addInterceptor(newLoggingInterceptor(HttpLoggingInterceptor.Level.BASIC));
+            builder.addInterceptor(newLoggingInterceptor(HttpLoggingInterceptor.Level.BODY));
         }
 
         return builder.build();

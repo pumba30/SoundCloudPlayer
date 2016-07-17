@@ -2,6 +2,8 @@ package com.pumba30.soundcloudplayer;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.pumba30.soundcloudplayer.api.rest.RestServiceManager;
 import com.pumba30.soundcloudplayer.utils.PreferencesManager;
@@ -15,8 +17,8 @@ public class App extends Application {
     @SuppressLint("MissingSuperCall")
     @Override
     public void onCreate() {
-        mRestServiceManager = new RestServiceManager();
         sAppInstance = this;
+        mRestServiceManager = new RestServiceManager();
 
     }
 
@@ -30,6 +32,16 @@ public class App extends Application {
 
     public static boolean isUserLogged() {
         return PreferencesManager.getInstance(getAppInstance()).getUserIsInAccount();
+    }
+
+    @NonNull
+    public static String getToken() {
+        String token = PreferencesManager.getInstance(getAppInstance()).getToken();
+        if (!TextUtils.isEmpty(token)) {
+            return token;
+        } else {
+            throw new NullPointerException();
+        }
     }
 
     public RestServiceManager getRestServiceManager() {

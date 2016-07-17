@@ -66,6 +66,7 @@ public class LoggedUserFragment extends Fragment {
                     mToolbar.setTitle(R.string.public_tracks);
                 } else if (tabId == 1) {
                     mToolbar.setTitle(R.string.like_tracks);
+                    // TODO: 16.07.2016  update adapter after adding the track to collection
                     playerStop();
                 } else if (tabId == 2) {
                     mToolbar.setTitle(R.string.playlists);

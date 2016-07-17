@@ -130,9 +130,12 @@ public class OneAndManyTrackListAdapter extends RecyclerView.Adapter<OneAndManyT
             mDurationTrack.setText(String.format(Locale.getDefault(),
                     "Duration of the track %d min.", (track.getDuration() / 1000) / 60));
             mDownloadTrack.setText(String.format("Download track: %s", track.getDownloadable()));
-            mUserNameTrack.setText(String.format("User name: Name"));
+            String userNameText = itemView.getContext().getString(R.string.user_name_track);
+            mUserNameTrack.setText(new StringBuilder().append(userNameText).append(track.getUser().getUserName()).toString());
             if (!TextUtils.isEmpty(track.getDescription())) {
                 mDescriptionTrack.setText(track.getDescription());
+            } else {
+                mDescriptionTrack.setText(R.string.description_is_empty);
             }
         }
 
