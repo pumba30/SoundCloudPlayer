@@ -41,6 +41,10 @@ public class RestServiceManager {
         mApiService.toMyCollection(idTrack).enqueue(new RestCallbackWrapper<>(trackRestCallback));
     }
 
+    public void deleteFromMyCollection(int idTrack, RestCallback<Track> trackRestCallback) {
+        mApiService.deleteFromMyCollection(idTrack).enqueue(new RestCallbackWrapper<>(trackRestCallback));
+    }
+
     public void getMyCollection(RestCallback<List<Track>> trackRestCallback) {
         mApiService.getMyColection().enqueue(new RestCallbackWrapper<>(trackRestCallback));
     }

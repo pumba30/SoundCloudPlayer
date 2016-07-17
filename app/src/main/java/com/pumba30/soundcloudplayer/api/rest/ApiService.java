@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -33,8 +34,12 @@ public interface ApiService {
     @PUT("me/favorites/{trackId}")
     Call<Track> toMyCollection(@Path("trackId") int trackId);
 
+    @DELETE("me/favorites/{trackId}")
+    Call<Track> deleteFromMyCollection(@Path("trackId") int trackId);
+
     @GET("me/favorites")
     Call<List<Track>> getMyColection();
+
 
     @FormUrlEncoded
     @POST("oauth2/token")

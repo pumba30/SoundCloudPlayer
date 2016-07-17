@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +12,22 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.player.PlayerActivity;
+import com.pumba30.soundcloudplayer.api.rest.RestServiceManager;
+import com.pumba30.soundcloudplayer.player.playerEvents.TrackToCollectionEvent;
+import com.pumba30.soundcloudplayer.utils.Utils;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static com.pumba30.soundcloudplayer.player.PlayerActivity.*;
+import static com.pumba30.soundcloudplayer.player.PlayerActivity.TypeListTrack;
+import static com.pumba30.soundcloudplayer.player.PlayerActivity.newIntent;
 
 /**
  * Created by pumba30 on 10.07.2016.
@@ -66,14 +73,42 @@ public class OneAndManyTrackListAdapter extends RecyclerView.Adapter<OneAndManyT
             holder.mImageButtonPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    List<Track> tracks = new ArrayList<>();
-                    tracks.add(track);
-                    Intent intent = newIntent(mContext, tracks);
-                    mContext.startActivity(intent);
+                    startPlayTrack(track);
+                }
+            });
+
+            holder.mImageButtonDeleteTrack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteTrack(track);
                 }
             });
         }
 
+    }
+
+    private void startPlayTrack(Track track) {
+        List<Track> tracks = new ArrayList<>();
+        tracks.add(track);
+        Intent intent = newIntent(mContext, tracks);
+        mContext.startActivity(intent);
+    }
+
+    private void deleteTrack(Track track) {
+        int idTrack = track.getId();
+        App.getAppInstance().getRestServiceManager()
+                .deleteFromMyCollection(idTrack, new RestServiceManager.RestCallback<Track>() {
+                    @Override
+                    public void onSuccess(Track response) {
+                        Utils.toast(mContext, R.string.track_deleted);
+                        EventBus.getDefault().post(new TrackToCollectionEvent(true));
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {
+                        Log.d(LOG_TAG, "Error: " + errorCode);
+                    }
+                });
     }
 
     @Override
@@ -94,6 +129,7 @@ public class OneAndManyTrackListAdapter extends RecyclerView.Adapter<OneAndManyT
 
         private ImageView mImageViewArtWork;
         private ImageButton mImageButtonPlay;
+        private ImageButton mImageButtonDeleteTrack;
         private TextView mUserName;
         private TextView mTitleTrack;
 
@@ -146,6 +182,7 @@ public class OneAndManyTrackListAdapter extends RecyclerView.Adapter<OneAndManyT
         private void initViewForManyTrack(View itemView) {
             mImageViewArtWork = (ImageView) itemView.findViewById(R.id.track_item_art_work);
             mImageButtonPlay = (ImageButton) itemView.findViewById(R.id.image_button_play_like_track);
+            mImageButtonDeleteTrack = (ImageButton) itemView.findViewById(R.id.image_button_delete_lile_track);
             mUserName = (TextView) itemView.findViewById(R.id.text_view_item_title_track_user_name);
             mTitleTrack = (TextView) itemView.findViewById(R.id.text_view_item_title_track);
         }
@@ -163,8 +200,8 @@ public class OneAndManyTrackListAdapter extends RecyclerView.Adapter<OneAndManyT
                     .error(R.drawable.placeholder_background)
                     .into(mImageViewArtWork);
         }
-    }
 
+    }
 
 
 }

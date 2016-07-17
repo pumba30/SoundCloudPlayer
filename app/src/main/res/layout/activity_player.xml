@@ -110,11 +110,11 @@
         android:id="@+id/relativeLayout"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginRight="25dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/circle"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/text_view_user_name_2"
-        android:layout_marginBottom="15dp">
+        android:layout_alignParentEnd="true">
 
         <ImageView
             android:id="@+id/control"

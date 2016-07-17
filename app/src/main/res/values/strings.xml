@@ -40,4 +40,5 @@
     <string name="user_name_track">"User name: "</string>
     <string name="added_to_collection">Added to Collection</string>
     <string name="failed_added">Failed added</string>
+    <string name="track_deleted">track deleted</string>
 </resources>

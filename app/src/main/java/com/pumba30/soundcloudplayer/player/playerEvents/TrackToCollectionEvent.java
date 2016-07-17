@@ -3,11 +3,11 @@ package com.pumba30.soundcloudplayer.player.playerEvents;
 /**
  * Created by pumba30 on 17.07.2016.
  */
-public class AddTrackToCollectionEvent {
+public class TrackToCollectionEvent {
     private final boolean mIsAdded;
 
 
-    public AddTrackToCollectionEvent(boolean isAdded) {
+    public TrackToCollectionEvent(boolean isAdded) {
         mIsAdded = isAdded;
     }
 

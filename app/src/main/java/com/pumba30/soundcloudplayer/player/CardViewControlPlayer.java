@@ -16,7 +16,7 @@ import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.api.rest.RestServiceManager;
-import com.pumba30.soundcloudplayer.player.playerEvents.AddTrackToCollectionEvent;
+import com.pumba30.soundcloudplayer.player.playerEvents.TrackToCollectionEvent;
 import com.pumba30.soundcloudplayer.player.playerEvents.PlayerEvent;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
@@ -149,7 +149,7 @@ public class CardViewControlPlayer extends RecyclerView.ViewHolder implements Vi
             @Override
             public void onSuccess(Track response) {
                 Utils.toast(mContext, R.string.added_to_collection);
-                EventBus.getDefault().post(new AddTrackToCollectionEvent(true));
+                EventBus.getDefault().post(new TrackToCollectionEvent(true));
 
             }
 
