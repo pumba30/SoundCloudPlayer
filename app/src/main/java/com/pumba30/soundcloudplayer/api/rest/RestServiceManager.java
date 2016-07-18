@@ -20,7 +20,9 @@ public class RestServiceManager {
 
     private static final String LOG_TAG = RestServiceManager.class.getSimpleName();
     public static final String GENRE = "genre";
-    public static final String ALL_MUSIC = "all_music";
+    private String mGenre;
+
+
     private ApiService mApiService;
 
     public RestServiceManager() {
@@ -29,9 +31,16 @@ public class RestServiceManager {
         mApiService = RestClientFactory.getRestApiService(interceptors);
     }
 
+    public RestServiceManager(String genre) {
+        List<Interceptor> interceptors = new ArrayList<>();
+        interceptors.add(new ClientInterceptor());
+        mApiService = RestClientFactory.getRestApiService(interceptors);
+        mGenre = genre;
+    }
 
-    public void loadGenreAllMusic(RestServiceManager.RestCallback<List<Track>> restCallback) {
-        mApiService.getGenreAllMusic(getQueryToMap(GENRE, ALL_MUSIC))
+
+    public void loadMusicByGenre(String genreMusic, RestServiceManager.RestCallback<List<Track>> restCallback) {
+        mApiService.getMusic(getQueryToMap(GENRE, genreMusic))
                 .enqueue(new RestCallbackWrapper<>(restCallback));
     }
 
@@ -65,6 +74,10 @@ public class RestServiceManager {
         Map<String, String> map = new HashMap<>();
         map.put(key, value);
         return map;
+    }
+
+    public String getGenre() {
+        return mGenre;
     }
 
     protected class RestCallbackWrapper<T> implements Callback<T> {

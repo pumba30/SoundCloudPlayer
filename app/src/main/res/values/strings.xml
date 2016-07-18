@@ -73,5 +73,6 @@
     <string name="trap">Trap</string>
     <string name="triphop">Triphop</string>
     <string name="world">World</string>
+    <string name="all_genres">All genres</string>
 
 </resources>

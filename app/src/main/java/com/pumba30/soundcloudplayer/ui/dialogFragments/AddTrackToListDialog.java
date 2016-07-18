@@ -5,5 +5,4 @@ import android.support.v4.app.DialogFragment;
 /**
  * Created by pumba30 on 16.07.2016.
  */
-public class AddTrackToListDialog extends DialogFragment {
-}
+public class AddTrackToListDialog extends DialogFragment {/*empty*/}

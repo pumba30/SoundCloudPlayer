@@ -27,7 +27,7 @@ public interface ApiService {
     Call<List<Track>> loadPublicTracks();
 
     @GET("tracks")
-    Call<List<Track>> getGenreAllMusic(@QueryMap Map<String, String> stringMap);
+    Call<List<Track>> getMusic(@QueryMap Map<String, String> stringMap);
 
 
     @GET("tracks/{trackId}")
@@ -55,6 +55,6 @@ public interface ApiService {
 //    http://api.soundcloud.com/tracks?genres=all-music&client_id=YOUR_CLIENT_ID
     /*requests for charts track*/
 //    @GET("top")
-//    Call<List<Track>> getGenreAllMusic(@QueryMap Map<String, String> stringMap);
+//    Call<List<Track>> getMusic(@QueryMap Map<String, String> stringMap);
 
 }

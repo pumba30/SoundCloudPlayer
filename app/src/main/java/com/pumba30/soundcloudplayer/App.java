@@ -5,6 +5,7 @@ import android.app.Application;
 import android.support.annotation.NonNull;
 
 import com.pumba30.soundcloudplayer.api.rest.RestServiceManager;
+import com.pumba30.soundcloudplayer.utils.GenreMusic;
 import com.pumba30.soundcloudplayer.utils.PreferencesManager;
 
 public class App extends Application {
@@ -17,6 +18,7 @@ public class App extends Application {
     public void onCreate() {
         sAppInstance = this;
         mRestServiceManager = new RestServiceManager();
+        mRestServiceManager = new RestServiceManager(GenreMusic.ALL_MUSIC);
     }
 
     public static App getAppInstance() {
@@ -37,6 +39,10 @@ public class App extends Application {
     }
 
     public RestServiceManager getRestServiceManager() {
+        return mRestServiceManager;
+    }
+
+    public RestServiceManager getRestServiceManager(String genre) {
         return mRestServiceManager;
     }
 

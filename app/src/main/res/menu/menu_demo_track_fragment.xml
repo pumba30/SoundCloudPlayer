@@ -12,6 +12,12 @@
         app:showAsAction="always"/>
 
     <item
+        android:id="@+id/action_all_genres"
+        android:orderInCategory="100"
+        android:title="@string/all_genres"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/action_alternative_rock"
         android:orderInCategory="100"
         android:title="@string/alternative_rock"
