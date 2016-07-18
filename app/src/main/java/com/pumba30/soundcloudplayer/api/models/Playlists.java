@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Playts {
+public class Playlists {
 
     public List<Playlist> mPlaylists;
 
