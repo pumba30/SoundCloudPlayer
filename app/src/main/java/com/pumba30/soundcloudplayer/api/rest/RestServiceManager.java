@@ -2,7 +2,7 @@ package com.pumba30.soundcloudplayer.api.rest;
 
 import android.util.Log;
 
-import com.pumba30.soundcloudplayer.api.models.Playlists;
+import com.pumba30.soundcloudplayer.api.models.Playts;
 import com.pumba30.soundcloudplayer.api.models.Token;
 import com.pumba30.soundcloudplayer.api.models.Track;
 
@@ -54,7 +54,7 @@ public class RestServiceManager {
         mApiService.authorize(authMap).enqueue(new RestCallbackWrapper<>(restCallback));
     }
 
-    public void getPlayLists(RestServiceManager.RestCallback<List<Playlists>> restCallback) {
+    public void getPlayLists(RestServiceManager.RestCallback<List<Playts>> restCallback) {
         mApiService.getMyPlaylists().enqueue(new RestCallbackWrapper<>(restCallback));
     }
 

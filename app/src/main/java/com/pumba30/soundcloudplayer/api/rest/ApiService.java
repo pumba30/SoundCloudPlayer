@@ -1,7 +1,6 @@
 package com.pumba30.soundcloudplayer.api.rest;
 
-import com.pumba30.soundcloudplayer.api.models.Playlist;
-import com.pumba30.soundcloudplayer.api.models.Playlists;
+import com.pumba30.soundcloudplayer.api.models.Playts;
 import com.pumba30.soundcloudplayer.api.models.Token;
 import com.pumba30.soundcloudplayer.api.models.Track;
 
@@ -34,7 +33,7 @@ public interface ApiService {
     Call<Track> loadSoundCloudTrack(@Path("trackId") int trackId);
 
     @GET("me/playlists")
-    Call<List<Playlists>> getMyPlaylists();
+    Call<List<Playts>> getMyPlaylists();
 
     @PUT("me/favorites/{trackId}")
     Call<Track> toMyCollection(@Path("trackId") int trackId);
