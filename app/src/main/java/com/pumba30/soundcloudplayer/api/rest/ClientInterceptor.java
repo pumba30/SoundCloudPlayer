@@ -14,15 +14,9 @@ import okhttp3.Response;
 
 public class ClientInterceptor implements Interceptor {
     private static final String KEY_OAUTH_TOKEN = "oauth_token";
+    private static final String CLIENT_ID = "a09c7db0f83a5b19c3435543291fdf69";
+    private static final String KEY_CLIENT_ID = "client_id";
 
-    private String mKey;
-    private String mValue;
-
-
-    public ClientInterceptor(String key, String value) {
-        mKey = key;
-        mValue = value;
-    }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
@@ -38,7 +32,7 @@ public class ClientInterceptor implements Interceptor {
         if (!App.isUserLogged()) {
             urlWithQuery = originalHttpUrl
                     .newBuilder()
-                    .addQueryParameter(mKey, mValue)
+                    .addQueryParameter(KEY_CLIENT_ID, CLIENT_ID)
                     .build();
         } else {
             urlWithQuery = originalHttpUrl

@@ -41,4 +41,37 @@
     <string name="added_to_collection">Added to Collection</string>
     <string name="failed_added">Failed added</string>
     <string name="track_deleted">track deleted</string>
+    <string name="refresh_page">Refresh page</string>
+    <string name="refresh_ok">Refresh OK!</string>
+    <string name="alternative_rock">Alternative rock</string>
+    <string name="ambient">Ambient</string>
+    <string name="classical">Classical</string>
+    <string name="country">Country</string>
+    <string name="danceedm"><![CDATA[Dance & EDM]]></string>
+    <string name="dancehall">Dancehall</string>
+    <string name="deephouse">Deephouse</string>
+    <string name="disco">Disco</string>
+    <string name="drumbass">Drumbass</string>
+    <string name="dubstep">Dubstep</string>
+    <string name="electronic">Electronic</string>
+    <string name="folksingersongwriter">Folk</string>
+    <string name="hiphop_rap">Hip-hop and Rap</string>
+    <string name="house">House</string>
+    <string name="indie">Indie</string>
+    <string name="jazz_blues">Jazz and Blues</string>
+    <string name="latin">Latin</string>
+    <string name="metal">Metal</string>
+    <string name="piano">Piano</string>
+    <string name="pop">Pop</string>
+    <string name="rnb_soul"><![CDATA[R&B & Soul]]></string>
+    <string name="reggae">Reggae</string>
+    <string name="reggaeton">Reggaeton</string>
+    <string name="rock">Rock</string>
+    <string name="soundtrack">Soundtrack</string>
+    <string name="techno">Techno</string>
+    <string name="trance">Trance</string>
+    <string name="trap">Trap</string>
+    <string name="triphop">Triphop</string>
+    <string name="world">World</string>
+
 </resources>

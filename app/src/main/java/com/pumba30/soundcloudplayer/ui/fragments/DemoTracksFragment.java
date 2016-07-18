@@ -1,9 +1,12 @@
 package com.pumba30.soundcloudplayer.ui.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,16 +23,18 @@ import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.api.rest.RestServiceManager;
 import com.pumba30.soundcloudplayer.player.Player;
 import com.pumba30.soundcloudplayer.ui.adapters.PublicTracksListAdapter;
+import com.pumba30.soundcloudplayer.utils.Utils;
 
 import java.util.List;
 
 
-public class DemoTracksFragment extends Fragment {
+public class DemoTracksFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     public static final String LOG_TAG = DemoTracksFragment.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
     private PublicTracksListAdapter mAdapter;
     private Player mPlayer;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public static DemoTracksFragment newInstance() {
         return new DemoTracksFragment();
@@ -50,6 +55,14 @@ public class DemoTracksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_public_tracks, container, false);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
+        mSwipeRefreshLayout.setColorSchemeColors(Color.RED,
+                Color.YELLOW,
+                Color.GREEN,
+                Color.CYAN);
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.public_tracks_list_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -58,13 +71,24 @@ public class DemoTracksFragment extends Fragment {
         mAdapter = new PublicTracksListAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
 
+        loadGenresAllMusic();
+
+        return view;
+    }
+
+    private void loadGenresAllMusic() {
         App.getAppInstance().getRestServiceManager()
-                .loadPublicTracks(new RestServiceManager.RestCallback<List<Track>>() {
+                .loadGenreAllMusic(new RestServiceManager.RestCallback<List<Track>>() {
                     @Override
                     public void onSuccess(List<Track> tracks) {
                         if (tracks != null) {
                             mAdapter.setTracksList(tracks);
                             mAdapter.notifyDataSetChanged();
+                            if (mSwipeRefreshLayout.isRefreshing()) {
+                                mSwipeRefreshLayout.setRefreshing(false);
+                                Utils.toast(getActivity(), R.string.refresh_ok);
+                            }
+
                         } else {
                             Log.d(LOG_TAG, "Error load track");
                         }
@@ -75,8 +99,6 @@ public class DemoTracksFragment extends Fragment {
                         Log.d(LOG_TAG, "Error request code: " + String.valueOf(errorCode));
                     }
                 });
-
-        return view;
     }
 
 
@@ -129,4 +151,8 @@ public class DemoTracksFragment extends Fragment {
     }
 
 
+    @Override
+    public void onRefresh() {
+        loadGenresAllMusic();
+    }
 }
