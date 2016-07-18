@@ -143,6 +143,7 @@ public class DemoTracksFragment extends Fragment implements SwipeRefreshLayout.O
 
     @Override
     public void onRefresh() {
+        // FIXME: 18.07.2016 not properly work
         loadMusicByGenre(mManager.getGenre());
     }
 
