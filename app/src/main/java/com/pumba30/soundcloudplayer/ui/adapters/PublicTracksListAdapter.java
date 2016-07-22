@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.player.CardViewControlPlayer;
-import com.pumba30.soundcloudplayer.utils.PreferencesManager;
+import com.pumba30.soundcloudplayer.managers.PreferencesManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class PublicTracksListAdapter extends RecyclerView.Adapter<PublicTracksLi
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        if (PreferencesManager.getInstance(mContext).getUserIsInAccount()) {
+        if (PreferencesManager.getInstance(mContext).isUserLoggedIn()) {
             view = mInflater
                     .inflate(R.layout.card_item_list_public_tracks, parent, false);
         } else {

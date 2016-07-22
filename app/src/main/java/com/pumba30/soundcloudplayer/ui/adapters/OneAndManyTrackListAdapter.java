@@ -15,8 +15,8 @@ import android.widget.TextView;
 import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.api.rest.RestServiceManager;
-import com.pumba30.soundcloudplayer.player.playerEvents.TrackToCollectionEvent;
+import com.pumba30.soundcloudplayer.managers.RestServiceManager;
+import com.pumba30.soundcloudplayer.player.playerEventBus.TrackToCollectionEvent;
 import com.pumba30.soundcloudplayer.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -96,7 +96,7 @@ public class OneAndManyTrackListAdapter extends RecyclerView.Adapter<OneAndManyT
 
     private void deleteTrack(Track track) {
         int idTrack = track.getId();
-        App.getAppInstance().getRestServiceManager()
+        App.sAppInstance.getRestServiceManager()
                 .deleteFromMyCollection(idTrack, new RestServiceManager.RestCallback<Track>() {
                     @Override
                     public void onSuccess(Track response) {

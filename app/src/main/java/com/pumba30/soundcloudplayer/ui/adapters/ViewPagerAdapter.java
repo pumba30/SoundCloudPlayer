@@ -11,6 +11,7 @@ import android.text.SpannableString;
 import android.text.style.ImageSpan;
 
 import com.pumba30.soundcloudplayer.R;
+import com.pumba30.soundcloudplayer.ui.fragments.ChartsTracksFragment;
 import com.pumba30.soundcloudplayer.ui.fragments.CollectionTracksFragment;
 import com.pumba30.soundcloudplayer.ui.fragments.PlayListsFragment;
 import com.pumba30.soundcloudplayer.ui.fragments.PublicTrackFragment;
@@ -36,7 +37,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return PublicTrackFragment.newInstance();
+                return ChartsTracksFragment.newInstance();
             case 1:
                 return CollectionTracksFragment.newInstance();
             case 2:

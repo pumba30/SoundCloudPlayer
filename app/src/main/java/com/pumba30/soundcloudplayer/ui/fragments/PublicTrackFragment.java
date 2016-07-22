@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.api.rest.RestServiceManager;
+import com.pumba30.soundcloudplayer.managers.RestServiceManager;
 import com.pumba30.soundcloudplayer.player.Player;
 import com.pumba30.soundcloudplayer.ui.adapters.PublicTracksListAdapter;
 
@@ -41,7 +41,7 @@ public class PublicTrackFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_public_tracks_list, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.public_tracks_list_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tracks_list_recycler_view);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -54,7 +54,7 @@ public class PublicTrackFragment extends Fragment {
     }
 
     public void loadPublickTracks() {
-        App.getAppInstance().getRestServiceManager()
+        App.sAppInstance.getRestServiceManager()
                 .loadPublicTracks(new RestServiceManager.RestCallback<List<Track>>() {
                     @Override
                     public void onSuccess(List<Track> tracks) {

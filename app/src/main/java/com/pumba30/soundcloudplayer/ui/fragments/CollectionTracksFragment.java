@@ -5,17 +5,19 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 
 import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.api.rest.RestServiceManager;
+import com.pumba30.soundcloudplayer.managers.RestServiceManager;
 import com.pumba30.soundcloudplayer.player.PlayerActivity;
-import com.pumba30.soundcloudplayer.player.playerEvents.TrackToCollectionEvent;
+import com.pumba30.soundcloudplayer.player.playerEventBus.TrackToCollectionEvent;
 import com.pumba30.soundcloudplayer.ui.adapters.OneAndManyTrackListAdapter;
 import com.pumba30.soundcloudplayer.utils.DividerItemDecoration;
 
@@ -38,6 +40,7 @@ public class CollectionTracksFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+
     }
 
     @Override
@@ -68,7 +71,7 @@ public class CollectionTracksFragment extends Fragment {
     }
 
     private void getMyCollectionList() {
-        App.getAppInstance().getRestServiceManager()
+        App.sAppInstance.getRestServiceManager()
                 .getMyCollection(new RestServiceManager.RestCallback<List<Track>>() {
                     @Override
                     public void onSuccess(List<Track> response) {

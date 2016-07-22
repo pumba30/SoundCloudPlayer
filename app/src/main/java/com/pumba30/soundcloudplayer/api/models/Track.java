@@ -113,7 +113,7 @@ public class Track implements Parcelable {
     private String mUri;
 
     @SerializedName("user")
-    private User mUser;
+    private MiniUser mUser;
 
     @SerializedName("permalink_url")
     private String mPermalinkUrl;
@@ -177,7 +177,7 @@ public class Track implements Parcelable {
         mOriginalFormat = in.readString();
         mLicence = in.readString();
         mUri = in.readString();
-        mUser = in.readParcelable(User.class.getClassLoader());
+        mUser = in.readParcelable(MiniUser.class.getClassLoader());
         mPermalinkUrl = in.readString();
         mArtworkUrl = in.readString();
         mWaveFormUrl = in.readString();
@@ -473,11 +473,11 @@ public class Track implements Parcelable {
         return mUri;
     }
 
-    public void setUser(User user) {
+    public void setUser(MiniUser user) {
         mUser = user;
     }
 
-    public User getUser() {
+    public MiniUser getUser() {
         return mUser;
     }
 

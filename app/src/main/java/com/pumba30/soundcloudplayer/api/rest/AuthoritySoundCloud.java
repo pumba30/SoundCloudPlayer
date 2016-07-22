@@ -1,15 +1,18 @@
 package com.pumba30.soundcloudplayer.api.rest;
 
-import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.api.models.Token;
-import com.pumba30.soundcloudplayer.utils.PreferencesManager;
+import com.pumba30.soundcloudplayer.api.models.User;
+import com.pumba30.soundcloudplayer.managers.RestServiceManager;
+import com.pumba30.soundcloudplayer.managers.SessionManager;
+import com.pumba30.soundcloudplayer.ui.activity.MainActivity;
 
 import java.util.HashMap;
 
-// authority on SoundCloud and receive the token
+// authority on SoundCloud
 public class AuthoritySoundCloud {
     private static final String LOG_TAG = AuthoritySoundCloud.class.getSimpleName();
 
@@ -27,7 +30,9 @@ public class AuthoritySoundCloud {
     public static final String KEY_GRANT_TYPE = "grant_type";
     public static final String KEY_REDIRECT_URI = "redirect_uri";
     public static final String KEY_CODE = "code";
-    public static final String FORMAT = "%sclient_id=%s&redirect_uri=%s&responce_type=%s&scope=%s&display=%s&state=%s";
+
+    private static RestServiceManager sRestServiceManager = App.sAppInstance.getRestServiceManager();
+    private static SessionManager sSessionManager = App.sAppInstance.getSessionManager();
 
 
     public static String getUrlConnect() {
@@ -40,23 +45,43 @@ public class AuthoritySoundCloud {
                 "&state=" + STATE;
     }
 
-    public static void authorization(String code, Context context) {
-        requestToken(code, context);
+    public static void authorization(String code) {
+        requestToken(code);
     }
 
-    private static void requestToken(String code, final Context context) {
-        HashMap<String, String> fieldMap = requestTokenUrlToMap(code);
+    private static void requestToken(String code) {
+        final HashMap<String, String> fieldMap = requestTokenUrlToMap(code);
 
-        App.getAppInstance().getRestServiceManager().getToken(fieldMap, new RestServiceManager.RestCallback<Token>() {
+        sRestServiceManager.getToken(fieldMap, new RestServiceManager.RestCallback<Token>() {
             @Override
             public void onSuccess(Token response) {
-                PreferencesManager.getInstance(context).storeToken(response);
                 Log.d(LOG_TAG, "Token " + response.toString());
+                sSessionManager.createLoginSession(response, true);
+                requestUser();
+
+                startMainActivity();
             }
 
             @Override
             public void onError(int errorCode) {
                 Log.e(LOG_TAG, "Auth failure - " + errorCode);
+                throw new RuntimeException("Auth failure");
+            }
+        });
+    }
+
+    private static void requestUser() {
+        sRestServiceManager.getUser(new RestServiceManager.RestCallback<User>() {
+            @Override
+            public void onSuccess(User response) {
+                Log.d(LOG_TAG, "User receive OK: " + response.toString());
+                sSessionManager.saveUser(response);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                Log.e(LOG_TAG, "User null - " + errorCode);
+                throw new NullPointerException("User null");
             }
         });
     }
@@ -75,5 +100,10 @@ public class AuthoritySoundCloud {
         }
     }
 
+    private static void startMainActivity() {
+        Intent intent = new Intent(App.sAppInstance, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        App.sAppInstance.startActivity(intent);
+    }
 
 }

@@ -15,9 +15,9 @@ import android.widget.ProgressBar;
 import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.api.rest.RestServiceManager;
-import com.pumba30.soundcloudplayer.player.playerEvents.TrackToCollectionEvent;
-import com.pumba30.soundcloudplayer.player.playerEvents.PlayerEvent;
+import com.pumba30.soundcloudplayer.managers.RestServiceManager;
+import com.pumba30.soundcloudplayer.player.playerEventBus.TrackToCollectionEvent;
+import com.pumba30.soundcloudplayer.player.playerEventBus.PlayerEvent;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -145,12 +145,12 @@ public class CardViewControlPlayer extends RecyclerView.ViewHolder implements Vi
 
     private void addToMyCollection() {
         int idTrack = mTrack.getId();
-        App.getAppInstance().getRestServiceManager().toMyCollection(idTrack, new RestServiceManager.RestCallback<Track>() {
+        App.sAppInstance.getRestServiceManager()
+                .toMyCollection(idTrack, new RestServiceManager.RestCallback<Track>() {
             @Override
             public void onSuccess(Track response) {
                 Utils.toast(mContext, R.string.added_to_collection);
                 EventBus.getDefault().post(new TrackToCollectionEvent(true));
-
             }
 
             @Override

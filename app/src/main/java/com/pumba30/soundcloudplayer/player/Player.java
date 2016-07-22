@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.player.playerEvents.PlayerEvent;
+import com.pumba30.soundcloudplayer.player.playerEventBus.PlayerEvent;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;

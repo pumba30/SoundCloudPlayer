@@ -9,9 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="sdtgdsf"/>
+
         <android.support.v7.widget.RecyclerView
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/public_tracks_list_recycler_view"
+            android:id="@+id/charts_tracks_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

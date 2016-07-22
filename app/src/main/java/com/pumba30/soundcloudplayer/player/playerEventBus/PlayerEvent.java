@@ -1,4 +1,4 @@
-package com.pumba30.soundcloudplayer.player.playerEvents;
+package com.pumba30.soundcloudplayer.player.playerEventBus;
 
 /**
  * Created by pumba30 on 07.07.2016.

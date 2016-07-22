@@ -1,10 +1,14 @@
-package com.pumba30.soundcloudplayer.api.rest;
+package com.pumba30.soundcloudplayer.managers;
 
 import android.util.Log;
 
 import com.pumba30.soundcloudplayer.api.models.Playlists;
 import com.pumba30.soundcloudplayer.api.models.Token;
 import com.pumba30.soundcloudplayer.api.models.Track;
+import com.pumba30.soundcloudplayer.api.models.User;
+import com.pumba30.soundcloudplayer.api.rest.ApiService;
+import com.pumba30.soundcloudplayer.api.rest.ClientInterceptor;
+import com.pumba30.soundcloudplayer.api.rest.RestClientFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,14 +34,6 @@ public class RestServiceManager {
         interceptors.add(new ClientInterceptor());
         mApiService = RestClientFactory.getRestApiService(interceptors);
     }
-
-    public RestServiceManager(String genre) {
-        List<Interceptor> interceptors = new ArrayList<>();
-        interceptors.add(new ClientInterceptor());
-        mApiService = RestClientFactory.getRestApiService(interceptors);
-        mGenre = genre;
-    }
-
 
     public void loadMusicByGenre(String genreMusic, RestServiceManager.RestCallback<List<Track>> restCallback) {
         mApiService.getMusic(getQueryToMap(GENRE, genreMusic))
@@ -70,6 +66,10 @@ public class RestServiceManager {
         mApiService.getMyColection().enqueue(new RestCallbackWrapper<>(trackRestCallback));
     }
 
+    public void getUser(RestServiceManager.RestCallback<User> userRestCallback) {
+        mApiService.getUser().enqueue(new RestCallbackWrapper<>(userRestCallback));
+    }
+
     private static Map<String, String> getQueryToMap(String key, String value) {
         Map<String, String> map = new HashMap<>();
         map.put(key, value);
@@ -91,7 +91,7 @@ public class RestServiceManager {
 
         @Override
         public void onResponse(Call<T> call, Response<T> response) {
-            Log.d(LOG_TAG, "Responce to string: " + response.toString());
+            Log.d(LOG_TAG, "Responce to string: " + response.message());
 
             if (response.isSuccessful()) {
                 mRestCallback.onSuccess(response.body());

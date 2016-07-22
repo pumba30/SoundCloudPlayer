@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -17,6 +18,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+    <style name="NoShadow" parent="AppTheme">
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
     <!--style color tabs-->
     <style name="SoundCloudTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorHeight">6dp</item>
@@ -26,11 +31,15 @@
     <style name="TabCustomTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">false</item>
     </style>
+
     <style name="PopupMenu" parent="android:Widget.PopupMenu">
         <item name="android:background">@color/white</item>
         <item name="android:textColor">@color/gray</item>
     </style>
 
-    <color name="gray">#808080</color>
 
+    <style name="WidgetSpinner">
+        <item name="android:background">@drawable/background_spinner</item>
+        <item name="android:popupBackground">@drawable/bg_popup_spinner</item>
+    </style>
 </resources>

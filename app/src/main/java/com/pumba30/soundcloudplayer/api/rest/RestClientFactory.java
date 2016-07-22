@@ -2,8 +2,6 @@ package com.pumba30.soundcloudplayer.api.rest;
 
 import android.support.annotation.NonNull;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.pumba30.soundcloudplayer.BuildConfig;
 
 import java.util.List;
@@ -16,11 +14,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestClientFactory {
-    public static final String API_END_POINT = "https://api.soundcloud.com/";
+    public static final String BASE_URL = "https://api.soundcloud.com/";
 
     public static ApiService getRestApiService(List<Interceptor> interceptors) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_END_POINT)
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(getClient(interceptors))
                 .build();

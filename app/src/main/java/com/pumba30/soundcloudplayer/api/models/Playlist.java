@@ -73,7 +73,7 @@ public class Playlist {
     @SerializedName("streamable")
     private boolean mStreamable;
     @SerializedName("user")
-    private User mUser;
+    private MiniUser mUser;
     @SerializedName("embeddable_by")
     private String mEmbeddableBy;
     @SerializedName("label_id")
@@ -343,11 +343,11 @@ public class Playlist {
         this.mStreamable = streamable;
     }
 
-    public User getUser() {
+    public MiniUser getUser() {
         return mUser;
     }
 
-    public void setUser(User user) {
+    public void setUser(MiniUser user) {
         this.mUser = user;
     }
 

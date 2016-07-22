@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="genres_array">
+        <item>@string/all_music</item>
+        <item>@string/alternative_rock</item>
+        <item>@string/ambient</item>
+        <item>@string/classical</item>
+        <item>@string/country</item>
+        <item>@string/danceedm</item>
+        <item>@string/dancehall</item>
+        <item>@string/deephouse</item>
+        <item>@string/disco</item>
+        <item>@string/drumbass</item>
+        <item>@string/dubstep</item>
+        <item>@string/electronic</item>
+        <item>@string/folksingersongwriter</item>
+        <item>@string/hiphop_rap</item>
+        <item>@string/house</item>
+        <item>@string/indie</item>
+        <item>@string/jazz_blues</item>
+        <item>@string/latin</item>
+        <item>@string/metal</item>
+        <item>@string/piano</item>
+        <item>@string/pop</item>
+        <item>@string/rnb_soul</item>
+        <item>@string/reggae</item>
+        <item>@string/reggaeton</item>
+        <item>@string/rock</item>
+        <item>@string/soundtrack</item>
+        <item>@string/techno</item>
+        <item>@string/trance</item>
+        <item>@string/trap</item>
+        <item>@string/triphop</item>
+        <item>@string/world</item>
+    </string-array>
+
+
+</resources>

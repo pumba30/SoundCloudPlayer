@@ -3,6 +3,7 @@ package com.pumba30.soundcloudplayer.api.rest;
 import com.pumba30.soundcloudplayer.api.models.Playlists;
 import com.pumba30.soundcloudplayer.api.models.Token;
 import com.pumba30.soundcloudplayer.api.models.Track;
+import com.pumba30.soundcloudplayer.api.models.User;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,9 @@ import retrofit2.http.QueryMap;
  * Created by pumba30 on 28.06.2016.
  */
 public interface ApiService {
+
+    @GET("me")
+    Call<User> getUser();
 
     @GET("tracks")
     Call<List<Track>> loadPublicTracks();
@@ -47,13 +51,5 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("oauth2/token")
     Call<Token> authorize(@FieldMap Map<String, String> authMap);
-
-
-
-//    http://api.soundcloud.com/tracks?genres=rock&client_id=YOUR_CLIENT_ID
-//    http://api.soundcloud.com/tracks?genres=all-music&client_id=YOUR_CLIENT_ID
-    /*requests for charts track*/
-//    @GET("top")
-//    Call<List<Track>> getMusic(@QueryMap Map<String, String> stringMap);
 
 }

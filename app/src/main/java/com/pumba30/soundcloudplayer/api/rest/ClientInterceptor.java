@@ -1,9 +1,6 @@
 package com.pumba30.soundcloudplayer.api.rest;
 
-import android.text.TextUtils;
-
 import com.pumba30.soundcloudplayer.App;
-import com.pumba30.soundcloudplayer.utils.Utils;
 
 import java.io.IOException;
 
@@ -13,39 +10,27 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class ClientInterceptor implements Interceptor {
+    private static final String LOG_TAG = ClientInterceptor.class.getSimpleName();
     private static final String KEY_OAUTH_TOKEN = "oauth_token";
     private static final String CLIENT_ID = "a09c7db0f83a5b19c3435543291fdf69";
     private static final String KEY_CLIENT_ID = "client_id";
 
-
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request original = chain.request();
-        String token = null;
-        if (!TextUtils.isEmpty(App.getToken())) {
-            token = App.getToken();
-        }
-        HttpUrl originalHttpUrl = original.url();
+        HttpUrl.Builder urlBuilder = original.url().newBuilder();
+        String token = App.sAppInstance.getSessionManager().getToken();
 
-        HttpUrl urlWithQuery;
-
-        if (!App.isUserLogged()) {
-            urlWithQuery = originalHttpUrl
-                    .newBuilder()
-                    .addQueryParameter(KEY_CLIENT_ID, CLIENT_ID)
-                    .build();
+        if (token == null) {
+            urlBuilder.addEncodedQueryParameter(KEY_CLIENT_ID, CLIENT_ID).build();
         } else {
-            urlWithQuery = originalHttpUrl
-                    .newBuilder()
-                    .addQueryParameter(KEY_OAUTH_TOKEN, token)
-                    .build();
+            urlBuilder.addEncodedQueryParameter(KEY_OAUTH_TOKEN, token);
         }
 
-        Request.Builder builder = original.newBuilder().url(urlWithQuery);
-        Request request = builder.build();
+        Request newRequest = original.newBuilder()
+                .url(urlBuilder.build())
+                .build();
 
-        return chain.proceed(request);
+        return chain.proceed(newRequest);
     }
-
-
 }
