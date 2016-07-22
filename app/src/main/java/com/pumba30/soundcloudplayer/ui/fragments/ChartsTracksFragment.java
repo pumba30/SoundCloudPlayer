@@ -4,15 +4,21 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
@@ -33,6 +39,8 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
     private Player mPlayer;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RestServiceManager mManager = App.sAppInstance.getRestServiceManager();
+    private Spinner mSpinner;
+
 
     public static ChartsTracksFragment newInstance() {
         return new ChartsTracksFragment();
@@ -42,6 +50,7 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        setRetainInstance(true);
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.charts);
@@ -134,7 +143,31 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
         loadMusicByGenre(mManager.getGenre());
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.spinner_filter, menu);
+        createSpinnerFilterGenreMusic(menu);
 
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void createSpinnerFilterGenreMusic(Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.context_menu_filter);
+        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+        mSpinner = (Spinner) layoutInflater.inflate(R.layout.spinner_menu, null);
+        mSpinner.setDropDownVerticalOffset(45);
+
+        CharSequence[] charSequence = getActivity().getResources().getStringArray(R.array.genres_array);
+        ArrayAdapter<CharSequence> spinnerAdapter = new ArrayAdapter<>(getActivity(),
+                R.layout.spinner_item_main,
+                android.R.id.text1,
+                charSequence);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        LinearLayout linearLayout = (LinearLayout) MenuItemCompat.getActionView(menuItem);
+        linearLayout.addView(mSpinner);
+        mSpinner.setAdapter(spinnerAdapter);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

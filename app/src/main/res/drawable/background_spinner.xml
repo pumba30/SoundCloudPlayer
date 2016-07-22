@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <bitmap android:gravity="center|end" android:src="@drawable/ic_filter_list_white_24dp">
+        <bitmap android:gravity="center|end" android:src="@drawable/ic_filter_list">
         </bitmap>
     </item>
 

@@ -5,9 +5,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
@@ -16,8 +13,7 @@ import com.pumba30.soundcloudplayer.ui.adapters.ViewPagerAdapter;
 
 public class MainActivity extends BaseDrawerActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private Spinner mSpinner;
-
+    public static final String KEY_TITLE = "keyTitle";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +25,6 @@ public class MainActivity extends BaseDrawerActivity {
         } else {
             mToolbar.setTitle(R.string.charts);
 
-            mSpinner = (Spinner) mToolbar.findViewById(R.id.toolbar_spinner);
-
-            ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
-                    R.array.genres_array, R.layout.spinner_item_main);
-            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            mSpinner.setAdapter(spinnerAdapter);
-
             AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
             params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
                     | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
@@ -46,6 +35,7 @@ public class MainActivity extends BaseDrawerActivity {
 
 
             TabLayout tabLayout = (TabLayout) findViewById(R.id.soundcloud_tabs);
+            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
             tabLayout.setupWithViewPager(viewPager);
 
             tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
@@ -54,18 +44,14 @@ public class MainActivity extends BaseDrawerActivity {
                     int tabId = tab.getPosition();
                     if (tabId == 0) {
                         mToolbar.setTitle(R.string.charts);
-                        mSpinner.setVisibility(View.VISIBLE);
                     } else if (tabId == 1) {
                         mToolbar.setTitle(R.string.like_tracks);
-                        mSpinner.setVisibility(View.GONE);
                         playerStop();
                     } else if (tabId == 2) {
                         mToolbar.setTitle(R.string.playlists);
-                        mSpinner.setVisibility(View.GONE);
                         playerStop();
                     } else if (tabId == 3) {
                         mToolbar.setTitle(R.string.search);
-                        mSpinner.setVisibility(View.GONE);
                         playerStop();
                     }
                 }
@@ -85,5 +71,6 @@ public class MainActivity extends BaseDrawerActivity {
             Player.getInstance(getApplicationContext()).stopPlayer();
         }
     }
+
 
 }
