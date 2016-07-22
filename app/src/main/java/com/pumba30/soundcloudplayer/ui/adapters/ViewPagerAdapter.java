@@ -13,8 +13,7 @@ import android.text.style.ImageSpan;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.ui.fragments.ChartsTracksFragment;
 import com.pumba30.soundcloudplayer.ui.fragments.CollectionTracksFragment;
-import com.pumba30.soundcloudplayer.ui.fragments.PlayListsFragment;
-import com.pumba30.soundcloudplayer.ui.fragments.PublicTrackFragment;
+import com.pumba30.soundcloudplayer.ui.fragments.PlistsFragment;
 import com.pumba30.soundcloudplayer.ui.fragments.SearchFragment;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
@@ -41,7 +40,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             case 1:
                 return CollectionTracksFragment.newInstance();
             case 2:
-                return PlayListsFragment.newInstance();
+                return PlistsFragment.newInstance();
             case 3:
                 return SearchFragment.newInstance();
         }
