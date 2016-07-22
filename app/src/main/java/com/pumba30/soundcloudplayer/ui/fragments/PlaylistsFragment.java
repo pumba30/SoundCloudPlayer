@@ -12,9 +12,9 @@ import com.pumba30.soundcloudplayer.R;
 /**
  * Created by pumba30 on 15.07.2016.
  */
-public class PlistsFragment extends Fragment {
-    public static PlistsFragment newInstance() {
-        return new PlistsFragment();
+public class PlaylistsFragment extends Fragment {
+    public static PlaylistsFragment newInstance() {
+        return new PlaylistsFragment();
     }
 
 
