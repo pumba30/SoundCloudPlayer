@@ -15,14 +15,14 @@ import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.managers.RestServiceManager;
 import com.pumba30.soundcloudplayer.player.Player;
-import com.pumba30.soundcloudplayer.ui.adapters.PublicTracksListAdapter;
+import com.pumba30.soundcloudplayer.ui.adapters.ChartTracksAdapter;
 
 import java.util.List;
 
 public class PublicTrackFragment extends Fragment {
 
     private static final String LOG_TAG = PublicTrackFragment.class.getSimpleName();
-    private PublicTracksListAdapter mAdapter;
+    private ChartTracksAdapter mAdapter;
     private Player mPlayer;
 
 
@@ -46,7 +46,7 @@ public class PublicTrackFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        mAdapter = new PublicTracksListAdapter(getActivity());
+        mAdapter = new ChartTracksAdapter(getActivity());
         recyclerView.setAdapter(mAdapter);
 
         loadPublickTracks();

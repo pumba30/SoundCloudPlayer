@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.player.blurPlayerView.BlurPlayerView;
-import com.pumba30.soundcloudplayer.ui.adapters.OneAndManyTrackListAdapter;
+import com.pumba30.soundcloudplayer.ui.adapters.OneAndManyTrackAdapter;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
 import java.util.ArrayList;
@@ -74,8 +74,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(layoutManager);
 
-        OneAndManyTrackListAdapter adapter =
-                new OneAndManyTrackListAdapter(getApplicationContext(), TypeListTrack.ONE_TRACK);
+        OneAndManyTrackAdapter adapter =
+                new OneAndManyTrackAdapter(getApplicationContext(), TypeListTrack.ONE_TRACK);
         mRecyclerView.setAdapter(adapter);
 
         adapter.setTrackList(tracks);

@@ -11,44 +11,31 @@ import android.widget.TextView;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.player.CardViewControlPlayer;
-import com.pumba30.soundcloudplayer.managers.PreferencesManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-/**
- * Created by pumba30 on 28.06.2016.
- */
-public class PublicTracksListAdapter extends RecyclerView.Adapter<PublicTracksListAdapter.ViewHolder> {
-    private static final String LOG_TAG = PublicTracksListAdapter.class.getSimpleName();
+public class ChartTracksAdapter extends RecyclerView.Adapter<ChartTracksAdapter.ViewHolder> {
+    private static final String LOG_TAG = ChartTracksAdapter.class.getSimpleName();
 
     private List<Track> mTracksList;
     private LayoutInflater mInflater;
     private CardViewControlPlayer mCardViewController;
-    private Context mContext;
 
 
-    public PublicTracksListAdapter(Context context) {
-        mContext = context;
+    public ChartTracksAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        if (PreferencesManager.getInstance(mContext).isUserLoggedIn()) {
-            view = mInflater
-                    .inflate(R.layout.card_item_list_public_tracks, parent, false);
-        } else {
-            view = mInflater
-                    .inflate(R.layout.card_item_list_public_tracks_unlogged, parent, false);
-        }
+        view = mInflater.inflate(R.layout.card_item_list_public_tracks, parent, false);
 
         //handling  buttons in CardView item
         mCardViewController = new CardViewControlPlayer(view);
         return new ViewHolder(view);
     }
-
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
@@ -66,13 +53,11 @@ public class PublicTracksListAdapter extends RecyclerView.Adapter<PublicTracksLi
         }
     }
 
-
     public void setTracksList(List<Track> tracksList) {
         if (tracksList != null) {
             mTracksList = tracksList;
         }
     }
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView mUserNamePostedTrack;
@@ -86,7 +71,6 @@ public class PublicTracksListAdapter extends RecyclerView.Adapter<PublicTracksLi
             super(itemView);
             initializationView(itemView);
         }
-
 
         private void initializationView(View itemView) {
             mUserNamePostedTrack = (TextView) itemView.findViewById(R.id.text_view_user_name_posted_track);

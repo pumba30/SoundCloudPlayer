@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -25,21 +26,20 @@ import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.managers.RestServiceManager;
 import com.pumba30.soundcloudplayer.player.Player;
-import com.pumba30.soundcloudplayer.ui.adapters.PublicTracksListAdapter;
+import com.pumba30.soundcloudplayer.ui.adapters.ChartTracksAdapter;
 import com.pumba30.soundcloudplayer.utils.GenreMusic;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
 import java.util.List;
 
 
-public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, Spinner.OnItemSelectedListener {
     public static final String LOG_TAG = ChartsTracksFragment.class.getSimpleName();
 
-    private PublicTracksListAdapter mAdapter;
+    private ChartTracksAdapter mAdapter;
     private Player mPlayer;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RestServiceManager mManager = App.sAppInstance.getRestServiceManager();
-    private Spinner mSpinner;
 
 
     public static ChartsTracksFragment newInstance() {
@@ -68,18 +68,17 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
 
         mSwipeRefreshLayout.setColorSchemeColors(Color.RED,
                 Color.YELLOW,
-                Color.GREEN,
-                Color.CYAN);
+                Color.GREEN);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.charts_tracks_recycler_view);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        mAdapter = new PublicTracksListAdapter(getActivity());
+        mAdapter = new ChartTracksAdapter(getActivity());
         recyclerView.setAdapter(mAdapter);
 
-        loadMusicByGenre(GenreMusic.ALL_MUSIC);
+        loadMusicByGenre("all-music");
 
         return view;
     }
@@ -91,6 +90,7 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
             @Override
             public void onSuccess(List<Track> tracks) {
                 if (tracks != null) {
+                    Log.d(LOG_TAG, "traks:" + tracks.toString());
                     mAdapter.setTracksList(tracks);
                     mAdapter.notifyDataSetChanged();
                     if (mSwipeRefreshLayout.isRefreshing()) {
@@ -140,7 +140,7 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
     @Override
     public void onRefresh() {
         // FIXME: 18.07.2016 not properly work
-        loadMusicByGenre(mManager.getGenre());
+        // loadMusicByGenre(GenreMusic.ALL_MUSIC);
     }
 
     @Override
@@ -154,8 +154,9 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
     private void createSpinnerFilterGenreMusic(Menu menu) {
         MenuItem menuItem = menu.findItem(R.id.context_menu_filter);
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-        mSpinner = (Spinner) layoutInflater.inflate(R.layout.spinner_menu, null);
-        mSpinner.setDropDownVerticalOffset(45);
+        Spinner spinner = (Spinner) layoutInflater.inflate(R.layout.spinner_menu, null);
+        spinner.setOnItemSelectedListener(this);
+        spinner.setDropDownVerticalOffset(45);
 
         CharSequence[] charSequence = getActivity().getResources().getStringArray(R.array.genres_array);
         ArrayAdapter<CharSequence> spinnerAdapter = new ArrayAdapter<>(getActivity(),
@@ -165,62 +166,17 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         LinearLayout linearLayout = (LinearLayout) MenuItemCompat.getActionView(menuItem);
-        linearLayout.addView(mSpinner);
-        mSpinner.setAdapter(spinnerAdapter);
+        linearLayout.addView(spinner);
+        spinner.setAdapter(spinnerAdapter);
+    }
+
+    //handling click spinner's item
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String genreMusic = GenreMusic.getGenre(i);
+        Log.d(LOG_TAG, "Genre Music: " + genreMusic);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-//        if (id == R.id.action_all_genres) {
-//            mToolbar.setTitle(R.string.all_music);
-//            loadMusicByGenre(GenreMusic.ALL_MUSIC);
-//
-//        } else if (id == R.id.action_alternative_rock) {
-//            mToolbar.setTitle(R.string.alternative_rock);
-//            loadMusicByGenre(GenreMusic.ALTERNATIVE_ROCK);
-//
-//        } else if (id == R.id.action_ambient) {
-//            mToolbar.setTitle(R.string.ambient);
-//            loadMusicByGenre(GenreMusic.AMBIENT);
-//
-//        } else if (id == R.id.action_classical) {
-//            mToolbar.setTitle(R.string.classical);
-//            loadMusicByGenre(GenreMusic.CLASSICAL);
-//
-//        } else if (id == R.id.action_country) {
-//            mToolbar.setTitle(R.string.country);
-//            loadMusicByGenre(GenreMusic.COUNTRY);
-//
-//        } else if (id == R.id.action_danceedm) {
-//            mToolbar.setTitle(R.string.danceedm);
-//            loadMusicByGenre(GenreMusic.DANCE_EDM);
-//
-//        } else if (id == R.id.action_dancehall) {
-//            mToolbar.setTitle(R.string.dancehall);
-//            loadMusicByGenre(GenreMusic.DANCEHALL);
-//
-//        } else if (id == R.id.action_deephouse) {
-//            mToolbar.setTitle(R.string.deephouse);
-//            loadMusicByGenre(GenreMusic.DEEP_HOUSE);
-//
-//        } else if (id == R.id.action_disco) {
-//            mToolbar.setTitle(R.string.disco);
-//            loadMusicByGenre(GenreMusic.DISCO);
-//
-//        } else if (id == R.id.action_drumbass) {
-//            mToolbar.setTitle(R.string.drumbass);
-//            loadMusicByGenre(GenreMusic.DRUM_BASS);
-//
-//        } else if (id == R.id.action_dubstep) {
-//            mToolbar.setTitle(R.string.dubstep);
-//            loadMusicByGenre(GenreMusic.DUBSTEP);
-//        }
-        // TODO: 18.07.2016 add the remaining genres menu item
-
-
-        return super.onOptionsItemSelected(item);
-    }
-
+    public void onNothingSelected(AdapterView<?> adapterView) {/*empty*/}
 }

@@ -24,8 +24,6 @@ public class RestServiceManager {
 
     private static final String LOG_TAG = RestServiceManager.class.getSimpleName();
     public static final String GENRE = "genre";
-    private String mGenre;
-
 
     private ApiService mApiService;
 
@@ -76,9 +74,6 @@ public class RestServiceManager {
         return map;
     }
 
-    public String getGenre() {
-        return mGenre;
-    }
 
     protected class RestCallbackWrapper<T> implements Callback<T> {
 

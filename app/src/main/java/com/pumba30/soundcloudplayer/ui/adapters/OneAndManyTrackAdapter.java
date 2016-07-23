@@ -32,8 +32,8 @@ import static com.pumba30.soundcloudplayer.player.PlayerActivity.newIntent;
 /**
  * Created by pumba30 on 10.07.2016.
  */
-public class OneAndManyTrackListAdapter extends RecyclerView.Adapter<OneAndManyTrackListAdapter.ViewHolder> {
-    private static final String LOG_TAG = OneAndManyTrackListAdapter.class.getSimpleName();
+public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrackAdapter.ViewHolder> {
+    private static final String LOG_TAG = OneAndManyTrackAdapter.class.getSimpleName();
 
     private static final String SIZE_PICTURE_T67X67 = "t67x67";
     public static final String SIZE_PICTURE_LARGE = "large";
@@ -43,7 +43,7 @@ public class OneAndManyTrackListAdapter extends RecyclerView.Adapter<OneAndManyT
     private TypeListTrack mTypeListTrack;
 
 
-    public OneAndManyTrackListAdapter(Context context, TypeListTrack typeListTrack) {
+    public OneAndManyTrackAdapter(Context context, TypeListTrack typeListTrack) {
         mInflater = LayoutInflater.from(context);
         mContext = context;
         mTypeListTrack = typeListTrack;

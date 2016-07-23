@@ -5,12 +5,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Spinner;
 
 import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
@@ -18,7 +16,7 @@ import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.managers.RestServiceManager;
 import com.pumba30.soundcloudplayer.player.PlayerActivity;
 import com.pumba30.soundcloudplayer.player.playerEventBus.TrackToCollectionEvent;
-import com.pumba30.soundcloudplayer.ui.adapters.OneAndManyTrackListAdapter;
+import com.pumba30.soundcloudplayer.ui.adapters.OneAndManyTrackAdapter;
 import com.pumba30.soundcloudplayer.utils.DividerItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
@@ -28,7 +26,7 @@ import java.util.List;
 
 public class CollectionTracksFragment extends Fragment {
     private static final String LOG_TAG = CollectionTracksFragment.class.getSimpleName();
-    private OneAndManyTrackListAdapter mAdapter;
+    private OneAndManyTrackAdapter mAdapter;
     private View mView;
 
 
@@ -55,7 +53,7 @@ public class CollectionTracksFragment extends Fragment {
                 DividerItemDecoration(getActivity());
         recyclerView.addItemDecoration(itemDecoration);
 
-        mAdapter = new OneAndManyTrackListAdapter(getActivity(), PlayerActivity.TypeListTrack.MANY_TRACK);
+        mAdapter = new OneAndManyTrackAdapter(getActivity(), PlayerActivity.TypeListTrack.MANY_TRACK);
         recyclerView.setAdapter(mAdapter);
 
         getMyCollectionList();
