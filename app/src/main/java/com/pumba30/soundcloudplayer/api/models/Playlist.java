@@ -45,7 +45,7 @@ public class Playlist {
     @SerializedName("playlist_type")
     private Object playlistType;
     @SerializedName("id")
-    private int id;
+    private int mId;
     @SerializedName("downloadable")
     private Object mDownloadable;
     @SerializedName("sharing")
@@ -232,11 +232,11 @@ public class Playlist {
     }
 
     public int getId() {
-        return id;
+        return mId;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.mId = id;
     }
 
     public Object getDownloadable() {

@@ -74,7 +74,7 @@ public class AuthoritySoundCloud {
         sRestServiceManager.getUser(new RestServiceManager.RestCallback<User>() {
             @Override
             public void onSuccess(User response) {
-                Log.d(LOG_TAG, "User receive OK: " + response.toString());
+                Log.d(LOG_TAG, "User saved OK: " + response.toString());
                 sSessionManager.saveUser(response);
             }
 

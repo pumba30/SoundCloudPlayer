@@ -8,6 +8,7 @@ import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.api.models.Track;
+import com.pumba30.soundcloudplayer.player.playerEventBus.LoadPlaylistComplete;
 import com.pumba30.soundcloudplayer.player.playerEventBus.TrackCollectionEvent;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
@@ -105,8 +106,36 @@ public class QueryManager {
     }
 
 
-    public void createPlaylist() {
-        mRestManager.createPlaylist(new RestServiceManager.RestCallback<Playlist>() {
+    public void createPlaylist(String title, String sharing) {
+        mRestManager.createPlaylist(title, sharing, new RestServiceManager.RestCallback<Playlist>() {
+            @Override
+            public void onSuccess(Playlist response) {
+
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
+    }
+
+    public void getMePlaylists() {
+        mRestManager.getPlaylists(new RestServiceManager.RestCallback<List<Playlist>>() {
+            @Override
+            public void onSuccess(List<Playlist> response) {
+                EventBus.getDefault().post(new LoadPlaylistComplete(response));
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
+    }
+
+    public void addTrackToPlaylist(String playlistId, String trackId) {
+        mRestManager.addTrackToPlayList(playlistId, trackId, new RestServiceManager.RestCallback<Playlist>() {
             @Override
             public void onSuccess(Playlist response) {
 

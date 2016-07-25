@@ -12,10 +12,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pumba30.soundcloudplayer.R;
+import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.managers.QueryManager;
+import com.pumba30.soundcloudplayer.player.playerEventBus.LoadPlaylistComplete;
 import com.pumba30.soundcloudplayer.utils.Utils;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +39,14 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
     private LayoutInflater mInflater;
     private Context mContext;
     private TypeListTrack mTypeListTrack;
+    private List<Playlist> mPlaylists;
 
 
     public OneAndManyTrackAdapter(Context context, TypeListTrack typeListTrack) {
         mInflater = LayoutInflater.from(context);
         mContext = context;
         mTypeListTrack = typeListTrack;
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -73,13 +80,20 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
             holder.mAddToPlaylist.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    QueryManager.getInstance().createPlaylist();
+//                    QueryManager.getInstance().createPlaylist("Super Playlist 2", "public");
+                    QueryManager.getInstance().addTrackToPlaylist("244495883", String.valueOf(track.getId())); //244495883 244495883
                     Utils.toast(mContext, "Attempt create playlist");
                 }
             });
         }
-
     }
+
+
+    @Subscribe
+    public void loadListComplete(LoadPlaylistComplete event) {
+        mPlaylists = event.getPlaylists();
+    }
+
 
     private void startPlayTrack(Track track) {
         List<Track> tracks = new ArrayList<>();

@@ -23,9 +23,6 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
-/**
- * Created by pumba30 on 28.06.2016.
- */
 public interface ApiService {
 
     /*User*/
@@ -35,8 +32,8 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("oauth2/token")
     Call<Token> authorize(@FieldMap Map<String, String> authMap);
-    
-    
+
+
     /*Tracks*/
     @GET("tracks")
     Call<List<Track>> loadPublicTracks();
@@ -53,8 +50,8 @@ public interface ApiService {
     @GET("tracks/{trackId}")
     Call<Track> loadSoundCloudTrack(@Path("trackId") int trackId);
 
-    
-    /*Collection a.k.a Like tracks*/
+
+    /*Collection e.i. Like tracks*/
     @GET("me/favorites")
     Call<List<Track>> getListTrackColection();
 
@@ -64,6 +61,10 @@ public interface ApiService {
     Call<Playlist> createPlaylist(@Body Map<String, Map<String, String>> map);
 
     @GET("me/playlists")
-    Call<List<Playlists>> getPlaylist(); // TODO: 25.07.2016  work method is not checked
+    Call<List<Playlist>> getPlaylist();
+
+    @PUT("me/playlists/{playlistId}")
+    Call<Playlist> addTrackToPlaylist(@Path("playlistId") String playlistId,
+                                      @Body Map<String, Map<String, List<Map<String, String>>>> map);
 
 }

@@ -3,7 +3,6 @@ package com.pumba30.soundcloudplayer.managers;
 import android.util.Log;
 
 import com.pumba30.soundcloudplayer.api.models.Playlist;
-import com.pumba30.soundcloudplayer.api.models.Playlists;
 import com.pumba30.soundcloudplayer.api.models.Token;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.api.models.User;
@@ -25,6 +24,10 @@ public class RestServiceManager {
 
     private static final String LOG_TAG = RestServiceManager.class.getSimpleName();
     public static final String GENRE = "genre";
+    public static final String TITLE_PLAYLIST = "title";
+    public static final String PLAYLIST = "playlist";
+    public static final String TRACK_ID = "id";
+    public static final String PLAYLIST_ID = "id";
 
     private ApiService mApiService;
 
@@ -49,7 +52,7 @@ public class RestServiceManager {
         mApiService.authorize(authMap).enqueue(new RestCallbackWrapper<>(restCallback));
     }
 
-    public void getPlayLists(RestServiceManager.RestCallback<List<Playlists>> restCallback) {
+    public void getPlaylists(RestServiceManager.RestCallback<List<Playlist>> restCallback) {
         mApiService.getPlaylist().enqueue(new RestCallbackWrapper<>(restCallback));
     }
 
@@ -69,20 +72,47 @@ public class RestServiceManager {
         mApiService.getUser().enqueue(new RestCallbackWrapper<>(userRestCallback));
     }
 
-    public void createPlaylist(RestServiceManager.RestCallback<Playlist> playlistRestCallback) {
-        mApiService.createPlaylist(getMap()).enqueue(new RestCallbackWrapper<>(playlistRestCallback));
+    public void createPlaylist(String titlePlaylist, String sharing,
+                               RestServiceManager.RestCallback<Playlist> playlistRestCallback) {
+        mApiService.createPlaylist(getMapToCreatePlaylist(titlePlaylist, sharing))
+                .enqueue(new RestCallbackWrapper<>(playlistRestCallback));
     }
 
-    private Map<String, Map<String, String>> getMap() {
+    public void addTrackToPlayList(String playlistId, String trackId,
+                                   RestServiceManager.RestCallback<Playlist> playlistRestCallback) {
+        mApiService.addTrackToPlaylist(playlistId, getMapToAddPlayList(trackId))
+                .enqueue(new RestCallbackWrapper<>(playlistRestCallback));
+    }
 
-        Map<String, String> mapa = new HashMap<>();
-        mapa.put("title", "adsf");
-        mapa.put("id", "3434354343");
+
+    private Map<String, Map<String, List<Map<String, String>>>> getMapToAddPlayList(String trackId) {
+        Map<String, String> mapTrackId = new HashMap<>();
+        mapTrackId.put("id", trackId);
+
+        List<Map<String, String>> listTracksIds = new ArrayList<>();
+        listTracksIds.add(mapTrackId);
+
+
+        Map<String, List<Map<String, String>>> listMapTracksIds = new HashMap<>();
+        listMapTracksIds.put("tracks", listTracksIds);
+
+        Map<String, Map<String, List<Map<String, String>>>> mapPlaylist = new HashMap<>();
+        mapPlaylist.put("playlist", listMapTracksIds);
+
+        return mapPlaylist;
+    }
+
+
+    private Map<String, Map<String, String>> getMapToCreatePlaylist(String titlePlaylist, String sharing) {
+        Map<String, String> map = new HashMap<>();
+        map.put(TITLE_PLAYLIST, titlePlaylist);
+
+        //sharing may be public or private
+        map.put("sharing", sharing);
 
         Map<String, Map<String, String>> playlist = new HashMap<>();
-        playlist.put("playlist", mapa);
+        playlist.put(PLAYLIST, map);
 
-//Yeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee!!!!!!!!!!!!!!!!!!!!!!!!!
         return playlist;
     }
 
