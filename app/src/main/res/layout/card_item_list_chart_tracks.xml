@@ -132,19 +132,10 @@
                 android:id="@+id/image_button_like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toStartOf="@+id/image_button_add_to_playlist"
                 android:background="@android:color/white"
-                android:src="@mipmap/ic_like"/>
-
-            <ImageButton
-                android:id="@+id/image_button_add_to_playlist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_like"
                 android:layout_alignParentTop="true"
-                android:layout_toStartOf="@+id/image_button_share"
-                android:background="@android:color/white"
-                android:src="@mipmap/ic_add_to_play_list"/>
+                android:layout_toStartOf="@+id/image_button_share"/>
 
             <ImageButton
                 android:id="@+id/image_button_share"

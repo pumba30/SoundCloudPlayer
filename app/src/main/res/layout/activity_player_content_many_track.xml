@@ -58,12 +58,13 @@
         android:src="@mipmap/ic_play"/>
 
     <ImageButton
-        android:id="@+id/image_button_delete_lile_track"
+        android:id="@+id/image_button_add_to_playlist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:background="@color/white"
-        android:src="@mipmap/ic_trash"/>
-
+        android:layout_toStartOf="@+id/image_button_share"
+        android:background="@android:color/white"
+        android:src="@mipmap/ic_add_to_play_list"/>
 
 </LinearLayout>
+

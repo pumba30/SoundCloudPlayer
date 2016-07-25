@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,26 +11,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.managers.RestServiceManager;
-import com.pumba30.soundcloudplayer.player.playerEventBus.TrackToCollectionEvent;
+import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.utils.Utils;
 import com.squareup.picasso.Picasso;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import static com.pumba30.soundcloudplayer.player.PlayerActivity.TypeListTrack;
 import static com.pumba30.soundcloudplayer.player.PlayerActivity.newIntent;
 
-/**
- * Created by pumba30 on 10.07.2016.
- */
 public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrackAdapter.ViewHolder> {
     private static final String LOG_TAG = OneAndManyTrackAdapter.class.getSimpleName();
 
@@ -70,17 +63,18 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
             holder.bindForTypeOneTrack(track);
         } else if (mTypeListTrack == TypeListTrack.MANY_TRACK) {
             holder.bindForTypeManyTracks(track);
-            holder.mImageButtonPlay.setOnClickListener(new View.OnClickListener() {
+            holder.mPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     startPlayTrack(track);
                 }
             });
 
-            holder.mImageButtonDeleteTrack.setOnClickListener(new View.OnClickListener() {
+            holder.mAddToPlaylist.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    deleteTrack(track);
+                    QueryManager.getInstance().createPlaylist();
+                    Utils.toast(mContext, "Attempt create playlist");
                 }
             });
         }
@@ -94,22 +88,6 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
         mContext.startActivity(intent);
     }
 
-    private void deleteTrack(Track track) {
-        int idTrack = track.getId();
-        App.sAppInstance.getRestServiceManager()
-                .deleteFromMyCollection(idTrack, new RestServiceManager.RestCallback<Track>() {
-                    @Override
-                    public void onSuccess(Track response) {
-                        Utils.toast(mContext, R.string.track_deleted);
-                        EventBus.getDefault().post(new TrackToCollectionEvent(true));
-                    }
-
-                    @Override
-                    public void onError(int errorCode) {
-                        Log.d(LOG_TAG, "Error: " + errorCode);
-                    }
-                });
-    }
 
     @Override
     public int getItemCount() {
@@ -127,9 +105,8 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mImageViewArtWork;
-        private ImageButton mImageButtonPlay;
-        private ImageButton mImageButtonDeleteTrack;
+        private ImageView mViewArtWork;
+        private ImageButton mPlay;
         private TextView mUserName;
         private TextView mTitleTrack;
 
@@ -139,6 +116,7 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
         private TextView mDownloadTrack;
         private TextView mUserNameTrack;
         private TextView mDescriptionTrack;
+        private ImageButton mAddToPlaylist;
 
 
         public ViewHolder(View itemView, TypeListTrack typeListTrack) {
@@ -180,9 +158,9 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
         }
 
         private void initViewForManyTrack(View itemView) {
-            mImageViewArtWork = (ImageView) itemView.findViewById(R.id.track_item_art_work);
-            mImageButtonPlay = (ImageButton) itemView.findViewById(R.id.image_button_play_like_track);
-            mImageButtonDeleteTrack = (ImageButton) itemView.findViewById(R.id.image_button_delete_lile_track);
+            mViewArtWork = (ImageView) itemView.findViewById(R.id.track_item_art_work);
+            mPlay = (ImageButton) itemView.findViewById(R.id.image_button_play_like_track);
+            mAddToPlaylist = (ImageButton) itemView.findViewById(R.id.image_button_add_to_playlist);
             mUserName = (TextView) itemView.findViewById(R.id.text_view_item_title_track_user_name);
             mTitleTrack = (TextView) itemView.findViewById(R.id.text_view_item_title_track);
         }
@@ -198,7 +176,7 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
             Picasso.with(itemView.getContext()).load(pathArtWork)
                     .placeholder(R.drawable.ic_soundcloud)
                     .error(R.drawable.placeholder_background)
-                    .into(mImageViewArtWork);
+                    .into(mViewArtWork);
         }
 
     }

@@ -44,7 +44,6 @@ public enum GenreMusic {
         mGenre = genre;
     }
 
-
     public static String getGenre(int position) {
         String genre = null;
         for (GenreMusic genreMusic : values()) {

@@ -2,6 +2,7 @@ package com.pumba30.soundcloudplayer.managers;
 
 import android.util.Log;
 
+import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.api.models.Playlists;
 import com.pumba30.soundcloudplayer.api.models.Token;
 import com.pumba30.soundcloudplayer.api.models.Track;
@@ -49,26 +50,44 @@ public class RestServiceManager {
     }
 
     public void getPlayLists(RestServiceManager.RestCallback<List<Playlists>> restCallback) {
-        mApiService.getMyPlaylists().enqueue(new RestCallbackWrapper<>(restCallback));
+        mApiService.getPlaylist().enqueue(new RestCallbackWrapper<>(restCallback));
     }
 
     public void toMyCollection(int idTrack, RestServiceManager.RestCallback<Track> trackRestCallback) {
-        mApiService.toMyCollection(idTrack).enqueue(new RestCallbackWrapper<>(trackRestCallback));
+        mApiService.addTrackToCollection(idTrack).enqueue(new RestCallbackWrapper<>(trackRestCallback));
     }
 
     public void deleteFromMyCollection(int idTrack, RestServiceManager.RestCallback<Track> trackRestCallback) {
-        mApiService.deleteFromMyCollection(idTrack).enqueue(new RestCallbackWrapper<>(trackRestCallback));
+        mApiService.deleteTRackFromMCollection(idTrack).enqueue(new RestCallbackWrapper<>(trackRestCallback));
     }
 
     public void getMyCollection(RestServiceManager.RestCallback<List<Track>> trackRestCallback) {
-        mApiService.getMyColection().enqueue(new RestCallbackWrapper<>(trackRestCallback));
+        mApiService.getListTrackColection().enqueue(new RestCallbackWrapper<>(trackRestCallback));
     }
 
     public void getUser(RestServiceManager.RestCallback<User> userRestCallback) {
         mApiService.getUser().enqueue(new RestCallbackWrapper<>(userRestCallback));
     }
 
-    private static Map<String, String> getQueryToMap(String key, String value) {
+    public void createPlaylist(RestServiceManager.RestCallback<Playlist> playlistRestCallback) {
+        mApiService.createPlaylist(getMap()).enqueue(new RestCallbackWrapper<>(playlistRestCallback));
+    }
+
+    private Map<String, Map<String, String>> getMap() {
+
+        Map<String, String> mapa = new HashMap<>();
+        mapa.put("title", "adsf");
+        mapa.put("id", "3434354343");
+
+        Map<String, Map<String, String>> playlist = new HashMap<>();
+        playlist.put("playlist", mapa);
+
+//Yeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee!!!!!!!!!!!!!!!!!!!!!!!!!
+        return playlist;
+    }
+
+
+    private Map<String, String> getQueryToMap(String key, String value) {
         Map<String, String> map = new HashMap<>();
         map.put(key, value);
         return map;
@@ -90,14 +109,18 @@ public class RestServiceManager {
 
             if (response.isSuccessful()) {
                 mRestCallback.onSuccess(response.body());
+                Log.d(LOG_TAG, "Success responce to string: " + response.message());
+
             } else {
                 mRestCallback.onError(response.code());
+                Log.d(LOG_TAG, "Unsuccess responce to string: " + response.message());
             }
         }
 
         @Override
         public void onFailure(Call<T> call, Throwable t) {
             Log.d(LOG_TAG, t.getLocalizedMessage());
+            Log.d(LOG_TAG, "Failure responce to string");
         }
     }
 

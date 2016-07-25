@@ -142,6 +142,8 @@ public class Track implements Parcelable {
     @SerializedName("attachments_uri")
     private String mAttachmentsUri;
 
+    public Track() {/*empty*/}
+
     protected Track(Parcel in) {
         mKind = in.readString();
         mId = in.readInt();

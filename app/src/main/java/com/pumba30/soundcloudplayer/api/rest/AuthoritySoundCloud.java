@@ -50,7 +50,7 @@ public class AuthoritySoundCloud {
     }
 
     private static void requestToken(String code) {
-        final HashMap<String, String> fieldMap = requestTokenUrlToMap(code);
+        final HashMap<String, String> fieldMap = requestTokenUrlToFieldMap(code);
 
         sRestServiceManager.getToken(fieldMap, new RestServiceManager.RestCallback<Token>() {
             @Override
@@ -86,7 +86,7 @@ public class AuthoritySoundCloud {
         });
     }
 
-    private static HashMap<String, String> requestTokenUrlToMap(String code) {
+    private static HashMap<String, String> requestTokenUrlToFieldMap(String code) {
         if (code != null) {
             HashMap<String, String> fieldMap = new HashMap<>();
             fieldMap.put(KEY_CLIENT_ID, CLIENT_ID);

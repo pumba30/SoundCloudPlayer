@@ -12,11 +12,9 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
-import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.managers.RestServiceManager;
-import com.pumba30.soundcloudplayer.player.playerEventBus.TrackToCollectionEvent;
+import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.player.playerEventBus.PlayerEvent;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
@@ -33,11 +31,9 @@ public class CardViewControlPlayer extends RecyclerView.ViewHolder implements Vi
     private ProgressBar mProgressBar;
     private Player mPlayer;
     private Track mTrack;
-    private Context mContext;
 
     public CardViewControlPlayer(View itemView) {
         super(itemView);
-        mContext = itemView.getContext();
         mPlayer = Player.getInstance(itemView.getContext());
         initView();
         EventBus.getDefault().register(this);
@@ -59,7 +55,6 @@ public class CardViewControlPlayer extends RecyclerView.ViewHolder implements Vi
         ImageButton buttonPlay = (ImageButton) itemView.findViewById(R.id.image_button_play_public_track);
         ImageButton buttonStop = (ImageButton) itemView.findViewById(R.id.image_button_stop);
         ImageButton buttonLike = (ImageButton) itemView.findViewById(R.id.image_button_like);
-        ImageButton buttonAddToPlayList = (ImageButton) itemView.findViewById(R.id.image_button_add_to_playlist);
         ImageButton buttonShare = (ImageButton) itemView.findViewById(R.id.image_button_share);
         mProgressBar = (ProgressBar) itemView.findViewById(R.id.card_view_progress_bar);
         mPopupMenu = (ImageButton) itemView.findViewById(R.id.pop_up_menu);
@@ -69,17 +64,10 @@ public class CardViewControlPlayer extends RecyclerView.ViewHolder implements Vi
                 .setColorFilter(ContextCompat.getColor(itemView.getContext(),
                         R.color.orange_light),
                         PorterDuff.Mode.SRC_IN);
-        if (buttonLike != null) {
-            buttonLike.setOnClickListener(this);
-        }
-        if (buttonAddToPlayList != null) {
-            buttonAddToPlayList.setOnClickListener(this);
-        }
-        if (buttonShare != null) {
-            buttonShare.setOnClickListener(this);
-        }
 
         mPopupMenu.setOnClickListener(this);
+        buttonLike.setOnClickListener(this);
+        buttonShare.setOnClickListener(this);
         buttonPlay.setOnClickListener(this);
         buttonStop.setOnClickListener(this);
     }
@@ -108,15 +96,13 @@ public class CardViewControlPlayer extends RecyclerView.ViewHolder implements Vi
         popup.show();
     }
 
+    //buttons on card view
     @Override
     public void onClick(View view) {
         int viewId = view.getId();
         switch (viewId) {
             case R.id.image_button_like:
-                addToMyCollection();
-                break;
-            case R.id.image_button_add_to_playlist:
-                Utils.toast(view.getContext(), R.string.add_to_play_list);
+                QueryManager.getInstance().addTrackToMyCollection(mTrack);
                 break;
             case R.id.image_button_share:
                 Utils.toast(view.getContext(), R.string.share);
@@ -141,26 +127,4 @@ public class CardViewControlPlayer extends RecyclerView.ViewHolder implements Vi
             Log.d(LOG_TAG, "Track is null");
         }
     }
-
-
-    private void addToMyCollection() {
-        int idTrack = mTrack.getId();
-        App.sAppInstance.getRestServiceManager()
-                .toMyCollection(idTrack, new RestServiceManager.RestCallback<Track>() {
-            @Override
-            public void onSuccess(Track response) {
-                Utils.toast(mContext, R.string.added_to_collection);
-                EventBus.getDefault().post(new TrackToCollectionEvent(true));
-            }
-
-            @Override
-            public void onError(int errorCode) {
-                Utils.toast(mContext, R.string.failed_added);
-            }
-        });
-
-
-    }
-
-
 }

@@ -5,17 +5,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.managers.RestServiceManager;
+import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.player.PlayerActivity;
-import com.pumba30.soundcloudplayer.player.playerEventBus.TrackToCollectionEvent;
+import com.pumba30.soundcloudplayer.player.playerEventBus.TrackCollectionEvent;
 import com.pumba30.soundcloudplayer.ui.adapters.OneAndManyTrackAdapter;
 import com.pumba30.soundcloudplayer.utils.DividerItemDecoration;
 
@@ -56,33 +54,22 @@ public class CollectionTracksFragment extends Fragment {
         mAdapter = new OneAndManyTrackAdapter(getActivity(), PlayerActivity.TypeListTrack.MANY_TRACK);
         recyclerView.setAdapter(mAdapter);
 
-        getMyCollectionList();
+        QueryManager.getInstance().getCollectionList();
 
         return mView;
     }
 
     @Subscribe
-    public void updateAdapter(TrackToCollectionEvent event) {
-        if (event.isAdded()) {
-            getMyCollectionList();
+    public void updateAdapter(TrackCollectionEvent event) {
+        String message = event.getMessage();
+
+        if (message.equals(QueryManager.TRACK_ADDED)
+                || message.equals(QueryManager.TRACK_DELETED)) {
+            QueryManager.getInstance().getCollectionList();
+
+        } else if (message.equals(QueryManager.LIST_COLLECTION_TRACK_LOADED)) {
+            mAdapter.setTrackList((List<Track>) event.getObject());
+            mAdapter.notifyDataSetChanged();
         }
     }
-
-    private void getMyCollectionList() {
-        App.sAppInstance.getRestServiceManager()
-                .getMyCollection(new RestServiceManager.RestCallback<List<Track>>() {
-                    @Override
-                    public void onSuccess(List<Track> response) {
-                        mAdapter.setTrackList(response);
-                        mAdapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onError(int errorCode) {
-                        Log.d(LOG_TAG, "Error: " + errorCode);
-                    }
-                });
-    }
-
-
 }

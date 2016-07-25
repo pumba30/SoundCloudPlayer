@@ -21,14 +21,17 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
-import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.managers.RestServiceManager;
+import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.player.Player;
+import com.pumba30.soundcloudplayer.player.playerEventBus.TrackCollectionEvent;
 import com.pumba30.soundcloudplayer.ui.adapters.ChartTracksAdapter;
 import com.pumba30.soundcloudplayer.utils.GenreMusic;
 import com.pumba30.soundcloudplayer.utils.Utils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
@@ -39,8 +42,6 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
     private ChartTracksAdapter mAdapter;
     private Player mPlayer;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RestServiceManager mManager = App.sAppInstance.getRestServiceManager();
-
 
     public static ChartsTracksFragment newInstance() {
         return new ChartsTracksFragment();
@@ -51,6 +52,7 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         setRetainInstance(true);
+        EventBus.getDefault().register(this);
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.charts);
@@ -78,38 +80,8 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
         mAdapter = new ChartTracksAdapter(getActivity());
         recyclerView.setAdapter(mAdapter);
 
-        loadMusicByGenre("all-music");
-
         return view;
     }
-
-    private void loadMusicByGenre(String genreMusic) {
-        mPlayer.stopPlayer();
-
-        mManager.loadMusicByGenre(genreMusic, new RestServiceManager.RestCallback<List<Track>>() {
-            @Override
-            public void onSuccess(List<Track> tracks) {
-                if (tracks != null) {
-                    Log.d(LOG_TAG, "traks:" + tracks.toString());
-                    mAdapter.setTracksList(tracks);
-                    mAdapter.notifyDataSetChanged();
-                    if (mSwipeRefreshLayout.isRefreshing()) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        Utils.toast(getActivity(), R.string.refresh_ok);
-                    }
-
-                } else {
-                    Log.d(LOG_TAG, "Error load track");
-                }
-            }
-
-            @Override
-            public void onError(int errorCode) {
-                Log.d(LOG_TAG, "Error request code: " + String.valueOf(errorCode));
-            }
-        });
-    }
-
 
     @Override
     public void onPause() {
@@ -151,16 +123,17 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    // TODO: 23.07.2016 save title in spinner
     private void createSpinnerFilterGenreMusic(Menu menu) {
         MenuItem menuItem = menu.findItem(R.id.context_menu_filter);
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-        Spinner spinner = (Spinner) layoutInflater.inflate(R.layout.spinner_menu, null);
+        Spinner spinner = (Spinner) layoutInflater.inflate(R.layout.spinner_chart_fragment, null);
         spinner.setOnItemSelectedListener(this);
         spinner.setDropDownVerticalOffset(45);
 
         CharSequence[] charSequence = getActivity().getResources().getStringArray(R.array.genres_array);
         ArrayAdapter<CharSequence> spinnerAdapter = new ArrayAdapter<>(getActivity(),
-                R.layout.spinner_item_main,
+                R.layout.spinner_item_chart_fragment,
                 android.R.id.text1,
                 charSequence);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -173,10 +146,26 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
     //handling click spinner's item
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        mPlayer.stopPlayer();
         String genreMusic = GenreMusic.getGenre(i);
         Log.d(LOG_TAG, "Genre Music: " + genreMusic);
+        QueryManager.getInstance().loadMusicByGenre(genreMusic);
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {/*empty*/}
+
+    @Subscribe
+    public void updateAdapter(TrackCollectionEvent event) {
+        if (event.getMessage().equals(QueryManager.LIST_TRACK_LOADED)) {
+            mAdapter.setTracksList((List<Track>) event.getObject());
+            mAdapter.notifyDataSetChanged();
+            if (mSwipeRefreshLayout.isRefreshing()) {
+                mSwipeRefreshLayout.setRefreshing(false);
+                Utils.toast(getActivity(), R.string.refresh_ok);
+            }
+        }
+    }
+
+
 }
