@@ -25,9 +25,11 @@ public class RestServiceManager {
     private static final String LOG_TAG = RestServiceManager.class.getSimpleName();
     public static final String GENRE = "genre";
     public static final String TITLE_PLAYLIST = "title";
-    public static final String PLAYLIST = "playlist";
-    public static final String TRACK_ID = "id";
-    public static final String PLAYLIST_ID = "id";
+    public static final String KEY_PLAYLIST = "playlist";
+    public static final String KEY_PLAYLIST_ID = "id";
+    public static final String KEY_TRACK_ID = "id";
+    public static final String KEY_SHARING = "sharing";
+    public static final String KEY_TRACKS = "tracks";
 
     private ApiService mApiService;
 
@@ -87,17 +89,17 @@ public class RestServiceManager {
 
     private Map<String, Map<String, List<Map<String, String>>>> getMapToAddPlayList(String trackId) {
         Map<String, String> mapTrackId = new HashMap<>();
-        mapTrackId.put("id", trackId);
+        mapTrackId.put(KEY_TRACK_ID, trackId);
 
         List<Map<String, String>> listTracksIds = new ArrayList<>();
         listTracksIds.add(mapTrackId);
 
 
         Map<String, List<Map<String, String>>> listMapTracksIds = new HashMap<>();
-        listMapTracksIds.put("tracks", listTracksIds);
+        listMapTracksIds.put(KEY_TRACKS, listTracksIds);
 
         Map<String, Map<String, List<Map<String, String>>>> mapPlaylist = new HashMap<>();
-        mapPlaylist.put("playlist", listMapTracksIds);
+        mapPlaylist.put(KEY_PLAYLIST, listMapTracksIds);
 
         return mapPlaylist;
     }
@@ -108,10 +110,10 @@ public class RestServiceManager {
         map.put(TITLE_PLAYLIST, titlePlaylist);
 
         //sharing may be public or private
-        map.put("sharing", sharing);
+        map.put(KEY_SHARING, sharing);
 
         Map<String, Map<String, String>> playlist = new HashMap<>();
-        playlist.put(PLAYLIST, map);
+        playlist.put(KEY_PLAYLIST, map);
 
         return playlist;
     }
