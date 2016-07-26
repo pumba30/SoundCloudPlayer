@@ -71,5 +71,11 @@
     <string name="trap">Trap</string>
     <string name="triphop">Triphop</string>
     <string name="world">World</string>
+    <string name="enter_playlist_title">Enter playlist title</string>
+    <string name="public_playlist">Public playlist</string>
+    <string name="private_playlist">Private playlist</string>
+    <string name="create_playlist">Create playlist</string>
+    <string name="create">Create</string>
+    <string name="enter_valid_title">Please enter valid title</string>
 
 </resources>

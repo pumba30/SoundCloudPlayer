@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.player.playerEventBus.LoadPlaylistComplete;
+import com.pumba30.soundcloudplayer.ui.activity.MainActivity;
+import com.pumba30.soundcloudplayer.ui.dialogFragments.CreatePlaylistDialog;
 import com.pumba30.soundcloudplayer.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -25,7 +28,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 
 import static com.pumba30.soundcloudplayer.player.PlayerActivity.TypeListTrack;
 import static com.pumba30.soundcloudplayer.player.PlayerActivity.newIntent;
@@ -39,12 +41,15 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
     private LayoutInflater mInflater;
     private Context mContext;
     private TypeListTrack mTypeListTrack;
-    private List<Playlist> mPlaylists;
+    private MainActivity mMainActivity;
 
 
     public OneAndManyTrackAdapter(Context context, TypeListTrack typeListTrack) {
         mInflater = LayoutInflater.from(context);
         mContext = context;
+        if (context instanceof MainActivity) {
+            mMainActivity = (MainActivity) context;
+        }
         mTypeListTrack = typeListTrack;
         EventBus.getDefault().register(this);
     }
@@ -80,8 +85,24 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
             holder.mAddToPlaylist.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    QueryManager.getInstance().getMePlaylists();
+
+
+                    //  get  all playlists
+                    // if(playlists == null){
+                    //      createPlaylist();
+                    //  } else {
+                    //      open the DialogFragment and from list Playslists point
+                    //      specify PlaylistName
+                    //  }
+                    //  get id playlist and
+                    //  save all tracks from this playlist in List<Track> mServerListTracks
+                    //  add to mServerListTrack  saved track
+                    //  List<Track>  send to server
+
+
 //                    QueryManager.getInstance().createPlaylist("Super Playlist 2", "public");
-                    QueryManager.getInstance().addTrackToPlaylist("244495883", String.valueOf(track.getId())); //244495883 244495883
+                    // QueryManager.getInstance().addTrackToPlaylist("244495883", String.valueOf(track.getId())); //244495883 244495883
                     Utils.toast(mContext, "Attempt create playlist");
                 }
             });
@@ -90,10 +111,16 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
 
 
     @Subscribe
-    public void loadListComplete(LoadPlaylistComplete event) {
-        mPlaylists = event.getPlaylists();
+    public void loadPlaylistsComplete(LoadPlaylistComplete event) {
+        List<Playlist> playlists = event.getPlaylists();
+        if (playlists.size() == 0) {
+            Log.d(LOG_TAG, "Playlist size: " + playlists.size());
+            CreatePlaylistDialog playlistDialog = new CreatePlaylistDialog();
+            playlistDialog.show(mMainActivity.getSupportFragmentManager(), "createDialog");
+        } else {
+            Log.d(LOG_TAG, "Playlist size: " + playlists.size());
+        }
     }
-
 
     private void startPlayTrack(Track track) {
         List<Track> tracks = new ArrayList<>();
