@@ -77,5 +77,6 @@
     <string name="create_playlist">Create playlist</string>
     <string name="create">Create</string>
     <string name="enter_valid_title">Please enter valid title</string>
+    <string name="playlist_created">Playlist created</string>
 
 </resources>

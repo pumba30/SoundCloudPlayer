@@ -36,10 +36,9 @@ public class CreatePlaylistDialog extends BaseDialogFragment implements RadioGro
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.dialog_frag_create_playlist, null);
 
-        EditText playlistTitle = (EditText) view.findViewById(R.id.enter_playlist_title);
+        final EditText playlistTitle = (EditText) view.findViewById(R.id.enter_playlist_title);
         RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radio_group_select_type_playlist);
 
-        mTitle = playlistTitle.getText().toString();
         radioGroup.setOnCheckedChangeListener(this);
         playlistTitle.setOnEditorActionListener(this);
 
@@ -49,6 +48,7 @@ public class CreatePlaylistDialog extends BaseDialogFragment implements RadioGro
                 .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        mTitle = playlistTitle.getText().toString();
                         createPlaylist(mTitle, mSharing);
                     }
                 });
@@ -81,6 +81,7 @@ public class CreatePlaylistDialog extends BaseDialogFragment implements RadioGro
             getDialog().dismiss();
         } else {
             QueryManager.getInstance().createPlaylist(title, sharing);
+            Utils.toast(getActivity(), R.string.playlist_created);
             Log.d(LOG_TAG, "Attempt create playlist");
         }
     }
