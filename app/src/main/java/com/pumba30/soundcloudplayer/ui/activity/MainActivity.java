@@ -23,14 +23,14 @@ public class MainActivity extends BaseDrawerActivity {
             Log.d(LOG_TAG, "Start Login Activity");
             startLoginActivity(getApplicationContext());
         } else {
-            mToolbar.setTitle(R.string.charts);
+
 
             AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
             params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
                     | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
                     | AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP);
 
-            ViewPager viewPager = (ViewPager) findViewById(R.id.soundcloud_view_pager);
+            final ViewPager viewPager = (ViewPager) findViewById(R.id.soundcloud_view_pager);
             setupViewPager(viewPager);
 
 
@@ -42,17 +42,30 @@ public class MainActivity extends BaseDrawerActivity {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
                     int tabId = tab.getPosition();
-                    if (tabId == 0) {
-                        mToolbar.setTitle(R.string.charts);
-                    } else if (tabId == 1) {
-                        mToolbar.setTitle(R.string.like_tracks);
-                        playerStop();
-                    } else if (tabId == 2) {
-                        mToolbar.setTitle(R.string.playlists);
-                        playerStop();
-                    } else if (tabId == 3) {
-                        mToolbar.setTitle(R.string.search);
-                        playerStop();
+                    switch (tabId) {
+                        case 0:
+                            viewPager.setCurrentItem(0);
+                            mToolbar.setTitle(R.string.charts);
+                            break;
+                        case 1:
+                            viewPager.setCurrentItem(1);
+                            mToolbar.setTitle(R.string.like_tracks);
+                            playerStop();
+                            break;
+                        case 2:
+                            viewPager.setCurrentItem(2);
+                            mToolbar.setTitle(R.string.playlists);
+                            playerStop();
+                            break;
+                        case 3:
+                            viewPager.setCurrentItem(3);
+                            mToolbar.setTitle(R.string.search);
+                            playerStop();
+                            break;
+
+                        default:
+                            viewPager.setCurrentItem(tab.getPosition());
+                            mToolbar.setTitle(R.string.charts);
                     }
                 }
             });

@@ -4,9 +4,6 @@ import com.pumba30.soundcloudplayer.api.models.Playlist;
 
 import java.util.List;
 
-/**
- * Created by pumba30 on 25.07.2016.
- */
 public class LoadPlaylistComplete {
 
     private List<Playlist> mPlaylists;

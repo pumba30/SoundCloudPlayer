@@ -27,6 +27,9 @@ public class CreatePlaylistDialog extends BaseDialogFragment implements RadioGro
     private String mTitle;
     private String mSharing;
 
+    public static CreatePlaylistDialog newInstance() {
+        return new CreatePlaylistDialog();
+    }
 
     @NonNull
     @Override
@@ -50,6 +53,7 @@ public class CreatePlaylistDialog extends BaseDialogFragment implements RadioGro
                     public void onClick(DialogInterface dialogInterface, int i) {
                         mTitle = playlistTitle.getText().toString();
                         createPlaylist(mTitle, mSharing);
+                        getDialog().dismiss();
                     }
                 });
 

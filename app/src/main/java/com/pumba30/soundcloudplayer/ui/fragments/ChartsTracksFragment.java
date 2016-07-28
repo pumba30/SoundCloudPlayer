@@ -8,7 +8,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,9 +22,10 @@ import android.widget.Spinner;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
+import com.pumba30.soundcloudplayer.managers.PreferencesManager;
 import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.player.Player;
-import com.pumba30.soundcloudplayer.player.playerEventBus.TrackCollectionEvent;
+import com.pumba30.soundcloudplayer.player.playerEventBus.ObjectsBusEvent;
 import com.pumba30.soundcloudplayer.ui.adapters.ChartTracksAdapter;
 import com.pumba30.soundcloudplayer.utils.GenreMusic;
 import com.pumba30.soundcloudplayer.utils.Utils;
@@ -42,6 +42,8 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
     private ChartTracksAdapter mAdapter;
     private Player mPlayer;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private Spinner mSpinner;
+    private String mGenreMusic;
 
     public static ChartsTracksFragment newInstance() {
         return new ChartsTracksFragment();
@@ -54,8 +56,6 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
         setRetainInstance(true);
         EventBus.getDefault().register(this);
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.charts);
         initPlayer();
     }
 
@@ -127,10 +127,11 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
     private void createSpinnerFilterGenreMusic(Menu menu) {
         MenuItem menuItem = menu.findItem(R.id.context_menu_filter);
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-        Spinner spinner = (Spinner) layoutInflater.inflate(R.layout.spinner_chart_fragment, null);
-        spinner.setOnItemSelectedListener(this);
-        spinner.setDropDownVerticalOffset(45);
+        mSpinner = (Spinner) layoutInflater.inflate(R.layout.spinner_chart_fragment, null);
+        mSpinner.setOnItemSelectedListener(this);
+        mSpinner.setDropDownVerticalOffset(45);
 
+        //set to spinner a list genres of music
         CharSequence[] charSequence = getActivity().getResources().getStringArray(R.array.genres_array);
         ArrayAdapter<CharSequence> spinnerAdapter = new ArrayAdapter<>(getActivity(),
                 R.layout.spinner_item_chart_fragment,
@@ -139,24 +140,38 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         LinearLayout linearLayout = (LinearLayout) MenuItemCompat.getActionView(menuItem);
-        linearLayout.addView(spinner);
-        spinner.setAdapter(spinnerAdapter);
+        linearLayout.addView(mSpinner);
+        mSpinner.setAdapter(spinnerAdapter);
+
+        getLastSpinnerItem();
+
+    }
+
+    private void getLastSpinnerItem() {
+        int savedItemSpinner = PreferencesManager.getInstance(getActivity()).getChoicedItemSpinner();
+        if (savedItemSpinner != -1) {
+            mSpinner.setSelection(savedItemSpinner, true);
+            mGenreMusic = GenreMusic.getGenre(savedItemSpinner);
+        }
     }
 
     //handling click spinner's item
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         mPlayer.stopPlayer();
-        String genreMusic = GenreMusic.getGenre(i);
-        Log.d(LOG_TAG, "Genre Music: " + genreMusic);
-        QueryManager.getInstance().loadMusicByGenre(genreMusic);
+
+        int choicedItem = mSpinner.getSelectedItemPosition();
+        PreferencesManager.getInstance(getContext()).saveChoicedItemSpinner(choicedItem);
+
+        Log.d(LOG_TAG, "Genre Music: " + mGenreMusic);
+        QueryManager.getInstance().loadMusicByGenre(mGenreMusic);
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {/*empty*/}
 
     @Subscribe
-    public void updateAdapter(TrackCollectionEvent event) {
+    public void updateAdapter(ObjectsBusEvent event) {
         if (event.getMessage().equals(QueryManager.LIST_TRACK_LOADED)) {
             mAdapter.setTracksList((List<Track>) event.getObject());
             mAdapter.notifyDataSetChanged();

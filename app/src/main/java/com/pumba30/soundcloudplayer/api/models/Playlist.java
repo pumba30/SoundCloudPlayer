@@ -1,11 +1,14 @@
 package com.pumba30.soundcloudplayer.api.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Playlist {
+public class Playlist implements Parcelable {
     @SerializedName("duration")
     private long mDuration;
     @SerializedName("release_day")
@@ -33,7 +36,7 @@ public class Playlist {
     @SerializedName("secret_uri")
     private String mSecretUri;
     @SerializedName("track_count")
-    private long mTrackCount;
+    private int mTrackCount;
     @SerializedName("user_id")
     private long mUserId;
     @SerializedName("last_modified")
@@ -78,6 +81,41 @@ public class Playlist {
     private String mEmbeddableBy;
     @SerializedName("label_id")
     private Object mLabelId;
+
+    protected Playlist(Parcel in) {
+        mDuration = in.readLong();
+        mPermalinkUrl = in.readString();
+        mPermalink = in.readString();
+        mUri = in.readString();
+        mTagList = in.readString();
+        mSecretUri = in.readString();
+        mTrackCount = in.readInt();
+        mUserId = in.readLong();
+        mLastModified = in.readString();
+        mLicense = in.readString();
+        mTrackList = in.createTypedArrayList(Track.CREATOR);
+        mId = in.readInt();
+        mSharing = in.readString();
+        mSecretToken = in.readString();
+        mCreatedAt = in.readString();
+        mKind = in.readString();
+        mTitle = in.readString();
+        mStreamable = in.readByte() != 0;
+        mUser = in.readParcelable(MiniUser.class.getClassLoader());
+        mEmbeddableBy = in.readString();
+    }
+
+    public static final Creator<Playlist> CREATOR = new Creator<Playlist>() {
+        @Override
+        public Playlist createFromParcel(Parcel in) {
+            return new Playlist(in);
+        }
+
+        @Override
+        public Playlist[] newArray(int size) {
+            return new Playlist[size];
+        }
+    };
 
     public long getDuration() {
         return mDuration;
@@ -183,11 +221,11 @@ public class Playlist {
         this.mSecretUri = secretUri;
     }
 
-    public long getTrackCount() {
+    public int getTrackCount() {
         return mTrackCount;
     }
 
-    public void setTrackCount(long trackCount) {
+    public void setTrackCount(int trackCount) {
         this.mTrackCount = trackCount;
     }
 
@@ -367,5 +405,33 @@ public class Playlist {
         this.mLabelId = labelId;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(mDuration);
+        parcel.writeString(mPermalinkUrl);
+        parcel.writeString(mPermalink);
+        parcel.writeString(mUri);
+        parcel.writeString(mTagList);
+        parcel.writeString(mSecretUri);
+        parcel.writeInt(mTrackCount);
+        parcel.writeLong(mUserId);
+        parcel.writeString(mLastModified);
+        parcel.writeString(mLicense);
+        parcel.writeTypedList(mTrackList);
+        parcel.writeInt(mId);
+        parcel.writeString(mSharing);
+        parcel.writeString(mSecretToken);
+        parcel.writeString(mCreatedAt);
+        parcel.writeString(mKind);
+        parcel.writeString(mTitle);
+        parcel.writeByte((byte) (mStreamable ? 1 : 0));
+        parcel.writeParcelable(mUser, i);
+        parcel.writeString(mEmbeddableBy);
+    }
 }
 

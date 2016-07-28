@@ -34,6 +34,7 @@ public class CardViewControlPlayer extends RecyclerView.ViewHolder implements Vi
 
     public CardViewControlPlayer(View itemView) {
         super(itemView);
+        mTrack = new Track();
         mPlayer = Player.getInstance(itemView.getContext());
         initView();
         EventBus.getDefault().register(this);
@@ -122,6 +123,7 @@ public class CardViewControlPlayer extends RecyclerView.ViewHolder implements Vi
 
     public void setTrack(Track track) {
         if (track != null) {
+            mTrack = null;
             mTrack = track;
         } else {
             Log.d(LOG_TAG, "Track is null");

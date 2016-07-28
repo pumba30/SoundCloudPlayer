@@ -78,5 +78,10 @@
     <string name="create">Create</string>
     <string name="enter_valid_title">Please enter valid title</string>
     <string name="playlist_created">Playlist created</string>
+    <string name="add_new_playlist">Add new playlist</string>
+    <string name="are_you_sure_delete">Are you sure delete?</string>
+    <string name="title_playlist">Title playlist</string>
+    <string name="count_playlist_s_tracks">Count playlist\'s tracks:</string>
+    <string name="count">0</string>
 
 </resources>

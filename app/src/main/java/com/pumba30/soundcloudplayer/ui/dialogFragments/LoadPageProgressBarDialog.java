@@ -8,7 +8,7 @@ import android.support.v7.app.AlertDialog;
 
 import com.pumba30.soundcloudplayer.R;
 
-public class LoadPageProgressBar extends DialogFragment {
+public class LoadPageProgressBarDialog extends DialogFragment {
 
     @NonNull
     @Override

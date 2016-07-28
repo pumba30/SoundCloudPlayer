@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
@@ -18,6 +19,7 @@ import com.pumba30.soundcloudplayer.R;
 public class BaseDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String LOG_TAG = BaseDrawerActivity.class.getSimpleName();
     public Toolbar mToolbar;
 
     @Override
@@ -28,6 +30,7 @@ public class BaseDrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_base_drawer);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle(R.string.charts);
         if (savedInstanceState != null) {
             mToolbar.setTitle(MainActivity.KEY_TITLE);
             mToolbar.setTitleTextAppearance(getApplicationContext(), R.style.TextAppearanceToolbar);

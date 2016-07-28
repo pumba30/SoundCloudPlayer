@@ -13,6 +13,7 @@ public class PreferencesManager {
     public static final String KEY_USER_IS_LOGGED_IN = "userIsLoggedIn";
     public static final String KEY_TOKEN = "keyToken";
     public static final String KEY_USER = "keyUser";
+    private static final String KEY_ITEM_SPINNER = "itemSpinner";
 
     private SharedPreferences mPreferences;
     private SharedPreferences.Editor mEditor;
@@ -83,5 +84,15 @@ public class PreferencesManager {
         mEditor = mPreferences.edit();
         mEditor.putString(KEY_USER, stringUser);
         mEditor.apply();
+    }
+
+    public void saveChoicedItemSpinner(int choicedItem) {
+        mEditor = mPreferences.edit();
+        mEditor.putInt(KEY_ITEM_SPINNER, choicedItem);
+        mEditor.apply();
+    }
+
+    public int getChoicedItemSpinner() {
+        return mPreferences.getInt(KEY_ITEM_SPINNER, -1);
     }
 }

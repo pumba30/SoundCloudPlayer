@@ -13,6 +13,7 @@ import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.player.CardViewControlPlayer;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChartTracksAdapter extends RecyclerView.Adapter<ChartTracksAdapter.ViewHolder> {
@@ -25,6 +26,7 @@ public class ChartTracksAdapter extends RecyclerView.Adapter<ChartTracksAdapter.
 
     public ChartTracksAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
+        mTracksList = new ArrayList<>();
     }
 
     @Override
@@ -46,17 +48,13 @@ public class ChartTracksAdapter extends RecyclerView.Adapter<ChartTracksAdapter.
 
     @Override
     public int getItemCount() {
-        if (mTracksList == null) {
-            return 0;
-        } else {
-            return mTracksList.size();
-        }
+        return mTracksList.size();
     }
 
     public void setTracksList(List<Track> tracksList) {
-        if (tracksList != null) {
-            mTracksList = tracksList;
-        }
+        mTracksList.clear();
+        mTracksList.addAll(tracksList);
+        this.notifyItemRangeChanged(0, tracksList.size() - 1);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

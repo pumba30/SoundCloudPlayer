@@ -19,7 +19,7 @@ import android.webkit.WebViewClient;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.rest.AuthoritySoundCloud;
-import com.pumba30.soundcloudplayer.ui.dialogFragments.LoadPageProgressBar;
+import com.pumba30.soundcloudplayer.ui.dialogFragments.LoadPageProgressBarDialog;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final String CODE = "code";
     public static final String SOUNDCLOUDPLAYER_CALLBACK = "soundcloudplayer://callback";
     public static final String PROGRESS_BAR = "progressBar";
-    private LoadPageProgressBar mProgressBar;
+    private LoadPageProgressBarDialog mProgressBar;
 
 
     public static Intent newIntent(Context context) {
@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "urlConnect isEmpty or NULL");
         }
 
-        mProgressBar = new LoadPageProgressBar();
+        mProgressBar = new LoadPageProgressBarDialog();
         mProgressBar.show(getSupportFragmentManager(), PROGRESS_BAR);
 
         webView.setWebViewClient(new WebViewClient() {

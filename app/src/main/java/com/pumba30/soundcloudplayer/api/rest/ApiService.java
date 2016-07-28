@@ -45,7 +45,7 @@ public interface ApiService {
     Call<Track> addTrackToCollection(@Path("trackId") int trackId);
 
     @DELETE("me/favorites/{trackId}")
-    Call<Track> deleteTRackFromMCollection(@Path("trackId") int trackId);
+    Call<Track> deleteTrackFromMCollection(@Path("trackId") String trackId);
 
     @GET("tracks/{trackId}")
     Call<Track> loadSoundCloudTrack(@Path("trackId") int trackId);
@@ -66,5 +66,8 @@ public interface ApiService {
     @PUT("me/playlists/{playlistId}")
     Call<Playlist> addTrackToPlaylist(@Path("playlistId") String playlistId,
                                       @Body Map<String, Map<String, List<Map<String, String>>>> map);
+
+    @GET("me/playlists/{playlistId}")
+    Call<Playlist> getPlaylistById(@Path("playlistId") String playlistId);
 
 }

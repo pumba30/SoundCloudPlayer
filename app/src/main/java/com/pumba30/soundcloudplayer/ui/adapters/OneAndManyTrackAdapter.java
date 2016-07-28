@@ -2,6 +2,7 @@ package com.pumba30.soundcloudplayer.ui.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,8 +19,9 @@ import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.player.playerEventBus.LoadPlaylistComplete;
 import com.pumba30.soundcloudplayer.ui.activity.MainActivity;
+import com.pumba30.soundcloudplayer.ui.dialogFragments.AddTrackToPlaylistDialog;
 import com.pumba30.soundcloudplayer.ui.dialogFragments.CreatePlaylistDialog;
-import com.pumba30.soundcloudplayer.utils.Utils;
+import com.pumba30.soundcloudplayer.ui.dialogFragments.DeleteTrackFromCollectionDialog;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,9 +44,12 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
     private Context mContext;
     private TypeListTrack mTypeListTrack;
     private MainActivity mMainActivity;
+    private Track mTrack;
+    private String mTrackId;
 
 
     public OneAndManyTrackAdapter(Context context, TypeListTrack typeListTrack) {
+        mTrackList = new ArrayList<>();
         mInflater = LayoutInflater.from(context);
         mContext = context;
         if (context instanceof MainActivity) {
@@ -63,62 +68,73 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
             view = mInflater.inflate(R.layout.activity_player_content_many_track, parent, false);
         }
 
-
         return new ViewHolder(view, mTypeListTrack);
     }
 
+
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        final Track track = mTrackList.get(position);
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        mTrack = mTrackList.get(position);
 
         if (mTypeListTrack == TypeListTrack.ONE_TRACK) {
-            holder.bindForTypeOneTrack(track);
+            holder.bindForTypeOneTrack(mTrack);
         } else if (mTypeListTrack == TypeListTrack.MANY_TRACK) {
-            holder.bindForTypeManyTracks(track);
+            holder.bindForTypeManyTracks(mTrack);
             holder.mPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startPlayTrack(track);
+                    startPlayTrack(mTrack);
                 }
             });
+
+            final int adapterPosition = holder.getAdapterPosition();
 
             holder.mAddToPlaylist.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     QueryManager.getInstance().getMePlaylists();
+                    mTrackId = getTrackId(adapterPosition);
 
-
-                    //  get  all playlists
-                    // if(playlists == null){
-                    //      createPlaylist();
-                    //  } else {
-                    //      open the DialogFragment and from list Playslists point
-                    //      specify PlaylistName
-                    //  }
-                    //  get id playlist and
-                    //  save all tracks from this playlist in List<Track> mServerListTracks
-                    //  add to mServerListTrack  saved track
-                    //  List<Track>  send to server
-
-
-//                    QueryManager.getInstance().createPlaylist("Super Playlist 2", "public");
-                    // QueryManager.getInstance().addTrackToPlaylist("244495883", String.valueOf(track.getId())); //244495883 244495883
-                    Utils.toast(mContext, "Attempt create playlist");
+                    Log.d(LOG_TAG, "TrackId: " + mTrackId);
                 }
             });
+
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    String trackId = getTrackId(adapterPosition);
+                    DeleteTrackFromCollectionDialog deleteTrack =
+                            DeleteTrackFromCollectionDialog.newInstance(trackId);
+                    deleteTrack.show(mMainActivity.getSupportFragmentManager(),
+                            "deleteTrackDialog");
+                    return true;
+                }
+            });
+
+
         }
     }
 
+    @NonNull
+    private String getTrackId(int adapterPosition) {
+        return String.valueOf(mTrackList.get(adapterPosition).getId());
+    }
 
     @Subscribe
     public void loadPlaylistsComplete(LoadPlaylistComplete event) {
         List<Playlist> playlists = event.getPlaylists();
-        if (playlists.size() == 0) {
-            Log.d(LOG_TAG, "Playlist size: " + playlists.size());
-            CreatePlaylistDialog playlistDialog = new CreatePlaylistDialog();
+
+        if (playlists.size() == 0 || playlists.get(0) == null) {
+            Log.d(LOG_TAG, "Playlist null, size: " + playlists.size());
+            CreatePlaylistDialog playlistDialog = CreatePlaylistDialog.newInstance();
             playlistDialog.show(mMainActivity.getSupportFragmentManager(), "createDialog");
+
         } else {
             Log.d(LOG_TAG, "Playlist size: " + playlists.size());
+            AddTrackToPlaylistDialog addTrackToPlaylistDialog
+                    = AddTrackToPlaylistDialog.newInstance(playlists, mTrackId);
+            addTrackToPlaylistDialog
+                    .show(mMainActivity.getSupportFragmentManager(), "addTrackToPlaylistDialog");
         }
     }
 
@@ -140,9 +156,10 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
     }
 
     public void setTrackList(List<Track> trackList) {
-        mTrackList = trackList;
+        mTrackList.clear();
+        mTrackList.addAll(trackList);
+        this.notifyItemRangeChanged(0, mTrackList.size() - 1);
     }
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -178,7 +195,6 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
             mDescriptionTrack = (TextView) itemView.findViewById(R.id.text_view_item_description);
         }
 
-        // texts is temporary, may be changed
         public void bindForTypeOneTrack(Track track) {
             mTitleTrackPlayer.setText(track.getTitle());
             if (!TextUtils.isEmpty(track.getGenre())) {
@@ -198,12 +214,14 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
             }
         }
 
-        private void initViewForManyTrack(View itemView) {
+        private void initViewForManyTrack(final View itemView) {
             mViewArtWork = (ImageView) itemView.findViewById(R.id.track_item_art_work);
             mPlay = (ImageButton) itemView.findViewById(R.id.image_button_play_like_track);
             mAddToPlaylist = (ImageButton) itemView.findViewById(R.id.image_button_add_to_playlist);
             mUserName = (TextView) itemView.findViewById(R.id.text_view_item_title_track_user_name);
             mTitleTrack = (TextView) itemView.findViewById(R.id.text_view_item_title_track);
+
+
         }
 
         public void bindForTypeManyTracks(Track track) {

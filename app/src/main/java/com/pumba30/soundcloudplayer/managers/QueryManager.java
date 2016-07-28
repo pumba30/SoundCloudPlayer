@@ -9,7 +9,7 @@ import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.player.playerEventBus.LoadPlaylistComplete;
-import com.pumba30.soundcloudplayer.player.playerEventBus.TrackCollectionEvent;
+import com.pumba30.soundcloudplayer.player.playerEventBus.ObjectsBusEvent;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -22,6 +22,7 @@ public class QueryManager {
     public static final String TRACK_DELETED = "trackDeleted";
     public static final String LIST_TRACK_LOADED = "listTrackLoaded";
     public static final String LIST_COLLECTION_TRACK_LOADED = "listCollectionTrackLoaded";
+    public static final String PLAYLIST_LOADED = "playlistLoaded";
     private static QueryManager sQueryManager = null;
     private Context mContext;
     private RestServiceManager mRestManager;
@@ -44,7 +45,7 @@ public class QueryManager {
             @Override
             public void onSuccess(Track response) {
                 Utils.toast(mContext, R.string.added_to_collection);
-                EventBus.getDefault().post(new TrackCollectionEvent(TRACK_ADDED, null));
+                EventBus.getDefault().post(new ObjectsBusEvent(TRACK_ADDED, null));
             }
 
             @Override
@@ -54,13 +55,12 @@ public class QueryManager {
         });
     }
 
-    public void deleteTrackFromCollection(Track track) {
-        int idTrack = track.getId();
-        mRestManager.deleteFromMyCollection(idTrack, new RestServiceManager.RestCallback<Track>() {
+    public void deleteTrackFromCollection(String trackId) {
+        mRestManager.deleteFromMyCollection(trackId, new RestServiceManager.RestCallback<Track>() {
             @Override
             public void onSuccess(Track response) {
                 Utils.toast(mContext, R.string.track_deleted);
-                EventBus.getDefault().post(new TrackCollectionEvent(TRACK_DELETED, null));
+                EventBus.getDefault().post(new ObjectsBusEvent(TRACK_DELETED, null));
             }
 
             @Override
@@ -75,7 +75,7 @@ public class QueryManager {
             @Override
             public void onSuccess(List<Track> response) {
                 EventBus.getDefault()
-                        .post(new TrackCollectionEvent(LIST_COLLECTION_TRACK_LOADED, response));
+                        .post(new ObjectsBusEvent(LIST_COLLECTION_TRACK_LOADED, response));
             }
 
             @Override
@@ -92,7 +92,7 @@ public class QueryManager {
                 if (tracks != null) {
                     Log.d(LOG_TAG, "tracks:" + tracks.toString());
                     EventBus.getDefault()
-                            .post(new TrackCollectionEvent(LIST_TRACK_LOADED, tracks));
+                            .post(new ObjectsBusEvent(LIST_TRACK_LOADED, tracks));
                 } else {
                     Log.d(LOG_TAG, "Error load track");
                 }
@@ -134,11 +134,26 @@ public class QueryManager {
         });
     }
 
-    public void addTrackToPlaylist(String playlistId, String trackId) {
-        mRestManager.addTrackToPlayList(playlistId, trackId, new RestServiceManager.RestCallback<Playlist>() {
+    public void addTrackToPlaylist(String playlistId, List<String> tracksIds) {
+        mRestManager.addTrackToPlayList(playlistId, tracksIds, new RestServiceManager.RestCallback<Playlist>() {
             @Override
             public void onSuccess(Playlist response) {
 
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
+    }
+
+    public void getPlaylistById(String playlistId) {
+        mRestManager.getPlaylistById(playlistId, new RestServiceManager.RestCallback<Playlist>() {
+
+            @Override
+            public void onSuccess(Playlist response) {
+                EventBus.getDefault().post(new ObjectsBusEvent(PLAYLIST_LOADED, response));
             }
 
             @Override

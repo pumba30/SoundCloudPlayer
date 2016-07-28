@@ -62,8 +62,8 @@ public class RestServiceManager {
         mApiService.addTrackToCollection(idTrack).enqueue(new RestCallbackWrapper<>(trackRestCallback));
     }
 
-    public void deleteFromMyCollection(int idTrack, RestServiceManager.RestCallback<Track> trackRestCallback) {
-        mApiService.deleteTRackFromMCollection(idTrack).enqueue(new RestCallbackWrapper<>(trackRestCallback));
+    public void deleteFromMyCollection(String idTrack, RestCallback<Track> trackRestCallback) {
+        mApiService.deleteTrackFromMCollection(idTrack).enqueue(new RestCallbackWrapper<>(trackRestCallback));
     }
 
     public void getMyCollection(RestServiceManager.RestCallback<List<Track>> trackRestCallback) {
@@ -80,20 +80,25 @@ public class RestServiceManager {
                 .enqueue(new RestCallbackWrapper<>(playlistRestCallback));
     }
 
-    public void addTrackToPlayList(String playlistId, String trackId,
+    public void addTrackToPlayList(String playlistId, List<String> trackId,
                                    RestServiceManager.RestCallback<Playlist> playlistRestCallback) {
         mApiService.addTrackToPlaylist(playlistId, getMapToAddPlayList(trackId))
                 .enqueue(new RestCallbackWrapper<>(playlistRestCallback));
     }
 
+    public void getPlaylistById(String playlistId, RestServiceManager.RestCallback<Playlist> playlistRestCallback){
+        mApiService.getPlaylistById(playlistId).enqueue(new RestCallbackWrapper<>(playlistRestCallback));
+    }
 
-    private Map<String, Map<String, List<Map<String, String>>>> getMapToAddPlayList(String trackId) {
-        Map<String, String> mapTrackId = new HashMap<>();
-        mapTrackId.put(KEY_TRACK_ID, trackId);
+
+    private Map<String, Map<String, List<Map<String, String>>>> getMapToAddPlayList(List<String> trackIdList) {
 
         List<Map<String, String>> listTracksIds = new ArrayList<>();
-        listTracksIds.add(mapTrackId);
-
+        for (int i = 0; i < trackIdList.size(); i++) {
+            Map<String, String> mapTrackId = new HashMap<>();
+            mapTrackId.put(KEY_TRACK_ID, trackIdList.get(i));
+            listTracksIds.add(mapTrackId);
+        }
 
         Map<String, List<Map<String, String>>> listMapTracksIds = new HashMap<>();
         listMapTracksIds.put(KEY_TRACKS, listTracksIds);
