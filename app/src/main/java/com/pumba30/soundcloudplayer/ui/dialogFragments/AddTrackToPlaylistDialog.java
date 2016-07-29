@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -27,12 +28,12 @@ import java.util.List;
 
 
 public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View.OnClickListener {
-
-
+    private static final String LOG_TAG = AddTrackToPlaylistDialog.class.getSimpleName();
     private static final String KEY_PLAYLISTS = "keyPlaylist";
     private static final String KEY_TRACK_ID = "trackId";
     private List<Playlist> mPlaylists;
     private String mTrackId;
+    private AddTrackPlaylistAdapter mPlaylistAdapter;
 
     public static AddTrackToPlaylistDialog newInstance(List<Playlist> playlists, String trackId) {
         Bundle bundle = new Bundle();
@@ -70,10 +71,10 @@ public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        AddTrackPlaylistAdapter playlistAdapter = new AddTrackPlaylistAdapter(getContext());
-        playlistAdapter.setPlaylist(mPlaylists);
-        playlistAdapter.setTrackId(mTrackId);
-        recyclerView.setAdapter(playlistAdapter);
+        mPlaylistAdapter = new AddTrackPlaylistAdapter(getContext());
+        mPlaylistAdapter.setPlaylist(mPlaylists);
+        mPlaylistAdapter.setTrackId(mTrackId);
+        recyclerView.setAdapter(mPlaylistAdapter);
 
         builder.setView(view)
                 .setTitle("Add track to playlist")
@@ -89,6 +90,26 @@ public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View
         return builder.create();
 
     }
+
+    @Subscribe
+    public void playlistCompleteLoaded(ObjectsBusEvent event) {
+        Playlist playlist;
+        if (event.getMessage().equals(QueryManager.PLAYLIST_LOADED)) {
+            Log.d(LOG_TAG, "Playlist loaded");
+            playlist = (Playlist) event.getObject();
+
+            List<String> tracksIds = new ArrayList<>();
+            for (int i = 0; i < playlist.getTrackList().size(); i++) {
+                tracksIds.add(String.valueOf(playlist.getTrackList().get(i).getId()));
+            }
+            tracksIds.add(mTrackId);
+
+            String playlistId = mPlaylistAdapter.getPlaylistId();
+            QueryManager.getInstance().addTrackToPlaylist(playlistId, tracksIds);
+            EventBus.getDefault().post(new ObjectsBusEvent(QueryManager.TRACK_ADDED, null));
+        }
+    }
+
 
     @Subscribe
     public void trackAddedToPlayList(ObjectsBusEvent event) {

@@ -5,16 +5,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by pumba30 on 28.07.2016.
- */
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHolder> {
     public static final String LOG_TAG = PlaylistAdapter.class.getSimpleName();
     private List<Playlist> mPlaylists;
@@ -34,8 +34,14 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Playlist playlist = mPlaylists.get(position);
-        //get a list and send it into player to play
         holder.bindPlaylist(playlist);
+        holder.mPlayPlaylist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //get a list and send it into player to play
+            }
+        });
+
     }
 
     @Override
@@ -43,14 +49,41 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
         return mPlaylists.size();
     }
 
+    public void setPlaylists(List<Playlist> playlists) {
+        mPlaylists.clear();
+        mPlaylists.addAll(playlists);
+        this.notifyItemRangeChanged(0, playlists.size() - 1);
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private TextView mTitlePlaylist;
+        private TextView mTrackCount;
+        private ImageView mLogoPlaylist;
+        private ImageView mPlayPlaylist;
 
         public ViewHolder(View itemView) {
             super(itemView);
+
+            initView();
+        }
+
+        private void initView() {
+            mTitlePlaylist = (TextView) itemView.findViewById(R.id.title_playlist);
+            mTrackCount = (TextView) itemView.findViewById(R.id.count_tracks);
+            mLogoPlaylist = (ImageView) itemView.findViewById(R.id.logo_playlist);
+            mPlayPlaylist = (ImageView) itemView.findViewById(R.id.play_playlist);
+
         }
 
         public void bindPlaylist(Playlist playlist) {
+            mTitlePlaylist.setText(playlist.getTitle());
+            mTrackCount.setText(String.valueOf(playlist.getTrackCount()));
 
+            String urlLogo = (String) playlist.getArtworkUrl();
+            Picasso.with(itemView.getContext())
+                    .load(urlLogo)
+                    .placeholder(R.mipmap.ic_placeholder)
+                    .into(mLogoPlaylist);
         }
     }
 }

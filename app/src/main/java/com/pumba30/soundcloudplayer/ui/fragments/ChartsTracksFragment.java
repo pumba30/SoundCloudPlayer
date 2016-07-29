@@ -54,9 +54,14 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         setRetainInstance(true);
-        EventBus.getDefault().register(this);
 
         initPlayer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
     }
 
 
@@ -86,6 +91,7 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
     @Override
     public void onPause() {
         super.onPause();
+        EventBus.getDefault().unregister(this);
         mPlayer.stopPlayer();
     }
 

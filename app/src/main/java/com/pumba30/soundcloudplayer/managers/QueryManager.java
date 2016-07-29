@@ -23,6 +23,7 @@ public class QueryManager {
     public static final String LIST_TRACK_LOADED = "listTrackLoaded";
     public static final String LIST_COLLECTION_TRACK_LOADED = "listCollectionTrackLoaded";
     public static final String PLAYLIST_LOADED = "playlistLoaded";
+    public static final String LIST_LIST = "listList";
     private static QueryManager sQueryManager = null;
     private Context mContext;
     private RestServiceManager mRestManager;
@@ -115,7 +116,7 @@ public class QueryManager {
 
             @Override
             public void onError(int errorCode) {
-
+                Log.d(LOG_TAG, "Error request code: " + String.valueOf(errorCode));
             }
         });
     }
@@ -129,7 +130,7 @@ public class QueryManager {
 
             @Override
             public void onError(int errorCode) {
-
+                Log.d(LOG_TAG, "Error request code: " + String.valueOf(errorCode));
             }
         });
     }
@@ -143,7 +144,7 @@ public class QueryManager {
 
             @Override
             public void onError(int errorCode) {
-
+                Log.d(LOG_TAG, "Error request code: " + String.valueOf(errorCode));
             }
         });
     }
@@ -158,7 +159,7 @@ public class QueryManager {
 
             @Override
             public void onError(int errorCode) {
-
+                Log.d(LOG_TAG, "Error request code: " + String.valueOf(errorCode));
             }
         });
     }

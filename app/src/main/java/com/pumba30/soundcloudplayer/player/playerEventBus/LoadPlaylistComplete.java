@@ -6,7 +6,7 @@ import java.util.List;
 
 public class LoadPlaylistComplete {
 
-    private List<Playlist> mPlaylists;
+    private final List<Playlist> mPlaylists;
 
     public LoadPlaylistComplete(List<Playlist> playlists) {
         mPlaylists = playlists;
@@ -15,4 +15,5 @@ public class LoadPlaylistComplete {
     public List<Playlist> getPlaylists() {
         return mPlaylists;
     }
+
 }

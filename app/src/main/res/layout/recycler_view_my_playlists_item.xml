@@ -6,7 +6,7 @@
 
 
     <ImageView
-        android:id="@+id/image_view_playlist"
+        android:id="@+id/logo_playlist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/ic_placeholder"/>
@@ -16,29 +16,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/image_view_playlist"
+        android:layout_toEndOf="@+id/logo_playlist"
         android:paddingStart="4dp"
         android:text="@string/title_playlist"
         android:textAppearance="@android:style/TextAppearance.Medium"/>
 
     <TextView
-        android:id="@+id/count_tracks"
+        android:id="@+id/title_track_count"
         android:layout_width="wrap_content"
-
         android:layout_height="wrap_content"
         android:layout_below="@+id/title_playlist"
-        android:layout_toEndOf="@+id/image_view_playlist"
+        android:layout_toEndOf="@+id/logo_playlist"
         android:paddingStart="4dp"
         android:text="@string/count_playlist_s_tracks"
         android:textAppearance="@android:style/TextAppearance.Medium"/>
 
     <TextView
-        android:id="@+id/text_view_count_tracks"
+        android:id="@+id/count_tracks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title_playlist"
         android:layout_marginStart="24dp"
-        android:layout_toEndOf="@+id/count_tracks"
+        android:layout_toEndOf="@+id/title_track_count"
         android:text="@string/count"
         android:textAppearance="@android:style/TextAppearance.Medium"/>
 
@@ -46,9 +45,9 @@
         android:id="@+id/play_playlist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:src="@mipmap/ic_play"
         android:layout_alignParentTop="true"
-        android:src="@mipmap/ic_play"/>
+        android:layout_alignParentEnd="true"/>
 
 
 </RelativeLayout>
