@@ -10,6 +10,7 @@ import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.player.playerEventBus.LoadPlaylistComplete;
 import com.pumba30.soundcloudplayer.player.playerEventBus.ObjectsBusEvent;
+import com.pumba30.soundcloudplayer.player.playerEventBus.PlaylistCreatedEvent;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -111,7 +112,7 @@ public class QueryManager {
         mRestManager.createPlaylist(title, sharing, new RestServiceManager.RestCallback<Playlist>() {
             @Override
             public void onSuccess(Playlist response) {
-
+                EventBus.getDefault().post(new PlaylistCreatedEvent(response));
             }
 
             @Override

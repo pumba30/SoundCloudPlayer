@@ -5,7 +5,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -13,7 +17,9 @@ import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.player.playerEventBus.LoadPlaylistComplete;
 import com.pumba30.soundcloudplayer.ui.adapters.PlaylistAdapter;
+import com.pumba30.soundcloudplayer.ui.dialogFragments.CreatePlaylistDialog;
 import com.pumba30.soundcloudplayer.utils.DividerItemDecoration;
+import com.pumba30.soundcloudplayer.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -21,6 +27,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class PlaylistsFragment extends Fragment {
 
+    private static final String LOG_TAG = PlaylistsFragment.class.getSimpleName();
     private PlaylistAdapter mPlaylistAdapter;
 
     public static PlaylistsFragment newInstance() {
@@ -32,14 +39,15 @@ public class PlaylistsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        setHasOptionsMenu(true);
         EventBus.getDefault().register(this);
 
     }
 
     @Override
     public void onPause() {
-        EventBus.getDefault().unregister(this);
         super.onPause();
+        EventBus.getDefault().unregister(this);
     }
 
     @Nullable
@@ -67,6 +75,47 @@ public class PlaylistsFragment extends Fragment {
     @Subscribe
     public void loadPlaylists(LoadPlaylistComplete complete) {
         mPlaylistAdapter.setPlaylists(complete.getPlaylists());
+        Log.d(LOG_TAG, "Load playlist complete");
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_playlist_fragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_create_playlist) {
+            Utils.toast(getActivity(), "Create playlist");
+            CreatePlaylistDialog dialog = CreatePlaylistDialog.newInstance();
+            dialog.show(getActivity().getSupportFragmentManager(), "createPlaylistDialog");
+        }
+        return true;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

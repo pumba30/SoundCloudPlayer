@@ -18,7 +18,9 @@ import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.player.playerEventBus.ObjectsBusEvent;
+import com.pumba30.soundcloudplayer.player.playerEventBus.PlaylistCreatedEvent;
 import com.pumba30.soundcloudplayer.ui.adapters.AddTrackPlaylistAdapter;
+import com.pumba30.soundcloudplayer.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -90,6 +92,7 @@ public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View
         return builder.create();
 
     }
+
 
     @Subscribe
     public void playlistCompleteLoaded(ObjectsBusEvent event) {

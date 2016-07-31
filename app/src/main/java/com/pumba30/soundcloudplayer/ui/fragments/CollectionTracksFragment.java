@@ -17,10 +17,12 @@ import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.player.PlayerActivity;
 import com.pumba30.soundcloudplayer.player.playerEventBus.LoadPlaylistComplete;
 import com.pumba30.soundcloudplayer.player.playerEventBus.ObjectsBusEvent;
+import com.pumba30.soundcloudplayer.player.playerEventBus.PlaylistCreatedEvent;
 import com.pumba30.soundcloudplayer.ui.adapters.OneAndManyTrackAdapter;
 import com.pumba30.soundcloudplayer.ui.dialogFragments.AddTrackToPlaylistDialog;
 import com.pumba30.soundcloudplayer.ui.dialogFragments.CreatePlaylistDialog;
 import com.pumba30.soundcloudplayer.utils.DividerItemDecoration;
+import com.pumba30.soundcloudplayer.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -31,6 +33,7 @@ public class CollectionTracksFragment extends Fragment {
     private static final String LOG_TAG = CollectionTracksFragment.class.getSimpleName();
     private OneAndManyTrackAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private List<Playlist> mPlaylists;
 
 
     public static CollectionTracksFragment newInstance() {
@@ -72,22 +75,27 @@ public class CollectionTracksFragment extends Fragment {
 
 
     @Subscribe
+    public void playlistCreated(PlaylistCreatedEvent event) {
+        Utils.toast(getActivity(), "Create PPLAYLIST");
+        Playlist playlist = event.getPlaylist();
+        mPlaylists.add(playlist);
+        mAdapter.setPlaylist(mPlaylists);
+    }
+
+    @Subscribe
     public void loadPlaylistsComplete(LoadPlaylistComplete event) {
-            List<Playlist> playlists = event.getPlaylists();
-            String trackId = mAdapter.getTrackId();
+        mPlaylists = event.getPlaylists();
 
-            if (playlists.size() == 0 || playlists.get(0) == null) {
-                Log.d(LOG_TAG, "Playlist null, size: " + playlists.size());
-                CreatePlaylistDialog playlistDialog = CreatePlaylistDialog.newInstance();
-                playlistDialog.show(getActivity().getSupportFragmentManager(), "createDialog");
+        if (mPlaylists.size() == 0 || mPlaylists.get(0) == null) {
+            Log.d(LOG_TAG, "Playlist null, size: " + mPlaylists.size());
+            CreatePlaylistDialog playlistDialog = CreatePlaylistDialog.newInstance();
+            playlistDialog.show(getActivity().getSupportFragmentManager(), "createDialog");
 
-            } else {
-                Log.d(LOG_TAG, "Playlist size: " + playlists.size());
-                AddTrackToPlaylistDialog addTrackToPlaylistDialog
-                        = AddTrackToPlaylistDialog.newInstance(playlists, trackId);
-                addTrackToPlaylistDialog
-                        .show(getActivity().getSupportFragmentManager(), "addTrackToPlaylistDialog");
-            }
+        } else {
+            Log.d(LOG_TAG, "Playlist size: " + mPlaylists.size());
+            mAdapter.setPlaylist(mPlaylists);
+
+        }
     }
 
 
@@ -102,7 +110,6 @@ public class CollectionTracksFragment extends Fragment {
 
         } else if (message.equals(QueryManager.LIST_COLLECTION_TRACK_LOADED)) {
             mAdapter.setTrackList((List<Track>) event.getObject());
-            mAdapter.notifyDataSetChanged();
         }
     }
 

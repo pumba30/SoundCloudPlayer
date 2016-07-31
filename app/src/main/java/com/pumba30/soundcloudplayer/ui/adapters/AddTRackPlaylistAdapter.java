@@ -30,7 +30,6 @@ public class AddTrackPlaylistAdapter extends RecyclerView.Adapter<AddTrackPlayli
 
     public AddTrackPlaylistAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
-        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -53,24 +52,6 @@ public class AddTrackPlaylistAdapter extends RecyclerView.Adapter<AddTrackPlayli
         });
     }
 
-    @Subscribe
-    public void playlistCompleteLoaded(ObjectsBusEvent event) {
-        Playlist playlist;
-        if (event.getMessage().equals(QueryManager.PLAYLIST_LOADED)) {
-            Log.d(LOG_TAG, "Playlist loaded");
-            playlist = (Playlist) event.getObject();
-
-            List<String> tracksIds = new ArrayList<>();
-            for (int i = 0; i < playlist.getTrackList().size(); i++) {
-                tracksIds.add(String.valueOf(playlist.getTrackList().get(i).getId()));
-            }
-            tracksIds.add(mTrackId);
-
-            QueryManager.getInstance().addTrackToPlaylist(mPlaylistId, tracksIds);
-            EventBus.getDefault().post(new ObjectsBusEvent(QueryManager.TRACK_ADDED, null));
-        }
-    }
-
     @Override
     public int getItemCount() {
         if (mPlaylists == null) {
@@ -82,6 +63,10 @@ public class AddTrackPlaylistAdapter extends RecyclerView.Adapter<AddTrackPlayli
 
     public void setPlaylist(List<Playlist> playlist) {
         mPlaylists = playlist;
+    }
+
+    public String getPlaylistId() {
+        return mPlaylistId;
     }
 
     public void setTrackId(String trackId) {

@@ -14,10 +14,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pumba30.soundcloudplayer.R;
+import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.ui.activity.MainActivity;
+import com.pumba30.soundcloudplayer.ui.dialogFragments.AddTrackToPlaylistDialog;
 import com.pumba30.soundcloudplayer.ui.dialogFragments.DeleteTrackFromCollectionDialog;
+import com.pumba30.soundcloudplayer.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -38,6 +41,7 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
     private TypeListTrack mTypeListTrack;
     private Track mTrack;
     private String mTrackId;
+    private List<Playlist> mPlaylists;
 
 
     public OneAndManyTrackAdapter(Context context, TypeListTrack typeListTrack) {
@@ -45,6 +49,7 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
         mInflater = LayoutInflater.from(context);
         mContext = context;
         mTypeListTrack = typeListTrack;
+        mPlaylists = new ArrayList<>();
     }
 
     @Override
@@ -58,7 +63,6 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
 
         return new ViewHolder(view, mTypeListTrack);
     }
-
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
@@ -81,7 +85,16 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
                 @Override
                 public void onClick(View view) {
                     mTrackId = gettingTrackId(adapterPosition);
+
                     QueryManager.getInstance().getMePlaylists();
+                    Utils.toast(mContext, "getMePlaylist");
+
+                    AddTrackToPlaylistDialog addTrackToPlaylistDialog
+                            = AddTrackToPlaylistDialog.newInstance(mPlaylists, mTrackId);
+                    addTrackToPlaylistDialog
+                            .show(((MainActivity) mContext).getSupportFragmentManager(), "addTrackToPlaylistDialog");
+
+
                     Log.d(LOG_TAG, "TrackId: " + mTrackId);
                 }
             });
@@ -97,8 +110,6 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
                     return true;
                 }
             });
-
-
         }
     }
 
@@ -106,11 +117,6 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
     private String gettingTrackId(int adapterPosition) {
         return String.valueOf(mTrackList.get(adapterPosition).getId());
     }
-
-    public String getTrackId() {
-        return mTrackId;
-    }
-
 
     private void startPlayTrack(Track track) {
         List<Track> tracks = new ArrayList<>();
@@ -130,6 +136,12 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
         mTrackList.clear();
         mTrackList.addAll(trackList);
         this.notifyItemRangeChanged(0, mTrackList.size() - 1);
+    }
+
+    public void setPlaylist(List<Playlist> playlist) {
+        mPlaylists.clear();
+        mPlaylists.addAll(playlist);
+        this.notifyItemRangeChanged(0, mPlaylists.size() - 1);
     }
 
 
@@ -178,7 +190,10 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
                     "Duration of the track %d min.", (track.getDuration() / 1000) / 60));
             mDownloadTrack.setText(String.format("Download track: %s", track.getDownloadable()));
             String userNameText = itemView.getContext().getString(R.string.user_name_track);
-            mUserNameTrack.setText(new StringBuilder().append(userNameText).append(track.getUser().getUserName()).toString());
+            mUserNameTrack.setText(new StringBuilder()
+                    .append(userNameText)
+                    .append(track.getUser().getUserName())
+                    .toString());
             if (!TextUtils.isEmpty(track.getDescription())) {
                 mDescriptionTrack.setText(track.getDescription());
             } else {

@@ -19,6 +19,8 @@ import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
+import org.greenrobot.eventbus.EventBus;
+
 public class CreatePlaylistDialog extends BaseDialogFragment implements RadioGroup.OnCheckedChangeListener,
         TextView.OnEditorActionListener {
     public static final String LOG_TAG = CreatePlaylistDialog.class.getSimpleName();
@@ -53,7 +55,7 @@ public class CreatePlaylistDialog extends BaseDialogFragment implements RadioGro
                     public void onClick(DialogInterface dialogInterface, int i) {
                         mTitle = playlistTitle.getText().toString();
                         createPlaylist(mTitle, mSharing);
-                        getDialog().dismiss();
+                        dismiss();
                     }
                 });
 
@@ -82,7 +84,7 @@ public class CreatePlaylistDialog extends BaseDialogFragment implements RadioGro
         if (TextUtils.isEmpty(title)) {
             Log.d(LOG_TAG, "Title is empty. Dialog dissmis");
             Utils.toast(getActivity(), R.string.enter_valid_title);
-            getDialog().dismiss();
+            dismiss();
         } else {
             QueryManager.getInstance().createPlaylist(title, sharing);
             Utils.toast(getActivity(), R.string.playlist_created);

@@ -55,6 +55,8 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
         setHasOptionsMenu(true);
         setRetainInstance(true);
 
+
+
         initPlayer();
     }
 

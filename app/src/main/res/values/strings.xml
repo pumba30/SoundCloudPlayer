@@ -83,5 +83,8 @@
     <string name="title_playlist">Title playlist</string>
     <string name="count_playlist_s_tracks">Count playlist\'s tracks:</string>
     <string name="count">0</string>
+    <string name="search_soundcloud">Search SoundCloud</string>
+    <string name="clear_search">Clear</string>
+
 
 </resources>
