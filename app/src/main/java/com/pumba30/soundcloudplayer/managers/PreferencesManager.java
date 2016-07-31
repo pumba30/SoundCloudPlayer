@@ -14,11 +14,13 @@ public class PreferencesManager {
     public static final String KEY_TOKEN = "keyToken";
     public static final String KEY_USER = "keyUser";
     private static final String KEY_ITEM_SPINNER = "itemSpinner";
+    private static final String KEY_IS_RUNNED = "keyIsRunned";
 
     private SharedPreferences mPreferences;
     private SharedPreferences.Editor mEditor;
 
     private static PreferencesManager sManager;
+    private boolean mRunnedSearchActivity;
 
     private PreferencesManager(Context context) {
         mPreferences = context.getSharedPreferences(PREFERENCES_MANAGER, Context.MODE_PRIVATE);
@@ -94,5 +96,15 @@ public class PreferencesManager {
 
     public int getChoicedItemSpinner() {
         return mPreferences.getInt(KEY_ITEM_SPINNER, -1);
+    }
+
+    public void setRunnedSearchActivity(boolean runnedSearchActivity) {
+        mEditor = mPreferences.edit();
+        mEditor.putBoolean(KEY_IS_RUNNED, runnedSearchActivity);
+        mEditor.apply();
+    }
+
+    public boolean isRunnedSearchActivity() {
+        return mPreferences.getBoolean(KEY_IS_RUNNED, false);
     }
 }

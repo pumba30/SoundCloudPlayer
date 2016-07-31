@@ -5,11 +5,15 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
 
 import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.player.Player;
 import com.pumba30.soundcloudplayer.ui.adapters.ViewPagerAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class MainActivity extends BaseDrawerActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -23,7 +27,6 @@ public class MainActivity extends BaseDrawerActivity {
             Log.d(LOG_TAG, "Start Login Activity");
             startLoginActivity(getApplicationContext());
         } else {
-
 
             AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
             params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
@@ -71,7 +74,6 @@ public class MainActivity extends BaseDrawerActivity {
             });
         }
     }
-
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),

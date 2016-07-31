@@ -5,6 +5,7 @@
     <color name="colorAccent">#ff8c40</color>
     <color name="orange_light">#ff8c40</color>
     <color name="orange_transparent">#a9ff8c40</color>
+    <color name="gray_transparent">#b7262422</color>
     <color name="white">#ffffff</color>
     <color name="blue">#219fe2</color>
     <color name="black_overlay">#66000000</color>

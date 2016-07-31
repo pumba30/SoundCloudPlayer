@@ -42,6 +42,7 @@
         </activity>
 
         <activity
+            android:theme="@style/Theme.Transparent"
             android:name=".ui.activity.SearchActivity"
             android:parentActivityName=".ui.activity.MainActivity">
         </activity>

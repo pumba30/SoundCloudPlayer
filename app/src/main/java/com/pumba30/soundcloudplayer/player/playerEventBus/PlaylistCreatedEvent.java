@@ -5,7 +5,7 @@ import com.pumba30.soundcloudplayer.api.models.Playlist;
 
 public class PlaylistCreatedEvent {
 
-    private final Playlist mPlaylist;
+    private  Playlist mPlaylist;
 
     public PlaylistCreatedEvent(Playlist response) {
         mPlaylist = response;
