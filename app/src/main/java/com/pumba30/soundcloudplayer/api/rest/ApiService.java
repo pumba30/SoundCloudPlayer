@@ -51,7 +51,7 @@ public interface ApiService {
     Call<Track> loadSoundCloudTrack(@Path("trackId") int trackId);
 
     @GET("tracks")
-    Call<Track> searchTrack(@Query("q") String query);
+    Call<List<Track>> searchTrack(@Query("q") String query);
 
 
     /*Collection e.i. Like tracks*/

@@ -86,8 +86,12 @@ public class RestServiceManager {
                 .enqueue(new RestCallbackWrapper<>(playlistRestCallback));
     }
 
-    public void getPlaylistById(String playlistId, RestServiceManager.RestCallback<Playlist> playlistRestCallback){
+    public void getPlaylistById(String playlistId, RestServiceManager.RestCallback<Playlist> playlistRestCallback) {
         mApiService.getPlaylistById(playlistId).enqueue(new RestCallbackWrapper<>(playlistRestCallback));
+    }
+
+    public void searchTrack(String query, RestServiceManager.RestCallback<List<Track>> trackRestCallback) {
+        mApiService.searchTrack(query).enqueue(new RestCallbackWrapper<List<Track>>(trackRestCallback));
     }
 
 

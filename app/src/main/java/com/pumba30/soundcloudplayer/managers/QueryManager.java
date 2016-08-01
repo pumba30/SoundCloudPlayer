@@ -164,4 +164,18 @@ public class QueryManager {
             }
         });
     }
+
+    public void searchTrack(String query) {
+        mRestManager.searchTrack(query, new RestServiceManager.RestCallback<List<Track>>() {
+            @Override
+            public void onSuccess(List<Track> response) {
+                Log.d(LOG_TAG, response.toString());
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                Log.d(LOG_TAG, "Error request code: " + String.valueOf(errorCode));
+            }
+        });
+    }
 }

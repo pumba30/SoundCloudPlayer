@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.managers.PreferencesManager;
+import com.pumba30.soundcloudplayer.managers.QueryManager;
 
 public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private static final String LOG_TAG = SearchActivity.class.getSimpleName();
@@ -71,7 +72,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     @Override
     public boolean onQueryTextSubmit(String query) {
         Log.d(LOG_TAG, "Query text submit " + query);
-        updateItems();
+        updateItems(query);
         return true;
     }
 
@@ -81,9 +82,9 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         return false;
     }
 
-    private void updateItems() {
+    private void updateItems(String query) {
 
-
+        QueryManager.getInstance().searchTrack(query);
 
     }
 
