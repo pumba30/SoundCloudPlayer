@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.managers.QueryManager;
-import com.pumba30.soundcloudplayer.player.playerEventBus.LoadPlaylistComplete;
+import com.pumba30.soundcloudplayer.events.LoadPlaylistCompleteEvent;
 import com.pumba30.soundcloudplayer.ui.adapters.PlaylistAdapter;
 import com.pumba30.soundcloudplayer.ui.dialogFragments.CreatePlaylistDialog;
 import com.pumba30.soundcloudplayer.utils.DividerItemDecoration;
@@ -66,14 +66,13 @@ public class PlaylistsFragment extends Fragment {
         mPlaylistAdapter = new PlaylistAdapter(getContext());
         recyclerView.setAdapter(mPlaylistAdapter);
 
-
         QueryManager.getInstance().getMePlaylists();
 
         return view;
     }
 
     @Subscribe
-    public void loadPlaylists(LoadPlaylistComplete complete) {
+    public void loadPlaylists(LoadPlaylistCompleteEvent complete) {
         mPlaylistAdapter.setPlaylists(complete.getPlaylists());
         Log.d(LOG_TAG, "Load playlist complete");
     }

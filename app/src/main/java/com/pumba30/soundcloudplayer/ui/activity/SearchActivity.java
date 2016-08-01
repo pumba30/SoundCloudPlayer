@@ -17,9 +17,6 @@ import android.widget.TextView;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.managers.PreferencesManager;
-import com.pumba30.soundcloudplayer.player.playerEventBus.SearchActivityRunnedEvent;
-
-import org.greenrobot.eventbus.EventBus;
 
 public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private static final String LOG_TAG = SearchActivity.class.getSimpleName();
@@ -38,16 +35,21 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_search);
 
+        setActivityBackGroundTransparent();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        PreferencesManager.getInstance(getApplicationContext()).setRunnedSearchActivity(true);
+    }
+
+    private void setActivityBackGroundTransparent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (getSupportActionBar() != null) {
                 ActionBar toolbar = getSupportActionBar();
                 toolbar.setElevation(0);
             }
-            getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.gray_transparent)));
+            getWindow().setBackgroundDrawable(new ColorDrawable(getResources()
+                    .getColor(R.color.gray_transparent)));
         }
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
-        PreferencesManager.getInstance(getApplicationContext()).setRunnedSearchActivity(true);
     }
 
     @Override
@@ -59,7 +61,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         searchView.setIconifiedByDefault(false);
         searchView.requestFocus();
 
-        //when the rotate screen doesn't fill a whole screen
+        //when rotated the screen, search doesn't fill  a whole screen
         searchView.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
         searchView.setOnQueryTextListener(this);
@@ -79,7 +81,11 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         return false;
     }
 
-    private void updateItems() {/*empty*/}
+    private void updateItems() {
+
+
+
+    }
 
 
     @Override

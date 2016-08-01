@@ -1,14 +1,14 @@
-package com.pumba30.soundcloudplayer.player.playerEventBus;
+package com.pumba30.soundcloudplayer.events;
 
 import com.pumba30.soundcloudplayer.api.models.Playlist;
 
 import java.util.List;
 
-public class LoadPlaylistComplete {
+public class LoadPlaylistCompleteEvent {
 
     private final List<Playlist> mPlaylists;
 
-    public LoadPlaylistComplete(List<Playlist> playlists) {
+    public LoadPlaylistCompleteEvent(List<Playlist> playlists) {
         mPlaylists = playlists;
     }
 

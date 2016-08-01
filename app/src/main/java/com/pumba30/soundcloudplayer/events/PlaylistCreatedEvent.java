@@ -1,4 +1,4 @@
-package com.pumba30.soundcloudplayer.player.playerEventBus;
+package com.pumba30.soundcloudplayer.events;
 
 
 import com.pumba30.soundcloudplayer.api.models.Playlist;

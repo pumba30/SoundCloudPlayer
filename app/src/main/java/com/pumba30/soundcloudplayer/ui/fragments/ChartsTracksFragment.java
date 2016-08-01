@@ -25,7 +25,7 @@ import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.managers.PreferencesManager;
 import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.player.Player;
-import com.pumba30.soundcloudplayer.player.playerEventBus.ObjectsBusEvent;
+import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
 import com.pumba30.soundcloudplayer.ui.adapters.ChartTracksAdapter;
 import com.pumba30.soundcloudplayer.utils.GenreMusic;
 import com.pumba30.soundcloudplayer.utils.Utils;

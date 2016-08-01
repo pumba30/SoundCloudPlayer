@@ -11,13 +11,7 @@ import android.widget.TextView;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.managers.QueryManager;
-import com.pumba30.soundcloudplayer.player.playerEventBus.ObjectsBusEvent;
-import com.pumba30.soundcloudplayer.utils.Utils;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
-import java.util.ArrayList;
 import java.util.List;
 
 

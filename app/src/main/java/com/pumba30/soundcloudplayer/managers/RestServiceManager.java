@@ -80,7 +80,7 @@ public class RestServiceManager {
                 .enqueue(new RestCallbackWrapper<>(playlistRestCallback));
     }
 
-    public void addTrackToPlayList(String playlistId, List<String> trackId,
+    public void addTrackToPlayaist(String playlistId, List<String> trackId,
                                    RestServiceManager.RestCallback<Playlist> playlistRestCallback) {
         mApiService.addTrackToPlaylist(playlistId, getMapToAddPlayList(trackId))
                 .enqueue(new RestCallbackWrapper<>(playlistRestCallback));

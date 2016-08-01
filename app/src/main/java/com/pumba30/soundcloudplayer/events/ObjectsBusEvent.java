@@ -1,4 +1,4 @@
-package com.pumba30.soundcloudplayer.player.playerEventBus;
+package com.pumba30.soundcloudplayer.events;
 
 public class ObjectsBusEvent {
     private final String mMessage;

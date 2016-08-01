@@ -15,11 +15,10 @@ import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.player.PlayerActivity;
-import com.pumba30.soundcloudplayer.player.playerEventBus.LoadPlaylistComplete;
-import com.pumba30.soundcloudplayer.player.playerEventBus.ObjectsBusEvent;
-import com.pumba30.soundcloudplayer.player.playerEventBus.PlaylistCreatedEvent;
+import com.pumba30.soundcloudplayer.events.LoadPlaylistCompleteEvent;
+import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
+import com.pumba30.soundcloudplayer.events.PlaylistCreatedEvent;
 import com.pumba30.soundcloudplayer.ui.adapters.OneAndManyTrackAdapter;
-import com.pumba30.soundcloudplayer.ui.dialogFragments.AddTrackToPlaylistDialog;
 import com.pumba30.soundcloudplayer.ui.dialogFragments.CreatePlaylistDialog;
 import com.pumba30.soundcloudplayer.utils.DividerItemDecoration;
 import com.pumba30.soundcloudplayer.utils.Utils;
@@ -83,7 +82,7 @@ public class CollectionTracksFragment extends Fragment {
     }
 
     @Subscribe
-    public void loadPlaylistsComplete(LoadPlaylistComplete event) {
+    public void loadPlaylistsComplete(LoadPlaylistCompleteEvent event) {
         mPlaylists = event.getPlaylists();
 
         if (mPlaylists.size() == 0 || mPlaylists.get(0) == null) {

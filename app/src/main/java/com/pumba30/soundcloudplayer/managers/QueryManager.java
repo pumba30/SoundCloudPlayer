@@ -8,9 +8,9 @@ import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.player.playerEventBus.LoadPlaylistComplete;
-import com.pumba30.soundcloudplayer.player.playerEventBus.ObjectsBusEvent;
-import com.pumba30.soundcloudplayer.player.playerEventBus.PlaylistCreatedEvent;
+import com.pumba30.soundcloudplayer.events.LoadPlaylistCompleteEvent;
+import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
+import com.pumba30.soundcloudplayer.events.PlaylistCreatedEvent;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -126,7 +126,7 @@ public class QueryManager {
         mRestManager.getPlaylists(new RestServiceManager.RestCallback<List<Playlist>>() {
             @Override
             public void onSuccess(List<Playlist> response) {
-                EventBus.getDefault().post(new LoadPlaylistComplete(response));
+                EventBus.getDefault().post(new LoadPlaylistCompleteEvent(response));
             }
 
             @Override
@@ -137,7 +137,7 @@ public class QueryManager {
     }
 
     public void addTrackToPlaylist(String playlistId, List<String> tracksIds) {
-        mRestManager.addTrackToPlayList(playlistId, tracksIds, new RestServiceManager.RestCallback<Playlist>() {
+        mRestManager.addTrackToPlayaist(playlistId, tracksIds, new RestServiceManager.RestCallback<Playlist>() {
             @Override
             public void onSuccess(Playlist response) {
 

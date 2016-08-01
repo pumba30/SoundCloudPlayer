@@ -1,6 +1,5 @@
 package com.pumba30.soundcloudplayer.player;
 
-import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.PopupMenu;
@@ -15,7 +14,7 @@ import android.widget.ProgressBar;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.managers.QueryManager;
-import com.pumba30.soundcloudplayer.player.playerEventBus.PlayerEvent;
+import com.pumba30.soundcloudplayer.events.PlayerEvent;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;

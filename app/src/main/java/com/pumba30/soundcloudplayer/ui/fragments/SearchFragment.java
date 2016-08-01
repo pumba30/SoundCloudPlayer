@@ -11,11 +11,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.pumba30.soundcloudplayer.R;
-import com.pumba30.soundcloudplayer.player.playerEventBus.SearchActivityRunnedEvent;
 import com.pumba30.soundcloudplayer.ui.activity.MainActivity;
 import com.pumba30.soundcloudplayer.ui.activity.SearchActivity;
-
-import org.greenrobot.eventbus.EventBus;
 
 public class SearchFragment extends Fragment implements View.OnClickListener {
 
