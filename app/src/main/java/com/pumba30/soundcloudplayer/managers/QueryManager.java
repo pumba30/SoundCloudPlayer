@@ -137,7 +137,7 @@ public class QueryManager {
     }
 
     public void addTrackToPlaylist(String playlistId, List<String> tracksIds) {
-        mRestManager.addTrackToPlayaist(playlistId, tracksIds, new RestServiceManager.RestCallback<Playlist>() {
+        mRestManager.addTrackToPlaylist(playlistId, tracksIds, new RestServiceManager.RestCallback<Playlist>() {
             @Override
             public void onSuccess(Playlist response) {
 
