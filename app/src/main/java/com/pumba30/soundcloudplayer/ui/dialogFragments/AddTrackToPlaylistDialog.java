@@ -16,9 +16,9 @@ import android.widget.LinearLayout;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
-import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
-import com.pumba30.soundcloudplayer.ui.adapters.AddTrackPlaylistAdapter;
+import com.pumba30.soundcloudplayer.managers.QueryManager;
+import com.pumba30.soundcloudplayer.ui.adapters.AddTackPlaylistAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,7 +33,7 @@ public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View
     private static final String KEY_TRACK_ID = "trackId";
     private List<Playlist> mPlaylists;
     private String mTrackId;
-    private AddTrackPlaylistAdapter mPlaylistAdapter;
+    private AddTackPlaylistAdapter mPlaylistAdapter;
 
     public static AddTrackToPlaylistDialog newInstance(List<Playlist> playlists, String trackId) {
         Bundle bundle = new Bundle();
@@ -71,7 +71,7 @@ public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        mPlaylistAdapter = new AddTrackPlaylistAdapter(getContext());
+        mPlaylistAdapter = new AddTackPlaylistAdapter(getContext());
         mPlaylistAdapter.setPlaylist(mPlaylists);
         mPlaylistAdapter.setTrackId(mTrackId);
         recyclerView.setAdapter(mPlaylistAdapter);

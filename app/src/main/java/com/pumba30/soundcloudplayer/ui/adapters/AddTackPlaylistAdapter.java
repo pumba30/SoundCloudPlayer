@@ -15,14 +15,15 @@ import com.pumba30.soundcloudplayer.managers.QueryManager;
 import java.util.List;
 
 
-public class AddTrackPlaylistAdapter extends RecyclerView.Adapter<AddTrackPlaylistAdapter.ViewHolder> {
-    public static final String LOG_TAG = AddTrackPlaylistAdapter.class.getSimpleName();
+
+public class AddTackPlaylistAdapter extends RecyclerView.Adapter<AddTackPlaylistAdapter.ViewHolder> {
+    public static final String LOG_TAG = AddTackPlaylistAdapter.class.getSimpleName();
     private LayoutInflater mInflater;
     private List<Playlist> mPlaylists;
     private String mTrackId;
     private String mPlaylistId;
 
-    public AddTrackPlaylistAdapter(Context context) {
+    public AddTackPlaylistAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
 
