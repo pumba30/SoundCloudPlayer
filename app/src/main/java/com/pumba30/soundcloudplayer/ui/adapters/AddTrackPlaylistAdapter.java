@@ -16,14 +16,14 @@ import java.util.List;
 
 
 
-public class AddTackPlaylistAdapter extends RecyclerView.Adapter<AddTackPlaylistAdapter.ViewHolder> {
-    public static final String LOG_TAG = AddTackPlaylistAdapter.class.getSimpleName();
+public class AddTrackPlaylistAdapter extends RecyclerView.Adapter<AddTrackPlaylistAdapter.ViewHolder> {
+    public static final String LOG_TAG = AddTrackPlaylistAdapter.class.getSimpleName();
     private LayoutInflater mInflater;
     private List<Playlist> mPlaylists;
     private String mTrackId;
     private String mPlaylistId;
 
-    public AddTackPlaylistAdapter(Context context) {
+    public AddTrackPlaylistAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
 
