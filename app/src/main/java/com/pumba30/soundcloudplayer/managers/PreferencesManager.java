@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.pumba30.soundcloudplayer.api.models.Token;
 import com.pumba30.soundcloudplayer.api.models.User;
+import com.pumba30.soundcloudplayer.utils.Serializer;
 
 public class PreferencesManager {
 
@@ -14,97 +15,73 @@ public class PreferencesManager {
     public static final String KEY_TOKEN = "keyToken";
     public static final String KEY_USER = "keyUser";
     private static final String KEY_ITEM_SPINNER = "itemSpinner";
-    private static final String KEY_IS_RUNNED = "keyIsRunned";
+    private static final String KEY_IS_LAUNCHED = "keyIsLaunched";
 
-    private SharedPreferences mPreferences;
-    private SharedPreferences.Editor mEditor;
 
-    private static PreferencesManager sManager;
-    private boolean mRunnedSearchActivity;
-
-    private PreferencesManager(Context context) {
-        mPreferences = context.getSharedPreferences(PREFERENCES_MANAGER, Context.MODE_PRIVATE);
+    public static SharedPreferences getPref(Context context) {
+        return context.getSharedPreferences(PREFERENCES_MANAGER, Context.MODE_PRIVATE);
     }
 
-    public static synchronized PreferencesManager getInstance(Context context) {
-        if (sManager == null) {
-            sManager = new PreferencesManager(context);
-        }
-        return sManager;
-    }
-
-    public void storeLoginSession(Token token, boolean isUserLoggedIn) {
-        mEditor = mPreferences.edit();
-        mEditor.putString(KEY_TOKEN, token.getAccessToken());
-        mEditor.putBoolean(KEY_USER_IS_LOGGED_IN, isUserLoggedIn);
-        mEditor.apply();
+    public static void storeLoginSession(Context context, Token token, boolean isUserLoggedIn) {
+        getPref(context).edit()
+                .putString(KEY_TOKEN, token.getAccessToken())
+                .putBoolean(KEY_USER_IS_LOGGED_IN, isUserLoggedIn)
+                .apply();
     }
 
 
-    private String userToStrings(User user) {
-        String stringUser;
-        if (user != null) {
-            Gson gson = new Gson();
-            stringUser = gson.toJson(user);
-        } else {
-            throw new NullPointerException("User is null");
-        }
-        return stringUser;
+    public static void saveUser(Context context, User user) {
+        String stringUser = userToStrings(user);
+        getPref(context).edit()
+                .putString(KEY_USER, stringUser)
+                .apply();
     }
 
-    public User getUser() {
-        String userString = mPreferences.getString(KEY_USER, null);
-        User user;
-        if (userString != null) {
-            Gson gson = new Gson();
-            user = gson.fromJson(userString, User.class);
-        } else {
-            throw new NullPointerException("User in SharedPreferences is null");
-        }
-        return user;
+    private static String userToStrings(User user) {
+        Serializer<User> stringUser = new Serializer<>();
+        return stringUser.objectToJson(user);
+    }
+
+    public static User getUser(Context context) {
+        String user = getPref(context).getString(KEY_USER, null);
+        Serializer<User> userSerializer = new Serializer<>();
+        return userSerializer.objectFromJson(user, User.class);
     }
 
     //action user logout
-    public void logoutUser() {
-        SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putString(KEY_TOKEN, null);
-        editor.putString(KEY_USER, null);
-        editor.putBoolean(KEY_USER_IS_LOGGED_IN, false);
-        editor.apply();
+    public static void logoutUser(Context context) {
+        getPref(context).edit()
+                .putString(KEY_TOKEN, null)
+                .putString(KEY_USER, null)
+                .putBoolean(KEY_USER_IS_LOGGED_IN, false)
+                .apply();
     }
 
-    public String getToken() {
-        return mPreferences.getString(KEY_TOKEN, null);
+    public static String getToken(Context context) {
+        return getPref(context).getString(KEY_TOKEN, null);
     }
 
-    public boolean isUserLoggedIn() {
-        return mPreferences.getBoolean(KEY_USER_IS_LOGGED_IN, false);
+    public static boolean isUserLoggedIn(Context context) {
+        return getPref(context).getBoolean(KEY_USER_IS_LOGGED_IN, false);
     }
 
-    public void saveUser(User user) {
-        String stringUser = userToStrings(user);
-        mEditor = mPreferences.edit();
-        mEditor.putString(KEY_USER, stringUser);
-        mEditor.apply();
+    public static void saveChoicedItemSpinner(Context context, int choicedItem) {
+        getPref(context).edit()
+                .putInt(KEY_ITEM_SPINNER, choicedItem)
+                .apply();
     }
 
-    public void saveChoicedItemSpinner(int choicedItem) {
-        mEditor = mPreferences.edit();
-        mEditor.putInt(KEY_ITEM_SPINNER, choicedItem);
-        mEditor.apply();
+    public static int getChoicedItemSpinner(Context context) {
+        return getPref(context).getInt(KEY_ITEM_SPINNER, -1);
     }
 
-    public int getChoicedItemSpinner() {
-        return mPreferences.getInt(KEY_ITEM_SPINNER, -1);
+    public static void setLauchedSearchActivity(Context context, boolean lauchedSearchActivity) {
+        getPref(context).edit()
+                .putBoolean(KEY_IS_LAUNCHED, lauchedSearchActivity)
+                .apply();
     }
 
-    public void setRunnedSearchActivity(boolean runnedSearchActivity) {
-        mEditor = mPreferences.edit();
-        mEditor.putBoolean(KEY_IS_RUNNED, runnedSearchActivity);
-        mEditor.apply();
-    }
-
-    public boolean isRunnedSearchActivity() {
-        return mPreferences.getBoolean(KEY_IS_RUNNED, false);
+    public static boolean isLaunchedSearchActivity(Context context) {
+        return getPref(context).getBoolean(KEY_IS_LAUNCHED, false);
     }
 }

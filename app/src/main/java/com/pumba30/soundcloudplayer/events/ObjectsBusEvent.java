@@ -1,21 +1,12 @@
 package com.pumba30.soundcloudplayer.events;
 
-public class ObjectsBusEvent {
-    private final String mMessage;
-    private final Object mObject;
+public class ObjectsBusEvent<T> {
+    public final String mMessage;
+    public final T mObject;
 
 
-    public ObjectsBusEvent(String message, Object o) {
-        mObject = o;
+    public ObjectsBusEvent(String message, T obj) {
+        mObject = obj;
         mMessage = message;
-    }
-
-
-    public String getMessage() {
-        return mMessage;
-    }
-
-    public Object getObject() {
-        return mObject;
     }
 }

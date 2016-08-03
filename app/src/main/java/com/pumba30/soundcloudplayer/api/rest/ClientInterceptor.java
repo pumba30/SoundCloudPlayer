@@ -19,7 +19,7 @@ public class ClientInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request original = chain.request();
         HttpUrl.Builder urlBuilder = original.url().newBuilder();
-        String token = App.sAppInstance.getSessionManager().getToken();
+        String token = App.getInstance().getSessionManager().getToken();
 
         if (token == null) {
             urlBuilder.addEncodedQueryParameter(KEY_CLIENT_ID, CLIENT_ID).build();

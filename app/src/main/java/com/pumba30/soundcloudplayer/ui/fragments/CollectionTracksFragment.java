@@ -99,8 +99,8 @@ public class CollectionTracksFragment extends Fragment {
 
 
     @Subscribe
-    public void updateAdapter(ObjectsBusEvent event) {
-        String message = event.getMessage();
+    public void updateAdapter(ObjectsBusEvent<List<Track>> event) {
+        String message = event.mMessage;
 
         if (message.equals(QueryManager.TRACK_ADDED)
                 || message.equals(QueryManager.TRACK_DELETED)) {
@@ -108,7 +108,7 @@ public class CollectionTracksFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
 
         } else if (message.equals(QueryManager.LIST_COLLECTION_TRACK_LOADED)) {
-            mAdapter.setTrackList((List<Track>) event.getObject());
+            mAdapter.setTrackList(event.mObject);
         }
     }
 

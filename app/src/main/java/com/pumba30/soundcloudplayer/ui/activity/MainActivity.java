@@ -23,7 +23,7 @@ public class MainActivity extends BaseDrawerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!App.sAppInstance.getSessionManager().isUserLoggedIn()) {
+        if (!App.getInstance().getSessionManager().isUserLoggedIn()) {
             Log.d(LOG_TAG, "Start Login Activity");
             startLoginActivity(getApplicationContext());
         } else {

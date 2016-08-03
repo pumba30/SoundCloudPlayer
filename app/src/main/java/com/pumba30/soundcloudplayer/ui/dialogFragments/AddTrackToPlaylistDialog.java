@@ -93,11 +93,11 @@ public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View
 
 
     @Subscribe
-    public void playlistCompleteLoaded(ObjectsBusEvent event) {
+    public void playlistCompleteLoaded(ObjectsBusEvent<Playlist> event) {
         Playlist playlist;
-        if (event.getMessage().equals(QueryManager.PLAYLIST_LOADED)) {
+        if (event.mMessage.equals(QueryManager.PLAYLIST_LOADED)) {
             Log.d(LOG_TAG, "Playlist loaded");
-            playlist = (Playlist) event.getObject();
+            playlist = event.mObject;
 
             List<String> tracksIds = new ArrayList<>();
             for (int i = 0; i < playlist.getTrackList().size(); i++) {
@@ -107,14 +107,14 @@ public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View
 
             String playlistId = mPlaylistAdapter.getPlaylistId();
             QueryManager.getInstance().addTrackToPlaylist(playlistId, tracksIds);
-            EventBus.getDefault().post(new ObjectsBusEvent(QueryManager.TRACK_ADDED, null));
+            EventBus.getDefault().post(new ObjectsBusEvent<Void>(QueryManager.TRACK_ADDED, null));
         }
     }
 
 
     @Subscribe
     public void trackAddedToPlayList(ObjectsBusEvent event) {
-        if (event.getMessage().equals(QueryManager.TRACK_ADDED)) {
+        if (event.mMessage.equals(QueryManager.TRACK_ADDED)) {
             dismiss();
         }
     }

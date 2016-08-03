@@ -31,8 +31,8 @@ public class AuthoritySoundCloud {
     public static final String KEY_REDIRECT_URI = "redirect_uri";
     public static final String KEY_CODE = "code";
 
-    private static RestServiceManager sRestServiceManager = App.sAppInstance.getRestServiceManager();
-    private static SessionManager sSessionManager = App.sAppInstance.getSessionManager();
+    private static RestServiceManager sRestServiceManager = App.getInstance().getRestServiceManager();
+    private static SessionManager sSessionManager = App.getInstance().getSessionManager();
 
 
     public static String getUrlConnect() {
@@ -101,9 +101,9 @@ public class AuthoritySoundCloud {
     }
 
     private static void startMainActivity() {
-        Intent intent = new Intent(App.sAppInstance, MainActivity.class);
+        Intent intent = new Intent(App.getInstance(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        App.sAppInstance.startActivity(intent);
+        App.getInstance().startActivity(intent);
     }
 
 }

@@ -39,7 +39,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         setActivityBackGroundTransparent();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
-        PreferencesManager.getInstance(getApplicationContext()).setRunnedSearchActivity(true);
+        PreferencesManager.setLauchedSearchActivity(getApplicationContext(), true);
     }
 
     private void setActivityBackGroundTransparent() {
@@ -95,8 +95,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
             case android.R.id.home:
                 onNavigateUp();
-                PreferencesManager.getInstance(getApplicationContext())
-                        .setRunnedSearchActivity(false);
+                PreferencesManager.setLauchedSearchActivity(getApplicationContext(), false);
                 return true;
 
             default:
@@ -107,8 +106,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
     @Override
     public void onBackPressed() {
-        PreferencesManager.getInstance(getApplicationContext())
-                .setRunnedSearchActivity(false);
+        PreferencesManager.setLauchedSearchActivity(getApplicationContext(), false);
         onNavigateUp();
         super.onBackPressed();
     }

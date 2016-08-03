@@ -22,10 +22,10 @@ import android.widget.Spinner;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
+import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
 import com.pumba30.soundcloudplayer.managers.PreferencesManager;
 import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.player.Player;
-import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
 import com.pumba30.soundcloudplayer.ui.adapters.ChartTracksAdapter;
 import com.pumba30.soundcloudplayer.utils.GenreMusic;
 import com.pumba30.soundcloudplayer.utils.Utils;
@@ -54,7 +54,6 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         setRetainInstance(true);
-
 
 
         initPlayer();
@@ -156,7 +155,7 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
     }
 
     private void getLastSpinnerItem() {
-        int savedItemSpinner = PreferencesManager.getInstance(getActivity()).getChoicedItemSpinner();
+        int savedItemSpinner = PreferencesManager.getChoicedItemSpinner(getActivity());
         if (savedItemSpinner != -1) {
             mSpinner.setSelection(savedItemSpinner, true);
             mGenreMusic = GenreMusic.getGenre(savedItemSpinner);
@@ -169,7 +168,7 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
         mPlayer.stopPlayer();
 
         int choicedItem = mSpinner.getSelectedItemPosition();
-        PreferencesManager.getInstance(getContext()).saveChoicedItemSpinner(choicedItem);
+        PreferencesManager.saveChoicedItemSpinner(getActivity(), choicedItem);
 
         Log.d(LOG_TAG, "Genre Music: " + mGenreMusic);
         QueryManager.getInstance().loadMusicByGenre(mGenreMusic);
@@ -179,9 +178,9 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
     public void onNothingSelected(AdapterView<?> adapterView) {/*empty*/}
 
     @Subscribe
-    public void updateAdapter(ObjectsBusEvent event) {
-        if (event.getMessage().equals(QueryManager.LIST_TRACK_LOADED)) {
-            mAdapter.setTracksList((List<Track>) event.getObject());
+    public void updateAdapter(ObjectsBusEvent<List<Track>> event) {
+        if (event.mMessage.equals(QueryManager.LIST_TRACK_LOADED)) {
+            mAdapter.setTracksList(event.mObject);
             mAdapter.notifyDataSetChanged();
             if (mSwipeRefreshLayout.isRefreshing()) {
                 mSwipeRefreshLayout.setRefreshing(false);

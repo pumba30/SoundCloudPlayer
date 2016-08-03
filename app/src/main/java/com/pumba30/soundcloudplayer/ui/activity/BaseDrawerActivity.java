@@ -10,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,11 +17,6 @@ import android.view.WindowManager;
 import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.managers.PreferencesManager;
-import com.pumba30.soundcloudplayer.utils.Utils;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 public class BaseDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -68,9 +62,9 @@ public class BaseDrawerActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        //check SearchActivity is runned, if true - hide toolbar
-        boolean isRunned = PreferencesManager.getInstance(getApplicationContext()).isRunnedSearchActivity();
-        if (isRunned) {
+        //check SearchActivity is launched, if true - hide toolbar
+        boolean isLaunched = PreferencesManager.isLaunchedSearchActivity(getApplicationContext());
+        if (isLaunched) {
             mToolbar.setVisibility(View.GONE);
         } else {
             mToolbar.setVisibility(View.VISIBLE);
@@ -94,7 +88,7 @@ public class BaseDrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.action_logout) {
-            App.sAppInstance.getSessionManager().logoutUser();
+            App.getInstance().getSessionManager().logoutUser();
             startLoginActivity(getApplicationContext());
         }
 
@@ -114,10 +108,5 @@ public class BaseDrawerActivity extends AppCompatActivity
         String title = (String) mToolbar.getTitle();
         outState.putString(MainActivity.KEY_TITLE, title);
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
     }
 }

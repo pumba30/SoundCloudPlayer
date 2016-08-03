@@ -8,41 +8,38 @@ import com.pumba30.soundcloudplayer.api.models.User;
 
 public class SessionManager {
     public static final String LOG_TAG = SessionManager.class.getSimpleName();
-    private PreferencesManager mPreferencesManager = PreferencesManager.getInstance(App.sAppInstance);
-
 
     public void createLoginSession(Token token, boolean isUserLoggedIn) {
         if (token != null) {
-            mPreferencesManager.storeLoginSession(token, isUserLoggedIn);
+            PreferencesManager.storeLoginSession(App.getInstance(), token, isUserLoggedIn);
         } else {
             Log.d(LOG_TAG, "Create login session failed");
         }
     }
 
     public void saveUser(User user) {
-        mPreferencesManager.saveUser(user);
+        PreferencesManager.saveUser(App.getInstance(), user);
     }
 
     public boolean checkLogin() {
-        return mPreferencesManager.isUserLoggedIn();
+        return PreferencesManager.isUserLoggedIn(App.getInstance());
     }
 
     public void logoutUser() {
-        mPreferencesManager.logoutUser();
+        PreferencesManager.logoutUser(App.getInstance());
     }
 
 
     public User getUser() {
-        return mPreferencesManager.getUser();
+        return PreferencesManager.getUser(App.getInstance());
     }
 
     public String getToken() {
-        return mPreferencesManager.getToken();
+        return PreferencesManager.getToken(App.getInstance());
     }
 
     public boolean isUserLoggedIn() {
-
-        return mPreferencesManager.isUserLoggedIn();
+        return PreferencesManager.isUserLoggedIn(App.getInstance());
     }
 
 }

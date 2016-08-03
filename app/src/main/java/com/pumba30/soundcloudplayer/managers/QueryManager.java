@@ -37,8 +37,8 @@ public class QueryManager {
     }
 
     public QueryManager() {
-        mContext = App.sAppInstance;
-        mRestManager = App.sAppInstance.getRestServiceManager();
+        mContext = App.getInstance();
+        mRestManager = App.getInstance().getRestServiceManager();
     }
 
     public void addTrackToMyCollection(Track track) {
