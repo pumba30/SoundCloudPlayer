@@ -85,6 +85,7 @@
     <string name="count">0</string>
     <string name="search_soundcloud">Search SoundCloud</string>
     <string name="clear_search">Clear</string>
+    <string name="search_sound_cloud">Search SoundCloud</string>
 
 
 </resources>

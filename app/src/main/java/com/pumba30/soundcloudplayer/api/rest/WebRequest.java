@@ -1,4 +1,4 @@
-package com.pumba30.soundcloudplayer.managers;
+package com.pumba30.soundcloudplayer.api.rest;
 
 
 import android.content.Context;
@@ -11,32 +11,33 @@ import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.events.LoadPlaylistCompleteEvent;
 import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
 import com.pumba30.soundcloudplayer.events.PlaylistCreatedEvent;
+import com.pumba30.soundcloudplayer.managers.RestServiceManager;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-public class QueryManager {
-    public static final String LOG_TAG = QueryManager.class.getSimpleName();
+public class WebRequest {
+    public static final String LOG_TAG = WebRequest.class.getSimpleName();
     public static final String TRACK_ADDED = "trackAdded";
     public static final String TRACK_DELETED = "trackDeleted";
     public static final String LIST_TRACK_LOADED = "listTrackLoaded";
     public static final String LIST_COLLECTION_TRACK_LOADED = "listCollectionTrackLoaded";
     public static final String PLAYLIST_LOADED = "playlistLoaded";
-    public static final String LIST_LIST = "listList";
-    private static QueryManager sQueryManager = null;
+    public static final String SEARCH_TRACK_LOADED = "searchTrackLoaded";
+    private static WebRequest sWebRequest = null;
     private Context mContext;
     private RestServiceManager mRestManager;
 
-    public static synchronized QueryManager getInstance() {
-        if (sQueryManager == null) {
-            sQueryManager = new QueryManager();
+    public static synchronized WebRequest getInstance() {
+        if (sWebRequest == null) {
+            sWebRequest = new WebRequest();
         }
-        return sQueryManager;
+        return sWebRequest;
     }
 
-    public QueryManager() {
+    public WebRequest() {
         mContext = App.getInstance();
         mRestManager = App.getInstance().getRestServiceManager();
     }
@@ -47,7 +48,7 @@ public class QueryManager {
             @Override
             public void onSuccess(Track response) {
                 Utils.toast(mContext, R.string.added_to_collection);
-                EventBus.getDefault().post(new ObjectsBusEvent(TRACK_ADDED, null));
+                EventBus.getDefault().post(new ObjectsBusEvent<>(TRACK_ADDED, null));
             }
 
             @Override
@@ -62,7 +63,7 @@ public class QueryManager {
             @Override
             public void onSuccess(Track response) {
                 Utils.toast(mContext, R.string.track_deleted);
-                EventBus.getDefault().post(new ObjectsBusEvent(TRACK_DELETED, null));
+                EventBus.getDefault().post(new ObjectsBusEvent<>(TRACK_DELETED, null));
             }
 
             @Override
@@ -77,7 +78,7 @@ public class QueryManager {
             @Override
             public void onSuccess(List<Track> response) {
                 EventBus.getDefault()
-                        .post(new ObjectsBusEvent(LIST_COLLECTION_TRACK_LOADED, response));
+                        .post(new ObjectsBusEvent<>(LIST_COLLECTION_TRACK_LOADED, response));
             }
 
             @Override
@@ -94,7 +95,7 @@ public class QueryManager {
                 if (tracks != null) {
                     Log.d(LOG_TAG, "tracks:" + tracks.toString());
                     EventBus.getDefault()
-                            .post(new ObjectsBusEvent(LIST_TRACK_LOADED, tracks));
+                            .post(new ObjectsBusEvent<>(LIST_TRACK_LOADED, tracks));
                 } else {
                     Log.d(LOG_TAG, "Error load track");
                 }
@@ -155,7 +156,7 @@ public class QueryManager {
 
             @Override
             public void onSuccess(Playlist response) {
-                EventBus.getDefault().post(new ObjectsBusEvent(PLAYLIST_LOADED, response));
+                EventBus.getDefault().post(new ObjectsBusEvent<>(PLAYLIST_LOADED, response));
             }
 
             @Override
@@ -169,6 +170,7 @@ public class QueryManager {
         mRestManager.searchTrack(query, new RestServiceManager.RestCallback<List<Track>>() {
             @Override
             public void onSuccess(List<Track> response) {
+                EventBus.getDefault().post(new ObjectsBusEvent<>(SEARCH_TRACK_LOADED, response));
                 Log.d(LOG_TAG, response.toString());
             }
 

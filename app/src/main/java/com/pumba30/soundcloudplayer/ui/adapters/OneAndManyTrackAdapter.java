@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.managers.QueryManager;
+import com.pumba30.soundcloudplayer.api.rest.WebRequest;
 import com.pumba30.soundcloudplayer.ui.activity.MainActivity;
 import com.pumba30.soundcloudplayer.ui.dialogFragments.AddTrackToPlaylistDialog;
 import com.pumba30.soundcloudplayer.ui.dialogFragments.DeleteTrackFromCollectionDialog;
@@ -86,7 +86,7 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
                 public void onClick(View view) {
                     mTrackId = gettingTrackId(adapterPosition);
 
-                    QueryManager.getInstance().getMePlaylists();
+                    WebRequest.getInstance().getMePlaylists();
                     Utils.toast(mContext, "getMePlaylist");
 
                     AddTrackToPlaylistDialog addTrackToPlaylistDialog

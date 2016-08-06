@@ -44,16 +44,20 @@ public enum GenreMusic {
         mGenre = genre;
     }
 
-    public static String getGenre(int position) {
-        String genre = null;
+    public static GenreMusic takeGenreMusic(int position) {
         for (GenreMusic genreMusic : values()) {
             if (genreMusic.mPosition == position) {
-                genre = genreMusic.mGenre;
-                break;
+                return genreMusic;
             }
         }
-
-        return genre;
+        return null;
     }
 
+    public int getPosition() {
+        return mPosition;
+    }
+
+    public String getGenre() {
+        return mGenre;
+    }
 }

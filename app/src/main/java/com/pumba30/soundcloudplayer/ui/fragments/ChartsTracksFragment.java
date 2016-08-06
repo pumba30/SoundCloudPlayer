@@ -2,6 +2,7 @@ package com.pumba30.soundcloudplayer.ui.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -24,7 +25,7 @@ import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
 import com.pumba30.soundcloudplayer.managers.PreferencesManager;
-import com.pumba30.soundcloudplayer.managers.QueryManager;
+import com.pumba30.soundcloudplayer.api.rest.WebRequest;
 import com.pumba30.soundcloudplayer.player.Player;
 import com.pumba30.soundcloudplayer.ui.adapters.ChartTracksAdapter;
 import com.pumba30.soundcloudplayer.utils.GenreMusic;
@@ -38,12 +39,13 @@ import java.util.List;
 
 public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, Spinner.OnItemSelectedListener {
     public static final String LOG_TAG = ChartsTracksFragment.class.getSimpleName();
+    public static final int VERTICAL_OFFSET = 45;
 
     private ChartTracksAdapter mAdapter;
     private Player mPlayer;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Spinner mSpinner;
-    private String mGenreMusic;
+    private GenreMusic mGenreMusic;
 
     public static ChartsTracksFragment newInstance() {
         return new ChartsTracksFragment();
@@ -55,13 +57,27 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
         setHasOptionsMenu(true);
         setRetainInstance(true);
 
+        int savedItemSpinner = PreferencesManager.getChoicedItemSpinner(getActivity());
+        if (savedItemSpinner != -1) {
+            mGenreMusic = GenreMusic.takeGenreMusic(savedItemSpinner);
+        } else {
+            mGenreMusic = GenreMusic.ALL_MUSIC;
+        }
 
+        loadTracks();
         initPlayer();
+
+
+    }
+
+    private void loadTracks() {
+        WebRequest.getInstance().loadMusicByGenre(mGenreMusic.getGenre());
+        Log.d(LOG_TAG, "Genre " + mGenreMusic.getGenre());
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         EventBus.getDefault().register(this);
     }
 
@@ -90,8 +106,8 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         EventBus.getDefault().unregister(this);
         mPlayer.stopPlayer();
     }
@@ -118,8 +134,7 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public void onRefresh() {
-        // FIXME: 18.07.2016 not properly work
-        // loadMusicByGenre(GenreMusic.ALL_MUSIC);
+        loadTracks();
     }
 
     @Override
@@ -130,13 +145,12 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    // TODO: 23.07.2016 save title in spinner
     private void createSpinnerFilterGenreMusic(Menu menu) {
         MenuItem menuItem = menu.findItem(R.id.context_menu_filter);
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
         mSpinner = (Spinner) layoutInflater.inflate(R.layout.spinner_chart_fragment, null);
         mSpinner.setOnItemSelectedListener(this);
-        mSpinner.setDropDownVerticalOffset(45);
+        mSpinner.setDropDownVerticalOffset(VERTICAL_OFFSET);
 
         //set to spinner a list genres of music
         CharSequence[] charSequence = getActivity().getResources().getStringArray(R.array.genres_array);
@@ -158,7 +172,6 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
         int savedItemSpinner = PreferencesManager.getChoicedItemSpinner(getActivity());
         if (savedItemSpinner != -1) {
             mSpinner.setSelection(savedItemSpinner, true);
-            mGenreMusic = GenreMusic.getGenre(savedItemSpinner);
         }
     }
 
@@ -169,9 +182,10 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
 
         int choicedItem = mSpinner.getSelectedItemPosition();
         PreferencesManager.saveChoicedItemSpinner(getActivity(), choicedItem);
+        mGenreMusic = GenreMusic.takeGenreMusic(choicedItem);
+        loadTracks();
 
         Log.d(LOG_TAG, "Genre Music: " + mGenreMusic);
-        QueryManager.getInstance().loadMusicByGenre(mGenreMusic);
     }
 
     @Override
@@ -179,7 +193,7 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
 
     @Subscribe
     public void updateAdapter(ObjectsBusEvent<List<Track>> event) {
-        if (event.mMessage.equals(QueryManager.LIST_TRACK_LOADED)) {
+        if (event.mMessage.equals(WebRequest.LIST_TRACK_LOADED)) {
             mAdapter.setTracksList(event.mObject);
             mAdapter.notifyDataSetChanged();
             if (mSwipeRefreshLayout.isRefreshing()) {

@@ -13,8 +13,8 @@ import android.widget.ProgressBar;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.managers.QueryManager;
 import com.pumba30.soundcloudplayer.events.PlayerEvent;
+import com.pumba30.soundcloudplayer.api.rest.WebRequest;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,10 +41,10 @@ public class CardViewControlPlayer extends RecyclerView.ViewHolder implements Vi
 
     @Subscribe
     public void makeProgressBarInvisible(PlayerEvent event) {
-        if (event.isPlaying()) {
+        if (event.mIsPlaying) {
             mProgressBar.setVisibility(View.INVISIBLE);
         }
-        if (!event.isPlaying()) {
+        if (!event.mIsPlaying) {
             mProgressBar.setVisibility(View.INVISIBLE);
         }
     }
@@ -102,7 +102,7 @@ public class CardViewControlPlayer extends RecyclerView.ViewHolder implements Vi
         int viewId = view.getId();
         switch (viewId) {
             case R.id.image_button_like:
-                QueryManager.getInstance().addTrackToMyCollection(mTrack);
+                WebRequest.getInstance().addTrackToMyCollection(mTrack);
                 break;
             case R.id.image_button_share:
                 Utils.toast(view.getContext(), R.string.share);

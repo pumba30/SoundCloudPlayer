@@ -9,7 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
 import com.pumba30.soundcloudplayer.R;
-import com.pumba30.soundcloudplayer.managers.QueryManager;
+import com.pumba30.soundcloudplayer.api.rest.WebRequest;
 
 public class DeleteTrackFromCollectionDialog extends DialogFragment {
 
@@ -49,7 +49,7 @@ public class DeleteTrackFromCollectionDialog extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        QueryManager.getInstance().deleteTrackFromCollection(mTrackId);
+                        WebRequest.getInstance().deleteTrackFromCollection(mTrackId);
                         dismiss();
                     }
                 });

@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
+import com.pumba30.soundcloudplayer.managers.PreferencesManager;
 import com.pumba30.soundcloudplayer.player.Player;
 import com.pumba30.soundcloudplayer.ui.adapters.ViewPagerAdapter;
 
@@ -36,12 +37,9 @@ public class MainActivity extends BaseDrawerActivity {
             final ViewPager viewPager = (ViewPager) findViewById(R.id.soundcloud_view_pager);
             setupViewPager(viewPager);
 
+            mTabLayout.setupWithViewPager(viewPager);
 
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.soundcloud_tabs);
-            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-            tabLayout.setupWithViewPager(viewPager);
-
-            tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
+            mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
                     int tabId = tab.getPosition();
@@ -74,6 +72,7 @@ public class MainActivity extends BaseDrawerActivity {
             });
         }
     }
+
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getApplicationContext(),

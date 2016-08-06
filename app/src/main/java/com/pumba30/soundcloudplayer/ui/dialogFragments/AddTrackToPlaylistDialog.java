@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
-import com.pumba30.soundcloudplayer.managers.QueryManager;
+import com.pumba30.soundcloudplayer.api.rest.WebRequest;
 import com.pumba30.soundcloudplayer.ui.adapters.AddTrackPlaylistAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -95,7 +95,7 @@ public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View
     @Subscribe
     public void playlistCompleteLoaded(ObjectsBusEvent<Playlist> event) {
         Playlist playlist;
-        if (event.mMessage.equals(QueryManager.PLAYLIST_LOADED)) {
+        if (event.mMessage.equals(WebRequest.PLAYLIST_LOADED)) {
             Log.d(LOG_TAG, "Playlist loaded");
             playlist = event.mObject;
 
@@ -106,15 +106,15 @@ public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View
             tracksIds.add(mTrackId);
 
             String playlistId = mPlaylistAdapter.getPlaylistId();
-            QueryManager.getInstance().addTrackToPlaylist(playlistId, tracksIds);
-            EventBus.getDefault().post(new ObjectsBusEvent<Void>(QueryManager.TRACK_ADDED, null));
+            WebRequest.getInstance().addTrackToPlaylist(playlistId, tracksIds);
+            EventBus.getDefault().post(new ObjectsBusEvent<Void>(WebRequest.TRACK_ADDED, null));
         }
     }
 
 
     @Subscribe
     public void trackAddedToPlayList(ObjectsBusEvent event) {
-        if (event.mMessage.equals(QueryManager.TRACK_ADDED)) {
+        if (event.mMessage.equals(WebRequest.TRACK_ADDED)) {
             dismiss();
         }
     }

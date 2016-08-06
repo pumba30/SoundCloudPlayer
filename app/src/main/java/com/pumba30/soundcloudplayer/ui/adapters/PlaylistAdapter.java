@@ -63,7 +63,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
 
         public ViewHolder(View itemView) {
             super(itemView);
-
             initView();
         }
 

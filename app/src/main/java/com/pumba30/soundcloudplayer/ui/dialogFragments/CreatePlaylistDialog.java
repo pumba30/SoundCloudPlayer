@@ -16,10 +16,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.pumba30.soundcloudplayer.R;
-import com.pumba30.soundcloudplayer.managers.QueryManager;
+import com.pumba30.soundcloudplayer.api.rest.WebRequest;
 import com.pumba30.soundcloudplayer.utils.Utils;
-
-import org.greenrobot.eventbus.EventBus;
 
 public class CreatePlaylistDialog extends BaseDialogFragment implements RadioGroup.OnCheckedChangeListener,
         TextView.OnEditorActionListener {
@@ -57,6 +55,12 @@ public class CreatePlaylistDialog extends BaseDialogFragment implements RadioGro
                         createPlaylist(mTitle, mSharing);
                         dismiss();
                     }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dismiss();
+                    }
                 });
 
         return builder.create();
@@ -86,7 +90,7 @@ public class CreatePlaylistDialog extends BaseDialogFragment implements RadioGro
             Utils.toast(getActivity(), R.string.enter_valid_title);
             dismiss();
         } else {
-            QueryManager.getInstance().createPlaylist(title, sharing);
+            WebRequest.getInstance().createPlaylist(title, sharing);
             Utils.toast(getActivity(), R.string.playlist_created);
             Log.d(LOG_TAG, "Attempt create playlist");
         }

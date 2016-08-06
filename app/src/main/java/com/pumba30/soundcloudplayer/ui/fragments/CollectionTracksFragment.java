@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.managers.QueryManager;
+import com.pumba30.soundcloudplayer.api.rest.WebRequest;
 import com.pumba30.soundcloudplayer.player.PlayerActivity;
 import com.pumba30.soundcloudplayer.events.LoadPlaylistCompleteEvent;
 import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
@@ -67,7 +67,7 @@ public class CollectionTracksFragment extends Fragment {
         mAdapter = new OneAndManyTrackAdapter(getActivity(), PlayerActivity.TypeListTrack.MANY_TRACK);
         mRecyclerView.setAdapter(mAdapter);
 
-        QueryManager.getInstance().getCollectionList();
+        WebRequest.getInstance().getCollectionList();
 
         return view;
     }
@@ -76,14 +76,14 @@ public class CollectionTracksFragment extends Fragment {
     @Subscribe
     public void playlistCreated(PlaylistCreatedEvent event) {
         Utils.toast(getActivity(), "Create PPLAYLIST");
-        Playlist playlist = event.getPlaylist();
+        Playlist playlist = event.mPlaylist;
         mPlaylists.add(playlist);
         mAdapter.setPlaylist(mPlaylists);
     }
 
     @Subscribe
     public void loadPlaylistsComplete(LoadPlaylistCompleteEvent event) {
-        mPlaylists = event.getPlaylists();
+        mPlaylists = event.mPlaylists;
 
         if (mPlaylists.size() == 0 || mPlaylists.get(0) == null) {
             Log.d(LOG_TAG, "Playlist null, size: " + mPlaylists.size());
@@ -102,12 +102,12 @@ public class CollectionTracksFragment extends Fragment {
     public void updateAdapter(ObjectsBusEvent<List<Track>> event) {
         String message = event.mMessage;
 
-        if (message.equals(QueryManager.TRACK_ADDED)
-                || message.equals(QueryManager.TRACK_DELETED)) {
-            QueryManager.getInstance().getCollectionList();
+        if (message.equals(WebRequest.TRACK_ADDED)
+                || message.equals(WebRequest.TRACK_DELETED)) {
+            WebRequest.getInstance().getCollectionList();
             mAdapter.notifyDataSetChanged();
 
-        } else if (message.equals(QueryManager.LIST_COLLECTION_TRACK_LOADED)) {
+        } else if (message.equals(WebRequest.LIST_COLLECTION_TRACK_LOADED)) {
             mAdapter.setTrackList(event.mObject);
         }
     }

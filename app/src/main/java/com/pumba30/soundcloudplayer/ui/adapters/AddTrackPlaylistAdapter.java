@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
-import com.pumba30.soundcloudplayer.managers.QueryManager;
+import com.pumba30.soundcloudplayer.api.rest.WebRequest;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class AddTrackPlaylistAdapter extends RecyclerView.Adapter<AddTrackPlayli
             public void onClick(View view) {
                 Log.d(LOG_TAG, "Get playlist by id");
                 mPlaylistId = String.valueOf(playlist.getId());
-                QueryManager.getInstance().getPlaylistById(mPlaylistId);
+                WebRequest.getInstance().getPlaylistById(mPlaylistId);
             }
         });
     }

@@ -31,8 +31,7 @@ public class ChartTracksAdapter extends RecyclerView.Adapter<ChartTracksAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
-        view = mInflater.inflate(R.layout.card_item_list_chart_tracks, parent, false);
+        View view = mInflater.inflate(R.layout.card_item_list_chart_tracks, parent, false);
 
         //handling  buttons in CardView item
         mCardViewController = new CardViewControlPlayer(view);
@@ -54,7 +53,6 @@ public class ChartTracksAdapter extends RecyclerView.Adapter<ChartTracksAdapter.
     public void setTracksList(List<Track> tracksList) {
         mTracksList.clear();
         mTracksList.addAll(tracksList);
-        this.notifyItemRangeChanged(0, tracksList.size() - 1);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

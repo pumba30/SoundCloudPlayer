@@ -2,9 +2,10 @@ package com.pumba30.soundcloudplayer.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,6 +24,7 @@ public class BaseDrawerActivity extends AppCompatActivity
 
     private static final String LOG_TAG = BaseDrawerActivity.class.getSimpleName();
     public Toolbar mToolbar;
+    public TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,6 @@ public class BaseDrawerActivity extends AppCompatActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_base_drawer);
-
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle(R.string.charts);
         if (savedInstanceState != null) {
@@ -38,6 +39,8 @@ public class BaseDrawerActivity extends AppCompatActivity
             mToolbar.setTitleTextAppearance(getApplicationContext(), R.style.TextAppearanceToolbar);
         }
         setSupportActionBar(mToolbar);
+        mTabLayout = (TabLayout) findViewById(R.id.soundcloud_tabs);
+        mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -66,8 +69,10 @@ public class BaseDrawerActivity extends AppCompatActivity
         boolean isLaunched = PreferencesManager.isLaunchedSearchActivity(getApplicationContext());
         if (isLaunched) {
             mToolbar.setVisibility(View.GONE);
+            mTabLayout.setVisibility(View.INVISIBLE);
         } else {
             mToolbar.setVisibility(View.VISIBLE);
+            mTabLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -108,5 +113,10 @@ public class BaseDrawerActivity extends AppCompatActivity
         String title = (String) mToolbar.getTitle();
         outState.putString(MainActivity.KEY_TITLE, title);
         super.onSaveInstanceState(outState);
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        PreferencesManager.setLauchedSearchActivity(getApplicationContext(), false);
     }
 }
