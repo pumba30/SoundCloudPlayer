@@ -17,9 +17,11 @@ import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.api.rest.WebRequest;
+import com.pumba30.soundcloudplayer.interfaces.OnEventItemListener;
 import com.pumba30.soundcloudplayer.ui.activity.MainActivity;
 import com.pumba30.soundcloudplayer.ui.dialogFragments.AddTrackToPlaylistDialog;
 import com.pumba30.soundcloudplayer.ui.dialogFragments.DeleteTrackFromCollectionDialog;
+import com.pumba30.soundcloudplayer.ui.fragments.CollectionTracksFragment;
 import com.pumba30.soundcloudplayer.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -42,14 +44,16 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
     private Track mTrack;
     private String mTrackId;
     private List<Playlist> mPlaylists;
+    private OnEventItemListener<List<Playlist>, String> mListener;
 
 
-    public OneAndManyTrackAdapter(Context context, TypeListTrack typeListTrack) {
+    public OneAndManyTrackAdapter(TypeListTrack typeListTrack, CollectionTracksFragment fragment) {
         mTrackList = new ArrayList<>();
-        mInflater = LayoutInflater.from(context);
-        mContext = context;
+        mInflater = LayoutInflater.from(fragment.getContext());
+        mContext = fragment.getContext();
         mTypeListTrack = typeListTrack;
         mPlaylists = new ArrayList<>();
+        mListener = fragment;
     }
 
     @Override
@@ -85,16 +89,7 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
                 @Override
                 public void onClick(View view) {
                     mTrackId = gettingTrackId(adapterPosition);
-
-                    WebRequest.getInstance().getMePlaylists();
-                    Utils.toast(mContext, "getMePlaylist");
-
-                    AddTrackToPlaylistDialog addTrackToPlaylistDialog
-                            = AddTrackToPlaylistDialog.newInstance(mPlaylists, mTrackId);
-                    addTrackToPlaylistDialog
-                            .show(((MainActivity) mContext).getSupportFragmentManager(), "addTrackToPlaylistDialog");
-
-
+                    mListener.onHandleEvent(mPlaylists, mTrackId);
                     Log.d(LOG_TAG, "TrackId: " + mTrackId);
                 }
             });
@@ -103,10 +98,7 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
                 @Override
                 public boolean onLongClick(View view) {
                     String trackId = gettingTrackId(adapterPosition);
-                    DeleteTrackFromCollectionDialog deleteTrack =
-                            DeleteTrackFromCollectionDialog.newInstance(trackId);
-                    deleteTrack.show(((MainActivity) mContext).getSupportFragmentManager(),
-                            "deleteTrackDialog");
+                    mListener.onHandleEventLongClick(trackId);
                     return true;
                 }
             });
@@ -141,7 +133,6 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
     public void setPlaylist(List<Playlist> playlist) {
         mPlaylists.clear();
         mPlaylists.addAll(playlist);
-        this.notifyItemRangeChanged(0, mPlaylists.size() - 1);
     }
 
 

@@ -141,7 +141,7 @@ public class WebRequest {
         mRestManager.addTrackToPlaylist(playlistId, tracksIds, new RestServiceManager.RestCallback<Playlist>() {
             @Override
             public void onSuccess(Playlist response) {
-
+                EventBus.getDefault().post(new ObjectsBusEvent<>(TRACK_ADDED, response));
             }
 
             @Override
@@ -177,6 +177,21 @@ public class WebRequest {
             @Override
             public void onError(int errorCode) {
                 Log.d(LOG_TAG, "Error request code: " + String.valueOf(errorCode));
+            }
+        });
+    }
+
+    public void loadStation() {
+        mRestManager.loadStation(new RestServiceManager.RestCallback<List<Track>>() {
+
+            @Override
+            public void onSuccess(List<Track> response) {
+                Log.d(LOG_TAG, "Station: " + response.toString());
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
             }
         });
     }

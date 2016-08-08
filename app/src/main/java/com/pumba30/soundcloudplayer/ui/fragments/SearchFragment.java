@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.pumba30.soundcloudplayer.R;
+import com.pumba30.soundcloudplayer.api.rest.WebRequest;
 import com.pumba30.soundcloudplayer.ui.activity.BaseDrawerActivity;
 import com.pumba30.soundcloudplayer.ui.activity.SearchActivity;
 
@@ -28,6 +29,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
+        loadStation();
+
+    }
+
+    // TODO: 08.08.2016 add method loadMore() - gives per page 10 items
+    private void loadStation() {
+        WebRequest.getInstance().loadStation();
     }
 
 
@@ -63,8 +72,5 @@ public class SearchFragment extends Fragment implements View.OnClickListener {
         Intent intent = SearchActivity.newIntent(getActivity());
         startActivity(intent);
     }
-
-
-
 
 }

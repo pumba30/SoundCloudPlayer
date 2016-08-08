@@ -39,6 +39,9 @@ public interface ApiService {
     Call<List<Track>> loadPublicTracks();
 
     @GET("tracks")
+    Call<List<Track>> loadStations(@Query("q") String query);
+
+    @GET("tracks")
     Call<List<Track>> getMusic(@QueryMap Map<String, String> stringMap);
 
     @PUT("me/favorites/{trackId}")
@@ -58,7 +61,6 @@ public interface ApiService {
     @GET("me/favorites")
     Call<List<Track>> getListTrackColection();
 
-
     /*Playlist*/
     @POST("playlists")
     Call<Playlist> createPlaylist(@Body Map<String, Map<String, String>> map);
@@ -72,5 +74,4 @@ public interface ApiService {
 
     @GET("me/playlists/{playlistId}")
     Call<Playlist> getPlaylistById(@Path("playlistId") String playlistId);
-
 }

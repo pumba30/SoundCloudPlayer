@@ -26,10 +26,10 @@ public class RestServiceManager {
     public static final String GENRE = "genre";
     public static final String TITLE_PLAYLIST = "title";
     public static final String KEY_PLAYLIST = "playlist";
-    public static final String KEY_PLAYLIST_ID = "id";
     public static final String KEY_TRACK_ID = "id";
     public static final String KEY_SHARING = "sharing";
     public static final String KEY_TRACKS = "tracks";
+    public static final String STATION = "Station";
 
     private ApiService mApiService;
 
@@ -94,7 +94,13 @@ public class RestServiceManager {
         mApiService.searchTrack(query).enqueue(new RestCallbackWrapper<List<Track>>(trackRestCallback));
     }
 
+    public void loadStation(RestCallback<List<Track>> stationCallback) {
+        mApiService.loadStations(STATION).enqueue(new RestCallbackWrapper<List<Track>>(stationCallback));
 
+    }
+
+
+    // TODO: 08.08.2016 add methods in a separate class
     private Map<String, Map<String, List<Map<String, String>>>> getMapToAddPlayList(List<String> trackIdList) {
 
         List<Map<String, String>> listTracksIds = new ArrayList<>();

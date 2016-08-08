@@ -14,12 +14,16 @@ import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.api.rest.WebRequest;
+import com.pumba30.soundcloudplayer.interfaces.OnEventItemListener;
 import com.pumba30.soundcloudplayer.player.PlayerActivity;
 import com.pumba30.soundcloudplayer.events.LoadPlaylistCompleteEvent;
 import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
 import com.pumba30.soundcloudplayer.events.PlaylistCreatedEvent;
+import com.pumba30.soundcloudplayer.ui.activity.MainActivity;
 import com.pumba30.soundcloudplayer.ui.adapters.OneAndManyTrackAdapter;
+import com.pumba30.soundcloudplayer.ui.dialogFragments.AddTrackToPlaylistDialog;
 import com.pumba30.soundcloudplayer.ui.dialogFragments.CreatePlaylistDialog;
+import com.pumba30.soundcloudplayer.ui.dialogFragments.DeleteTrackFromCollectionDialog;
 import com.pumba30.soundcloudplayer.utils.DividerItemDecoration;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
@@ -28,10 +32,9 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
-public class CollectionTracksFragment extends Fragment {
+public class CollectionTracksFragment extends Fragment implements OnEventItemListener<List<Playlist>, String> {
     private static final String LOG_TAG = CollectionTracksFragment.class.getSimpleName();
     private OneAndManyTrackAdapter mAdapter;
-    private RecyclerView mRecyclerView;
     private List<Playlist> mPlaylists;
 
 
@@ -43,35 +46,32 @@ public class CollectionTracksFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        EventBus.getDefault().register(this);
+        loadCollectionList();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        EventBus.getDefault().register(this);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_collection, container, false);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_like_tracks);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_like_tracks);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
 
         RecyclerView.ItemDecoration itemDecoration = new
                 DividerItemDecoration(getActivity());
-        mRecyclerView.addItemDecoration(itemDecoration);
+        recyclerView.addItemDecoration(itemDecoration);
 
-        mAdapter = new OneAndManyTrackAdapter(getActivity(), PlayerActivity.TypeListTrack.MANY_TRACK);
-        mRecyclerView.setAdapter(mAdapter);
-
-        WebRequest.getInstance().getCollectionList();
+        mAdapter = new OneAndManyTrackAdapter(PlayerActivity.TypeListTrack.MANY_TRACK, this);
+        recyclerView.setAdapter(mAdapter);
 
         return view;
     }
 
+    private void loadCollectionList() {
+        WebRequest.getInstance().getCollectionList();
+    }
 
     @Subscribe
     public void playlistCreated(PlaylistCreatedEvent event) {
@@ -79,6 +79,7 @@ public class CollectionTracksFragment extends Fragment {
         Playlist playlist = event.mPlaylist;
         mPlaylists.add(playlist);
         mAdapter.setPlaylist(mPlaylists);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Subscribe
@@ -93,6 +94,7 @@ public class CollectionTracksFragment extends Fragment {
         } else {
             Log.d(LOG_TAG, "Playlist size: " + mPlaylists.size());
             mAdapter.setPlaylist(mPlaylists);
+            mAdapter.notifyDataSetChanged();
 
         }
     }
@@ -109,12 +111,32 @@ public class CollectionTracksFragment extends Fragment {
 
         } else if (message.equals(WebRequest.LIST_COLLECTION_TRACK_LOADED)) {
             mAdapter.setTrackList(event.mObject);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public void onHandleEvent(List<Playlist> playlists, String trackId) {
+        WebRequest.getInstance().getMePlaylists();
+        Utils.toast(getContext(), "getMePlaylist");
+
+        AddTrackToPlaylistDialog addTrackToPlaylistDialog
+                = AddTrackToPlaylistDialog.newInstance(mPlaylists, trackId);
+        addTrackToPlaylistDialog
+                .show(getActivity().getSupportFragmentManager(), "addTrackToPlaylistDialog");
+    }
+
+    @Override
+    public void onHandleEventLongClick(String trackId) {
+        DeleteTrackFromCollectionDialog deleteTrack =
+                DeleteTrackFromCollectionDialog.newInstance(trackId);
+        deleteTrack.show(getActivity().getSupportFragmentManager(),
+                "deleteTrackDialog");
     }
 }

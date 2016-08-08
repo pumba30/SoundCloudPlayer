@@ -74,11 +74,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(layoutManager);
 
-        OneAndManyTrackAdapter adapter =
-                new OneAndManyTrackAdapter(getApplicationContext(), TypeListTrack.ONE_TRACK);
-        mRecyclerView.setAdapter(adapter);
-
-        adapter.setTrackList(tracks);
+//        OneAndManyTrackAdapter adapter =
+//                new OneAndManyTrackAdapter(TypeListTrack.ONE_TRACK);
+//        mRecyclerView.setAdapter(adapter);
+//
+//        adapter.setTrackList(tracks);
 
         // TODO: 12.07.2016 make reward and forward play music, correct pause
 

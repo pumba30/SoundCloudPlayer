@@ -189,6 +189,9 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         }
     }
 
+    @Override
+    public void onHandleEventLongClick(Integer obj2) {/*empty*/}
+
     @Subscribe
     public void playlistLoadedComplete(LoadPlaylistCompleteEvent event) {
         mProgressBar.setVisibility(View.INVISIBLE);

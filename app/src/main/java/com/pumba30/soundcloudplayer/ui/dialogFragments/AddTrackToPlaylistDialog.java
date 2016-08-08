@@ -16,8 +16,9 @@ import android.widget.LinearLayout;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
-import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
 import com.pumba30.soundcloudplayer.api.rest.WebRequest;
+import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
+import com.pumba30.soundcloudplayer.interfaces.OnEventItemListener;
 import com.pumba30.soundcloudplayer.ui.adapters.AddTrackPlaylistAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -27,13 +28,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View.OnClickListener {
+public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View.OnClickListener,
+        OnEventItemListener<Playlist, Void> {
     private static final String LOG_TAG = AddTrackToPlaylistDialog.class.getSimpleName();
     private static final String KEY_PLAYLISTS = "keyPlaylist";
     private static final String KEY_TRACK_ID = "trackId";
     private List<Playlist> mPlaylists;
     private String mTrackId;
     private AddTrackPlaylistAdapter mPlaylistAdapter;
+    private String mPlaylistId;
 
     public static AddTrackToPlaylistDialog newInstance(List<Playlist> playlists, String trackId) {
         Bundle bundle = new Bundle();
@@ -71,9 +74,8 @@ public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        mPlaylistAdapter = new AddTrackPlaylistAdapter(getContext());
+        mPlaylistAdapter = new AddTrackPlaylistAdapter(getContext(), this);
         mPlaylistAdapter.setPlaylist(mPlaylists);
-        mPlaylistAdapter.setTrackId(mTrackId);
         recyclerView.setAdapter(mPlaylistAdapter);
 
         builder.setView(view)
@@ -91,7 +93,6 @@ public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View
 
     }
 
-
     @Subscribe
     public void playlistCompleteLoaded(ObjectsBusEvent<Playlist> event) {
         Playlist playlist;
@@ -105,18 +106,14 @@ public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View
             }
             tracksIds.add(mTrackId);
 
-            String playlistId = mPlaylistAdapter.getPlaylistId();
-            WebRequest.getInstance().addTrackToPlaylist(playlistId, tracksIds);
-            EventBus.getDefault().post(new ObjectsBusEvent<Void>(WebRequest.TRACK_ADDED, null));
+            WebRequest.getInstance().addTrackToPlaylist(mPlaylistId, tracksIds);
+            dismiss();
         }
     }
 
-
     @Subscribe
-    public void trackAddedToPlayList(ObjectsBusEvent event) {
-        if (event.mMessage.equals(WebRequest.TRACK_ADDED)) {
-            dismiss();
-        }
+    public void trackAdded(ObjectsBusEvent<Playlist> event) {
+        WebRequest.getInstance().getPlaylistById(String.valueOf(event.mObject.getId()));
     }
 
     @Override
@@ -133,4 +130,16 @@ public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View
         super.onDismiss(dialog);
         EventBus.getDefault().unregister(this);
     }
+
+    @Override
+    public void onHandleEvent(Playlist obj1, Void obj2) {
+        mPlaylistId = String.valueOf(obj1.getId());
+        WebRequest.getInstance().getPlaylistById(mPlaylistId);
+
+    }
+
+    @Override
+    public void onHandleEventLongClick(Void obj2) {/*empty*/}
+
+
 }
