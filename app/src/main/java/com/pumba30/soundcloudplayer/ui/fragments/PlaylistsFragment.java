@@ -41,7 +41,12 @@ public class PlaylistsFragment extends Fragment {
         setRetainInstance(true);
         setHasOptionsMenu(true);
         EventBus.getDefault().register(this);
+        loadingPlaylists();
 
+    }
+
+    private void loadingPlaylists() {
+        WebRequest.getInstance().getMePlaylists();
     }
 
     @Override
@@ -66,14 +71,13 @@ public class PlaylistsFragment extends Fragment {
         mPlaylistAdapter = new PlaylistAdapter(getContext());
         recyclerView.setAdapter(mPlaylistAdapter);
 
-        WebRequest.getInstance().getMePlaylists();
-
         return view;
     }
 
     @Subscribe
     public void loadPlaylists(LoadPlaylistCompleteEvent complete) {
         mPlaylistAdapter.setPlaylists(complete.mPlaylists);
+        mPlaylistAdapter.notifyDataSetChanged();
         Log.d(LOG_TAG, "Load playlist complete");
     }
 

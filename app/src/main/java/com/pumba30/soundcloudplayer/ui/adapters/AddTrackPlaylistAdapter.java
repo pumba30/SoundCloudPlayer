@@ -10,30 +10,27 @@ import android.widget.TextView;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
-import com.pumba30.soundcloudplayer.api.rest.WebRequest;
 import com.pumba30.soundcloudplayer.interfaces.OnEventItemListener;
 import com.pumba30.soundcloudplayer.ui.dialogFragments.AddTrackToPlaylistDialog;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class AddTrackPlaylistAdapter extends RecyclerView.Adapter<AddTrackPlaylistAdapter.ViewHolder> {
     public static final String LOG_TAG = AddTrackPlaylistAdapter.class.getSimpleName();
-    private OnEventItemListener<Playlist, Void> mListener;
+    private OnEventItemListener mListener;
     private LayoutInflater mInflater;
     private List<Playlist> mPlaylists;
-    private String mTrackId;
+
+
+    public interface OnEventItemListener {
+        void onHandleEvent(Playlist playlist);
+    }
 
     public AddTrackPlaylistAdapter(Context context, AddTrackToPlaylistDialog addTrackToPlaylistDialog) {
         mInflater = LayoutInflater.from(context);
-        mPlaylists = new ArrayList<>();
-        try {
-            mListener = addTrackToPlaylistDialog;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnEventItemListener");
-        }
+        mListener = addTrackToPlaylistDialog;
+
     }
 
     @Override
@@ -50,23 +47,18 @@ public class AddTrackPlaylistAdapter extends RecyclerView.Adapter<AddTrackPlayli
             @Override
             public void onClick(View view) {
                 Log.d(LOG_TAG, "Get playlist by id");
-                mListener.onHandleEvent(playlist, null);
+                mListener.onHandleEvent(playlist);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        if (mPlaylists == null) {
-            return 0;
-        } else {
-            return mPlaylists.size();
-        }
+        return mPlaylists == null ? 0 : mPlaylists.size();
     }
 
     public void setPlaylist(List<Playlist> playlist) {
-        mPlaylists.clear();
-        mPlaylists.addAll(playlist);
+        mPlaylists = playlist;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

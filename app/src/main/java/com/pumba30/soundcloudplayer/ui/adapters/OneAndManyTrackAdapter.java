@@ -44,15 +44,18 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
     private Track mTrack;
     private String mTrackId;
     private List<Playlist> mPlaylists;
-    private OnEventItemListener<List<Playlist>, String> mListener;
+    private OnEventItemListener mListener;
 
+    public interface OnEventItemListener {
+        void onHandleEvent(List<Playlist> playlists, String trackId);
+
+        void onHandleEventLongClick(String trackId);
+    }
 
     public OneAndManyTrackAdapter(TypeListTrack typeListTrack, CollectionTracksFragment fragment) {
-        mTrackList = new ArrayList<>();
         mInflater = LayoutInflater.from(fragment.getContext());
         mContext = fragment.getContext();
         mTypeListTrack = typeListTrack;
-        mPlaylists = new ArrayList<>();
         mListener = fragment;
     }
 
@@ -120,19 +123,16 @@ public class OneAndManyTrackAdapter extends RecyclerView.Adapter<OneAndManyTrack
 
     @Override
     public int getItemCount() {
-        return mTrackList.size();
+        return mTrackList == null ? 0 : mTrackList.size();
 
     }
 
     public void setTrackList(List<Track> trackList) {
-        mTrackList.clear();
-        mTrackList.addAll(trackList);
-        this.notifyItemRangeChanged(0, mTrackList.size() - 1);
+        mTrackList = trackList;
     }
 
     public void setPlaylist(List<Playlist> playlist) {
-        mPlaylists.clear();
-        mPlaylists.addAll(playlist);
+        mPlaylists = playlist;
     }
 
 

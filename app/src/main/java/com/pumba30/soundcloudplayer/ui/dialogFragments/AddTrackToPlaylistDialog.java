@@ -29,7 +29,7 @@ import java.util.List;
 
 
 public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View.OnClickListener,
-        OnEventItemListener<Playlist, Void> {
+        AddTrackPlaylistAdapter.OnEventItemListener {
     private static final String LOG_TAG = AddTrackToPlaylistDialog.class.getSimpleName();
     private static final String KEY_PLAYLISTS = "keyPlaylist";
     private static final String KEY_TRACK_ID = "trackId";
@@ -76,6 +76,7 @@ public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View
 
         mPlaylistAdapter = new AddTrackPlaylistAdapter(getContext(), this);
         mPlaylistAdapter.setPlaylist(mPlaylists);
+        mPlaylistAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(mPlaylistAdapter);
 
         builder.setView(view)
@@ -132,14 +133,8 @@ public class AddTrackToPlaylistDialog extends BaseDialogFragment implements View
     }
 
     @Override
-    public void onHandleEvent(Playlist obj1, Void obj2) {
-        mPlaylistId = String.valueOf(obj1.getId());
+    public void onHandleEvent(Playlist playlist) {
+        mPlaylistId = String.valueOf(playlist.getId());
         WebRequest.getInstance().getPlaylistById(mPlaylistId);
-
     }
-
-    @Override
-    public void onHandleEventLongClick(Void obj2) {/*empty*/}
-
-
 }

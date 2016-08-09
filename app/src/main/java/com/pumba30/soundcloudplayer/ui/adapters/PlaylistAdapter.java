@@ -12,7 +12,6 @@ import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHolder> {
@@ -21,7 +20,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
     private LayoutInflater mInflater;
 
     public PlaylistAdapter(Context context) {
-        mPlaylists = new ArrayList<>();
         mInflater = LayoutInflater.from(context);
     }
 
@@ -38,7 +36,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
         holder.mPlayPlaylist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //get a list and send it into player to play
+                //get a list and send it into player to play, add interface listener
             }
         });
 
@@ -46,13 +44,11 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return mPlaylists.size();
+        return mPlaylists == null ? 0 : mPlaylists.size();
     }
 
     public void setPlaylists(List<Playlist> playlists) {
-        mPlaylists.clear();
-        mPlaylists.addAll(playlists);
-        this.notifyItemRangeChanged(0, playlists.size() - 1);
+        mPlaylists = playlists;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

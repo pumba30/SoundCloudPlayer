@@ -32,7 +32,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
-public class CollectionTracksFragment extends Fragment implements OnEventItemListener<List<Playlist>, String> {
+public class CollectionTracksFragment extends Fragment implements OneAndManyTrackAdapter.OnEventItemListener {
     private static final String LOG_TAG = CollectionTracksFragment.class.getSimpleName();
     private OneAndManyTrackAdapter mAdapter;
     private List<Playlist> mPlaylists;

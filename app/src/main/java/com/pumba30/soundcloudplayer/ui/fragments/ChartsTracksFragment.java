@@ -37,7 +37,8 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.List;
 
 
-public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, Spinner.OnItemSelectedListener {
+public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
+        Spinner.OnItemSelectedListener {
     public static final String LOG_TAG = ChartsTracksFragment.class.getSimpleName();
     public static final int VERTICAL_OFFSET = 45;
 
@@ -66,8 +67,6 @@ public class ChartsTracksFragment extends Fragment implements SwipeRefreshLayout
 
         loadTracks();
         initPlayer();
-
-
     }
 
     private void loadTracks() {

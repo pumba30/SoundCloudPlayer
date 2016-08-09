@@ -1,6 +1,7 @@
 package com.pumba30.soundcloudplayer.ui.adapters;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -17,15 +18,16 @@ public class StationAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<Track> mStations;
+    private LayoutInflater mInflater;
 
     public StationAdapter(Context context) {
         mContext = context;
-        mStations = new ArrayList<>();
+        mInflater = LayoutInflater.from(context);
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return mStations == null ? 0 : mStations.size();
     }
 
     @Override
@@ -39,13 +41,12 @@ public class StationAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(int position, View container, ViewGroup viewGroup) {
         return null;
     }
 
     public void setStations(List<Track> stations) {
-        mStations.clear();
-        mStations.addAll(stations);
+        mStations = stations;
     }
 
 

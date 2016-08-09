@@ -26,7 +26,6 @@ public class ChartTracksAdapter extends RecyclerView.Adapter<ChartTracksAdapter.
 
     public ChartTracksAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
-        mTracksList = new ArrayList<>();
     }
 
     @Override
@@ -47,12 +46,11 @@ public class ChartTracksAdapter extends RecyclerView.Adapter<ChartTracksAdapter.
 
     @Override
     public int getItemCount() {
-        return mTracksList.size();
+        return mTracksList == null ? 0 : mTracksList.size();
     }
 
     public void setTracksList(List<Track> tracksList) {
-        mTracksList.clear();
-        mTracksList.addAll(tracksList);
+        mTracksList = tracksList;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

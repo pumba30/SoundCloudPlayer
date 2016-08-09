@@ -1,6 +1,5 @@
 package com.pumba30.soundcloudplayer.ui.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +12,8 @@ import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.interfaces.OnEventItemListener;
 import com.pumba30.soundcloudplayer.ui.activity.SearchActivity;
-import com.pumba30.soundcloudplayer.utils.Utils;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> implements View.OnClickListener {
@@ -29,7 +26,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public SearchAdapter(SearchActivity activity) {
         mLayoutInflater = LayoutInflater.from(activity);
-        mTrackList = new ArrayList<>();
         mListener = activity;
     }
 
@@ -58,12 +54,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return mTrackList.size();
+        return mTrackList == null ? 0 : mTrackList.size();
     }
 
     public void setTrackList(List<Track> trackList) {
-        mTrackList.clear();
-        mTrackList.addAll(trackList);
+        mTrackList = trackList;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
