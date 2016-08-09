@@ -45,8 +45,8 @@
         </RelativeLayout>
 
 
-        <GridView
-            android:id="@+id/grid_view_station"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_grid_station"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -57,7 +57,7 @@
             android:numColumns="auto_fit"
             android:stretchMode="columnWidth"
             android:verticalSpacing="35dp">
-        </GridView>
+        </android.support.v7.widget.RecyclerView>
 
 
     </LinearLayout>

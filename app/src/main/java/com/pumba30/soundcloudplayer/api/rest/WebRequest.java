@@ -26,6 +26,7 @@ public class WebRequest {
     public static final String LIST_COLLECTION_TRACK_LOADED = "listCollectionTrackLoaded";
     public static final String PLAYLIST_LOADED = "playlistLoaded";
     public static final String SEARCH_TRACK_LOADED = "searchTrackLoaded";
+    public static final String STATION_LOADED = "stationLoaded";
     private static WebRequest sWebRequest = null;
     private Context mContext;
     private RestServiceManager mRestManager;
@@ -186,6 +187,7 @@ public class WebRequest {
 
             @Override
             public void onSuccess(List<Track> response) {
+                EventBus.getDefault().post(new ObjectsBusEvent<>(STATION_LOADED, response));
                 Log.d(LOG_TAG, "Station: " + response.toString());
             }
 

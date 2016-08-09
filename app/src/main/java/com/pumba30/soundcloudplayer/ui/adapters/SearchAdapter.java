@@ -1,5 +1,6 @@
 package com.pumba30.soundcloudplayer.ui.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,23 +11,29 @@ import android.widget.TextView;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.interfaces.OnEventItemListener;
-import com.pumba30.soundcloudplayer.ui.activity.SearchActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> implements View.OnClickListener {
 
-
-    private OnEventItemListener<Track, Integer> mListener;
     private LayoutInflater mLayoutInflater;
     private List<Track> mTrackList;
     private Track mTrack;
+    private OnEventItemListener mListener;
 
-    public SearchAdapter(SearchActivity activity) {
-        mLayoutInflater = LayoutInflater.from(activity);
-        mListener = activity;
+    public interface OnEventItemListener {
+        void onHandleEvent(Track track, int resId);
+    }
+
+
+    public SearchAdapter(Context context) {
+        mLayoutInflater = LayoutInflater.from(context);
+        try {
+            mListener = (OnEventItemListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("SearchActivity must implements OnEventItemListener");
+        }
     }
 
     @Override

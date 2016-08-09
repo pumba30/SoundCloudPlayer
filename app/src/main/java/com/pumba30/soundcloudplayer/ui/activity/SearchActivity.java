@@ -39,20 +39,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener,
-        OnEventItemListener<Track, Integer> {
+        SearchAdapter.OnEventItemListener {
     private static final String LOG_TAG = SearchActivity.class.getSimpleName();
     private static final float ELEVATION = 0;
 
     private SearchAdapter mSearchAdapter;
     private ProgressBar mProgressBar;
-    private RecyclerView mRecyclerView;
     private String mIdTrack;
-
 
     public static Intent newIntent(Context context) {
         return new Intent(context, SearchActivity.class);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +65,13 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         PreferencesManager.setLauchedSearchActivity(getApplicationContext(), true);
 
         DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext());
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_search_tracks);
-        mRecyclerView.addItemDecoration(decoration);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_search_tracks);
+        recyclerView.addItemDecoration(decoration);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        mRecyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
 
         mSearchAdapter = new SearchAdapter(this);
-        mRecyclerView.setAdapter(mSearchAdapter);
+        recyclerView.setAdapter(mSearchAdapter);
 
         mProgressBar = (ProgressBar) findViewById(R.id.search_progressBar);
         mProgressBar.setVisibility(View.INVISIBLE);
@@ -176,22 +173,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         EventBus.getDefault().unregister(this);
     }
 
-
-    @Override
-    public void onHandleEvent(Track obj1, Integer obj2) {
-        if (obj2 == R.id.search_image_button_play_like_track) {
-            startPlayTrack(obj1);
-        } else if (obj2 == R.id.search_image_button_add_to_playlist) {
-            Utils.hideKeyboard(this);
-            mProgressBar.setVisibility(View.VISIBLE);
-            WebRequest.getInstance().getMePlaylists();
-            mIdTrack = String.valueOf(obj1.getId());
-        }
-    }
-
-    @Override
-    public void onHandleEventLongClick(Integer obj2) {/*empty*/}
-
     @Subscribe
     public void playlistLoadedComplete(LoadPlaylistCompleteEvent event) {
         mProgressBar.setVisibility(View.INVISIBLE);
@@ -206,6 +187,18 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         tracks.add(track);
         Intent intent = PlayerActivity.newIntent(SearchActivity.this, tracks);
         startActivity(intent);
+    }
+
+    @Override
+    public void onHandleEvent(Track track, int resId) {
+        if (resId == R.id.search_image_button_play_like_track) {
+            startPlayTrack(track);
+        } else if (resId == R.id.search_image_button_add_to_playlist) {
+            Utils.hideKeyboard(this);
+            mProgressBar.setVisibility(View.VISIBLE);
+            WebRequest.getInstance().getMePlaylists();
+            mIdTrack = String.valueOf(track.getId());
+        }
     }
 }
 
