@@ -83,8 +83,9 @@ public class PlaylistsFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_playlist_fragment, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_playlist_fragment, menu);
     }
 
     @Override

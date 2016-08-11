@@ -1,20 +1,19 @@
 package com.pumba30.soundcloudplayer.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
-import com.pumba30.soundcloudplayer.managers.PreferencesManager;
 import com.pumba30.soundcloudplayer.player.Player;
 import com.pumba30.soundcloudplayer.ui.adapters.ViewPagerAdapter;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 public class MainActivity extends BaseDrawerActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -86,5 +85,30 @@ public class MainActivity extends BaseDrawerActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main_search, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_main_search) {
+            startSearchActivity();
+            hideActionBar();
+        }
+
+        return true;
+    }
+
+    private void startSearchActivity() {
+        Intent intent = SearchActivity.newIntent(getApplicationContext());
+        startActivity(intent);
+    }
+
+    private void hideActionBar() {
+        mToolbar.setVisibility(View.GONE);
+        mTabLayout.setVisibility(View.INVISIBLE);
+    }
 }

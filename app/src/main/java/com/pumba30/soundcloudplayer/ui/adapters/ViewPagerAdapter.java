@@ -14,7 +14,7 @@ import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.ui.fragments.ChartsTracksFragment;
 import com.pumba30.soundcloudplayer.ui.fragments.CollectionTracksFragment;
 import com.pumba30.soundcloudplayer.ui.fragments.PlaylistsFragment;
-import com.pumba30.soundcloudplayer.ui.fragments.SearchFragment;
+import com.pumba30.soundcloudplayer.ui.fragments.StationFragment;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public static final int PAGE_COUNT = 4;
@@ -22,7 +22,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             R.drawable.ic_home,
             R.drawable.ic_like,
             R.drawable.ic_play_list,
-            R.drawable.ic_search
+            R.drawable.ic_station
     };
 
     private Context mContext;
@@ -42,7 +42,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             case 2:
                 return PlaylistsFragment.newInstance();
             case 3:
-                return SearchFragment.newInstance();
+                return StationFragment.newInstance();
         }
         return null;
     }

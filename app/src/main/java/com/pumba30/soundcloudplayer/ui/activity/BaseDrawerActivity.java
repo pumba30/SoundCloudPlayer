@@ -66,14 +66,14 @@ public class BaseDrawerActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         //check SearchActivity is launched, if true - hide toolbar
-        boolean isLaunched = PreferencesManager.isLaunchedSearchActivity(getApplicationContext());
-        if (isLaunched) {
-            mToolbar.setVisibility(View.GONE);
-            mTabLayout.setVisibility(View.INVISIBLE);
-        } else {
-            mToolbar.setVisibility(View.VISIBLE);
-            mTabLayout.setVisibility(View.VISIBLE);
-        }
+//        boolean isLaunched = PreferencesManager.isLaunchedSearchActivity(getApplicationContext());
+//        if (isLaunched) {
+//            mToolbar.setVisibility(View.GONE);
+//            mTabLayout.setVisibility(View.INVISIBLE);
+//        } else {
+//            mToolbar.setVisibility(View.VISIBLE);
+//            mTabLayout.setVisibility(View.VISIBLE);
+//        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

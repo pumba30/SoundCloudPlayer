@@ -1,6 +1,5 @@
 package com.pumba30.soundcloudplayer.ui.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.widget.TextView;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Track;
-import com.pumba30.soundcloudplayer.ui.fragments.SearchFragment;
+import com.pumba30.soundcloudplayer.ui.fragments.StationFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -25,7 +24,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
         void onHandleEvent(Track track);
     }
 
-    public StationAdapter(SearchFragment fragment) {
+    public StationAdapter(StationFragment fragment) {
         mInflater = LayoutInflater.from(fragment.getContext());
         mListener = fragment;
     }

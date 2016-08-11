@@ -24,7 +24,6 @@ import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.api.rest.WebRequest;
 import com.pumba30.soundcloudplayer.events.LoadPlaylistCompleteEvent;
 import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
-import com.pumba30.soundcloudplayer.interfaces.OnEventItemListener;
 import com.pumba30.soundcloudplayer.managers.PreferencesManager;
 import com.pumba30.soundcloudplayer.player.PlayerActivity;
 import com.pumba30.soundcloudplayer.ui.adapters.SearchAdapter;
@@ -50,6 +49,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     public static Intent newIntent(Context context) {
         return new Intent(context, SearchActivity.class);
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +165,12 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     private void returnToParent() {
         PreferencesManager.setLauchedSearchActivity(getApplicationContext(), false);
         onNavigateUp();
+    }
+
+    private void hideActionBar() {
+        BaseDrawerActivity baseDrawerActivity = (BaseDrawerActivity) getApplicationContext();
+        baseDrawerActivity.mToolbar.setVisibility(View.GONE);
+        baseDrawerActivity.mTabLayout.setVisibility(View.INVISIBLE);
     }
 
     @Override
