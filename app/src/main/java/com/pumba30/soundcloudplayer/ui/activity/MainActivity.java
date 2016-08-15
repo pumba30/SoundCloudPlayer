@@ -12,16 +12,25 @@ import android.view.View;
 
 import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
+import com.pumba30.soundcloudplayer.managers.PreferencesManager;
 import com.pumba30.soundcloudplayer.player.Player;
 import com.pumba30.soundcloudplayer.ui.adapters.ViewPagerAdapter;
+import com.pumba30.soundcloudplayer.ui.dialogFragments.CreatePlaylistDialog;
 
 public class MainActivity extends BaseDrawerActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    public static final String KEY_TITLE = "keyTitle";
+    private static final String KEY_TITLE = "keyTitle";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            mToolbar.setTitle(savedInstanceState.getString(KEY_TITLE));
+            mToolbar.setTitleTextAppearance(getApplicationContext(), R.style.TextAppearanceToolbar);
+        } else {
+            mToolbar.setTitle(R.string.charts);
+        }
 
         if (!App.getInstance().getSessionManager().isUserLoggedIn()) {
             Log.d(LOG_TAG, "Start Login Activity");
@@ -59,7 +68,7 @@ public class MainActivity extends BaseDrawerActivity {
                             break;
                         case 3:
                             viewPager.setCurrentItem(3);
-                            mToolbar.setTitle(R.string.search);
+                            mToolbar.setTitle(R.string.stations);
                             playerStop();
                             break;
 
@@ -97,9 +106,14 @@ public class MainActivity extends BaseDrawerActivity {
         if (itemId == R.id.menu_main_search) {
             startSearchActivity();
             hideActionBar();
+            PreferencesManager.setLauchedSearchActivity(getApplicationContext(), true);
+            return true;
+        } else if (itemId == R.id.menu_create_playlist) {
+            CreatePlaylistDialog dialog = CreatePlaylistDialog.newInstance();
+            dialog.show(getSupportFragmentManager(), "createPlaylistDialog");
+            return true;
         }
-
-        return true;
+        return false;
     }
 
     private void startSearchActivity() {
@@ -111,4 +125,12 @@ public class MainActivity extends BaseDrawerActivity {
         mToolbar.setVisibility(View.GONE);
         mTabLayout.setVisibility(View.INVISIBLE);
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        String title = (String) mToolbar.getTitle();
+        outState.putString(KEY_TITLE, title);
+        super.onSaveInstanceState(outState);
+    }
+
 }

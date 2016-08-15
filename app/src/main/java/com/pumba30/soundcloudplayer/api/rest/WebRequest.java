@@ -7,6 +7,8 @@ import android.util.Log;
 import com.pumba30.soundcloudplayer.App;
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
+import com.pumba30.soundcloudplayer.api.models.Playlists;
+import com.pumba30.soundcloudplayer.api.models.Stations;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.events.LoadPlaylistCompleteEvent;
 import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
@@ -17,6 +19,7 @@ import com.pumba30.soundcloudplayer.utils.Utils;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
+import java.util.Map;
 
 public class WebRequest {
     public static final String LOG_TAG = WebRequest.class.getSimpleName();
@@ -27,6 +30,8 @@ public class WebRequest {
     public static final String PLAYLIST_LOADED = "playlistLoaded";
     public static final String SEARCH_TRACK_LOADED = "searchTrackLoaded";
     public static final String STATION_LOADED = "stationLoaded";
+    public static final String STATION_MORE_LOADED = "stationMoreLoaded";
+    public static final String PLAYLIST_DELETED = "playlistDeleted";
     private static WebRequest sWebRequest = null;
     private Context mContext;
     private RestServiceManager mRestManager;
@@ -183,12 +188,42 @@ public class WebRequest {
     }
 
     public void loadStation() {
-        mRestManager.loadStation(new RestServiceManager.RestCallback<List<Track>>() {
+        mRestManager.loadStations(new RestServiceManager.RestCallback<Stations>() {
 
             @Override
-            public void onSuccess(List<Track> response) {
+            public void onSuccess(Stations response) {
                 EventBus.getDefault().post(new ObjectsBusEvent<>(STATION_LOADED, response));
                 Log.d(LOG_TAG, "Station: " + response.toString());
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
+    }
+
+    public void loadMoreStation(Map<String, String> mapRequestUrl) {
+        mRestManager.loadMoreStations(mapRequestUrl, new RestServiceManager.RestCallback<Stations>() {
+            @Override
+            public void onSuccess(Stations response) {
+                EventBus.getDefault().post(new ObjectsBusEvent<>(STATION_MORE_LOADED, response));
+                Log.d(LOG_TAG, "Station: " + response.getCollection().size());
+
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
+    }
+
+    public void deletePlaylist(String playlistId) {
+        mRestManager.deletePlaylist(playlistId, new RestServiceManager.RestCallback<List<Playlist>>() {
+            @Override
+            public void onSuccess(List<Playlist> response) {
+                EventBus.getDefault().post(new ObjectsBusEvent<>(PLAYLIST_DELETED, response));
             }
 
             @Override

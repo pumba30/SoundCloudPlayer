@@ -87,6 +87,9 @@
     <string name="clear_search">Clear</string>
     <string name="search_sound_cloud">Search SoundCloud</string>
     <string name="title_station">Title station</string>
+    <string name="add_station_to_playlist">Add station to playlist</string>
+    <string name="play_station">Play station</string>
+    <string name="stations">Stations</string>
 
 
 </resources>

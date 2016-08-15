@@ -167,11 +167,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         onNavigateUp();
     }
 
-    private void hideActionBar() {
-        BaseDrawerActivity baseDrawerActivity = (BaseDrawerActivity) getApplicationContext();
-        baseDrawerActivity.mToolbar.setVisibility(View.GONE);
-        baseDrawerActivity.mTabLayout.setVisibility(View.INVISIBLE);
-    }
 
     @Override
     protected void onDestroy() {
@@ -206,5 +201,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
             mIdTrack = String.valueOf(track.getId());
         }
     }
+
 }
 

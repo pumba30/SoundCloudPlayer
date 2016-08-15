@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.pumba30.soundcloudplayer.R;
 import com.pumba30.soundcloudplayer.api.models.Playlist;
+import com.pumba30.soundcloudplayer.api.models.Track;
+import com.pumba30.soundcloudplayer.ui.fragments.PlaylistsFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -18,9 +20,17 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
     public static final String LOG_TAG = PlaylistAdapter.class.getSimpleName();
     private List<Playlist> mPlaylists;
     private LayoutInflater mInflater;
+    private OnHahdleEvent mHahdleEvent;
 
-    public PlaylistAdapter(Context context) {
-        mInflater = LayoutInflater.from(context);
+    public interface OnHahdleEvent {
+        void onPressButtonPlay(Playlist playlist);
+
+        void onLongClickIemList(Playlist playlist);
+    }
+
+    public PlaylistAdapter(PlaylistsFragment fragment) {
+        mInflater = LayoutInflater.from(fragment.getActivity());
+        mHahdleEvent = (OnHahdleEvent) fragment;
     }
 
     @Override
@@ -31,15 +41,23 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Playlist playlist = mPlaylists.get(position);
+        final Playlist playlist = mPlaylists.get(position);
         holder.bindPlaylist(playlist);
         holder.mPlayPlaylist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //get a list and send it into player to play, add interface listener
+                mHahdleEvent.onPressButtonPlay(playlist);
             }
         });
 
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                mHahdleEvent.onLongClickIemList(playlist);
+                return true;
+            }
+        });
     }
 
     @Override

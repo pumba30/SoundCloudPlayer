@@ -34,10 +34,7 @@ public class BaseDrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_base_drawer);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle(R.string.charts);
-        if (savedInstanceState != null) {
-            mToolbar.setTitle(MainActivity.KEY_TITLE);
-            mToolbar.setTitleTextAppearance(getApplicationContext(), R.style.TextAppearanceToolbar);
-        }
+
         setSupportActionBar(mToolbar);
         mTabLayout = (TabLayout) findViewById(R.id.soundcloud_tabs);
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -65,15 +62,15 @@ public class BaseDrawerActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        //check SearchActivity is launched, if true - hide toolbar
-//        boolean isLaunched = PreferencesManager.isLaunchedSearchActivity(getApplicationContext());
-//        if (isLaunched) {
-//            mToolbar.setVisibility(View.GONE);
-//            mTabLayout.setVisibility(View.INVISIBLE);
-//        } else {
-//            mToolbar.setVisibility(View.VISIBLE);
-//            mTabLayout.setVisibility(View.VISIBLE);
-//        }
+        //check SearchActivity is launched, if true - hide toolbar(for rotate)
+        boolean isLaunched = PreferencesManager.isLaunchedSearchActivity(getApplicationContext());
+        if (isLaunched) {
+            mToolbar.setVisibility(View.GONE);
+            mTabLayout.setVisibility(View.INVISIBLE);
+        } else {
+            mToolbar.setVisibility(View.VISIBLE);
+            mTabLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -108,15 +105,4 @@ public class BaseDrawerActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        String title = (String) mToolbar.getTitle();
-        outState.putString(MainActivity.KEY_TITLE, title);
-        super.onSaveInstanceState(outState);
-    }
-    @Override
-    protected void onStop() {
-        super.onStop();
-        PreferencesManager.setLauchedSearchActivity(getApplicationContext(), false);
-    }
 }

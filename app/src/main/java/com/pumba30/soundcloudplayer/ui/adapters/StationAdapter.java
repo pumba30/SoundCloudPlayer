@@ -1,9 +1,14 @@
 package com.pumba30.soundcloudplayer.ui.adapters;
 
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,8 +25,10 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
     private List<Track> mStations;
     private LayoutInflater mInflater;
 
-    public interface  OnEventItemListener{
+    public interface OnEventItemListener {
         void onHandleEvent(Track track);
+
+        void onClickContextMenu(Track track, int resId);
     }
 
     public StationAdapter(StationFragment fragment) {
@@ -46,6 +53,12 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
             }
         });
 
+        holder.mStationPopUpMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopupMenu(track, view);
+            }
+        });
     }
 
     @Override
@@ -57,11 +70,26 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
         mStations = stations;
     }
 
+    private void showPopupMenu(final Track track, final View view) {
+        PopupMenu popup = new PopupMenu(view.getContext(), view, Gravity.LEFT);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.menu_pop_up_station, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int itemId = item.getItemId();
+                mListener.onClickContextMenu(track, itemId);
+                return true;
+            }
+        });
+        popup.show();
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTitle;
         private ImageView mImageTitle;
+        private ImageButton mStationPopUpMenu;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -71,10 +99,10 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
         private void initView() {
             mImageTitle = (ImageView) itemView.findViewById(R.id.image_station);
             mTitle = (TextView) itemView.findViewById(R.id.text_view_title_station);
+            mStationPopUpMenu = (ImageButton) itemView.findViewById(R.id.grid_pop_up_menu);
         }
 
         public void bindStation(Track track) {
-
             mTitle.setText(track.getTitle());
 
             String urlToTitleImage = track.getArtworkUrl();
@@ -84,6 +112,4 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
                     .into(mImageTitle);
         }
     }
-
-
 }

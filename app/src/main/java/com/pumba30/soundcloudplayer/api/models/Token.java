@@ -2,9 +2,6 @@ package com.pumba30.soundcloudplayer.api.models;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by pumba30 on 04.07.2016.
- */
 public class Token {
     @SerializedName("access_token")
     private String mAccessToken;

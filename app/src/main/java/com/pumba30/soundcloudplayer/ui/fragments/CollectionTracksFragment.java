@@ -124,7 +124,6 @@ public class CollectionTracksFragment extends Fragment implements OneAndManyTrac
     @Override
     public void onHandleEvent(List<Playlist> playlists, String trackId) {
         WebRequest.getInstance().getMePlaylists();
-        Utils.toast(getContext(), "getMePlaylist");
 
         AddTrackToPlaylistDialog addTrackToPlaylistDialog
                 = AddTrackToPlaylistDialog.newInstance(mPlaylists, trackId);

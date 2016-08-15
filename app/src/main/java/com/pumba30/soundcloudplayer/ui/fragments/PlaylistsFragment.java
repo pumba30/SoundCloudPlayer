@@ -9,26 +9,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.pumba30.soundcloudplayer.R;
+import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.api.rest.WebRequest;
 import com.pumba30.soundcloudplayer.events.LoadPlaylistCompleteEvent;
+import com.pumba30.soundcloudplayer.events.ObjectsBusEvent;
+import com.pumba30.soundcloudplayer.managers.RestServiceManager;
 import com.pumba30.soundcloudplayer.ui.adapters.PlaylistAdapter;
-import com.pumba30.soundcloudplayer.ui.dialogFragments.CreatePlaylistDialog;
+import com.pumba30.soundcloudplayer.ui.dialogFragments.DeletePlaylistDialog;
 import com.pumba30.soundcloudplayer.utils.DividerItemDecoration;
 import com.pumba30.soundcloudplayer.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class PlaylistsFragment extends Fragment {
+
+public class PlaylistsFragment extends Fragment implements PlaylistAdapter.OnHahdleEvent {
 
     private static final String LOG_TAG = PlaylistsFragment.class.getSimpleName();
     private PlaylistAdapter mPlaylistAdapter;
+    private List<Playlist> mPlaylists;
+    private String mPlaylistId;
 
     public static PlaylistsFragment newInstance() {
         return new PlaylistsFragment();
@@ -42,7 +49,6 @@ public class PlaylistsFragment extends Fragment {
         setHasOptionsMenu(true);
         EventBus.getDefault().register(this);
         loadingPlaylists();
-
     }
 
     private void loadingPlaylists() {
@@ -68,7 +74,7 @@ public class PlaylistsFragment extends Fragment {
                 DividerItemDecoration(getActivity());
         recyclerView.addItemDecoration(itemDecoration);
 
-        mPlaylistAdapter = new PlaylistAdapter(getContext());
+        mPlaylistAdapter = new PlaylistAdapter(this);
         recyclerView.setAdapter(mPlaylistAdapter);
 
         return view;
@@ -76,7 +82,8 @@ public class PlaylistsFragment extends Fragment {
 
     @Subscribe
     public void loadPlaylists(LoadPlaylistCompleteEvent complete) {
-        mPlaylistAdapter.setPlaylists(complete.mPlaylists);
+        mPlaylists = complete.mPlaylists;
+        mPlaylistAdapter.setPlaylists(mPlaylists);
         mPlaylistAdapter.notifyDataSetChanged();
         Log.d(LOG_TAG, "Load playlist complete");
     }
@@ -89,13 +96,24 @@ public class PlaylistsFragment extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_create_playlist) {
-            Utils.toast(getActivity(), "Create playlist");
-            CreatePlaylistDialog dialog = CreatePlaylistDialog.newInstance();
-            dialog.show(getActivity().getSupportFragmentManager(), "createPlaylistDialog");
+    public void onPressButtonPlay(Playlist playlist) {
+        Utils.toast(getContext(), "Play");
+    }
+
+    @Override
+    public void onLongClickIemList(Playlist playlist) {
+        Utils.toast(getContext(), String.valueOf(playlist.getId()));
+        mPlaylistId = String.valueOf(playlist.getId());
+        DeletePlaylistDialog deletePlaylistDialog = DeletePlaylistDialog.newInstance(mPlaylistId);
+        deletePlaylistDialog.show(getActivity().getSupportFragmentManager(), "deletePlaylistDialog");
+    }
+
+    @Subscribe
+    public void deletePlaylist(ObjectsBusEvent<List<Playlist>> event) {
+        if (event.mMessage.equals(WebRequest.TRACK_DELETED)) {
+            mPlaylistAdapter.setPlaylists(event.mObject);
+            mPlaylistAdapter.notifyDataSetChanged();
         }
-        return true;
     }
 }
 

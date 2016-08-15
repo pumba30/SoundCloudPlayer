@@ -2,6 +2,7 @@ package com.pumba30.soundcloudplayer.api.rest;
 
 import com.pumba30.soundcloudplayer.api.models.Playlist;
 import com.pumba30.soundcloudplayer.api.models.Playlists;
+import com.pumba30.soundcloudplayer.api.models.Stations;
 import com.pumba30.soundcloudplayer.api.models.Token;
 import com.pumba30.soundcloudplayer.api.models.Track;
 import com.pumba30.soundcloudplayer.api.models.User;
@@ -39,7 +40,11 @@ public interface ApiService {
     Call<List<Track>> loadPublicTracks();
 
     @GET("tracks")
-    Call<List<Track>> loadStations(@Query("q") String query);
+    Call<Stations> loadStations(@Query("q") String query,
+                                @Query("linked_partitioning") int nextPage);
+
+    @GET("tracks")
+    Call<Stations> loadMoreStations(@QueryMap Map<String, String> mapRequestUrl);
 
     @GET("tracks")
     Call<List<Track>> getMusic(@QueryMap Map<String, String> stringMap);
@@ -49,9 +54,6 @@ public interface ApiService {
 
     @DELETE("me/favorites/{trackId}")
     Call<Track> deleteTrackFromMCollection(@Path("trackId") String trackId);
-
-    @GET("tracks/{trackId}")
-    Call<Track> loadSoundCloudTrack(@Path("trackId") int trackId);
 
     @GET("tracks")
     Call<List<Track>> searchTrack(@Query("q") String query);
@@ -71,6 +73,9 @@ public interface ApiService {
     @PUT("me/playlists/{playlistId}")
     Call<Playlist> addTrackToPlaylist(@Path("playlistId") String playlistId,
                                       @Body Map<String, Map<String, List<Map<String, String>>>> map);
+
+    @DELETE("me/playlists/{playlistId}")
+    Call<List<Playlist>> deletePlaylist(@Path("playlistId") String playlistId);
 
     @GET("me/playlists/{playlistId}")
     Call<Playlist> getPlaylistById(@Path("playlistId") String playlistId);
